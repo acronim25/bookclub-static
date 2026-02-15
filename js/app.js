@@ -436,7 +436,9 @@ const BookClub = {
     getQuizByChapterId: getQuiz,
     getQuizResult: (userId, chapterId) => {
         const user = getAllUsers()[userId];
-        return user?.quiz_scores?.[chapterId] || null;
+        const score = user?.quiz_scores?.[chapterId];
+        if (score === undefined) return null;
+        return { score, maxScore: 10 };
     },
     getQuizByChapter: getQuiz,
     getNotesForChapter: getNotesByChapter,
@@ -471,8 +473,9 @@ const BookClub = {
         // Save result - folosim chapterId nu quiz.id
         saveQuizResult(user.id, chapterId, score);
         
-        // Check for badges
-        const newBadges = checkBadges(getAllUsers()[user.id]);
+        // Check for badges - folosim user direct
+        const userData = getAllUsers()[user.id];
+        const newBadges = userData ? checkBadges(userData) : [];
         
         return {
             score,
