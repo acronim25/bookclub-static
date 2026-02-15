@@ -446,7 +446,14 @@ const BookClub = {
     getBadgeProgress,
     getAllNotes,
     addNote,
-    markChapterComplete,
+    markChapterComplete: (chapterId, notes = '') => {
+        const user = getCurrentUser();
+        if (!user) {
+            showNotification('Please select a user first', 'error');
+            return [];
+        }
+        return markChapterComplete(user.id, chapterId, notes);
+    },
     showNotification,
     submitQuiz: (chapterId, answers) => {
         const user = getCurrentUser();
