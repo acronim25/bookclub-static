@@ -429,12 +429,22 @@ const BookClub = {
     setCurrentUser,
     getAllUsers,
     getAllBooks,
-    getBookById: getBook,  // Alias pentru getBook
+    getBookById: getBook,
     getChaptersByBook,
-    getChapterById: getChapter,  // Alias pentru getChapter
+    getChapterById: getChapter,
     isChapterCompleted,
-    getQuizByChapterId: getQuiz,  // Alias pentru getQuiz
+    getQuizByChapterId: getQuiz,
+    getQuizResult: (userId, chapterId) => {
+        const user = getAllUsers()[userId];
+        return user?.quiz_scores?.[chapterId] || null;
+    },
+    getQuizByChapter: getQuiz,
+    getNotesForChapter: getNotesByChapter,
     getAllBadges,
+    getBadgeProgress,
+    getAllNotes,
+    addNote,
+    markChapterComplete,
     getCompletedChapters: (userId) => {
         const progress = getProgress(userId);
         return Object.keys(progress).filter(key => progress[key]).map(Number);
@@ -450,8 +460,6 @@ const BookClub = {
         const user = getAllUsers()[userId];
         return user?.notes?.length || 0;
     },
-    getBadgeProgress,
-    getAllNotes,
     getRecentActivity: () => [],
     getQuizResults: () => JSON.parse(localStorage.getItem('bookclub_quiz_results') || '{}'),
     initializeData
