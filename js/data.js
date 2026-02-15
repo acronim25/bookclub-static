@@ -507,6 +507,969 @@ const BOOKCLUB_DATA = {
                     correct: 1
                 }
             ]
+        },
+        // Chapter 4 - The Buddy System
+        {
+            id: 4,
+            chapter_id: 4,
+            questions: [
+                {
+                    question: "What is 'self-serving bias'?",
+                    options: [
+                        "Always putting others first",
+                        "Attributing successes to skill and failures to bad luck",
+                        "Being selfish in decisions",
+                        "Serving yourself before others"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is a 'buddy system' helpful for decision-making?",
+                    options: [
+                        "To have someone to blame when things go wrong",
+                        "To get honest feedback and overcome self-serving bias",
+                        "To make decisions faster",
+                        "To avoid making decisions alone"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'motivated reasoning'?",
+                    options: [
+                        "Being highly motivated to succeed",
+                        "Interpreting information to support what you already believe",
+                        "Reasoning with emotional intelligence",
+                        "Making decisions based on motivation"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why are we better at evaluating others' decisions than our own?",
+                    options: [
+                        "We're smarter about others",
+                        "We don't have emotional attachment to their outcomes",
+                        "Others make simpler decisions",
+                        "We know others better than ourselves"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is a 'truth-seeking group'?",
+                    options: [
+                        "A group that always agrees",
+                        "A group focused on finding the truth rather than being right",
+                        "A group that seeks hidden information",
+                        "A philosophical discussion group"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How should you respond when your buddy challenges your decision?",
+                    options: [
+                        "Defend your position aggressively",
+                        "Listen openly and consider their perspective",
+                        "Find a new buddy",
+                        "Ignore their feedback"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the main benefit of accountability partners in trading?",
+                    options: [
+                        "They make trades for you",
+                        "They provide objective feedback on your decision process",
+                        "They guarantee profits",
+                        "They reduce trading fees"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is group decision-making often better than individual?",
+                    options: [
+                        "Groups are smarter",
+                        "Diverse perspectives catch blind spots",
+                        "Groups make faster decisions",
+                        "Groups have more information"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What should you do before defending your decision to a group?",
+                    options: [
+                        "Prepare your arguments",
+                        "Consider what would make you change your mind",
+                        "Find allies",
+                        "Practice your presentation"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the danger of surrounding yourself with yes-men?",
+                    options: [
+                        "They agree too much",
+                        "You never hear challenging perspectives",
+                        "They slow down decisions",
+                        "They create conflict"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 5 - Dissent to Win
+        {
+            id: 5,
+            chapter_id: 5,
+            questions: [
+                {
+                    question: "Why is diversity of thought valuable in decision-making?",
+                    options: [
+                        "It creates interesting discussions",
+                        "Different perspectives uncover blind spots",
+                        "It makes everyone feel included",
+                        "It speeds up the process"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'red teaming'?",
+                    options: [
+                        "Working with angry people",
+                        "Having someone argue against your position to test it",
+                        "Competing with other teams",
+                        "Using red markers for important notes"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How should you treat dissenting opinions?",
+                    options: [
+                        "Ignore them",
+                        "Welcome them as valuable input",
+                        "Argue against them",
+                        "Avoid people who disagree"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'groupthink'?",
+                    options: [
+                        "Thinking as a group",
+                        "The desire for harmony overriding critical thinking",
+                        "Group decision-making",
+                        "Collaborative thinking"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How can you prevent groupthink?",
+                    options: [
+                        "Always agree with the leader",
+                        "Encourage dissent and alternative viewpoints",
+                        "Make decisions quickly",
+                        "Exclude outsiders"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is a 'blind spot'?",
+                    options: [
+                        "Something you can't see physically",
+                        "Information or perspective you're missing",
+                        "A spot on your chart",
+                        "An obvious mistake"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why should you seek out people who disagree with you?",
+                    options: [
+                        "To argue with them",
+                        "To test your beliefs and find weaknesses",
+                        "To convince them you're right",
+                        "To prove them wrong"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'constructive dissent'?",
+                    options: [
+                        "Arguing for the sake of arguing",
+                        "Disagreeing with the goal of improving the decision",
+                        "Being negative about everything",
+                        "Refusing to participate"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How do you create an environment where dissent is valued?",
+                    options: [
+                        "Punish disagreement",
+                        "Reward people for raising concerns",
+                        "Ignore different opinions",
+                        "Make decisions alone"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What happens when everyone in a group agrees too quickly?",
+                    options: [
+                        "The decision is definitely correct",
+                        "Important perspectives may have been missed",
+                        "The process is efficient",
+                        "Everyone feels good"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 6 - Adventures in Mental Time Travel
+        {
+            id: 6,
+            chapter_id: 6,
+            questions: [
+                {
+                    question: "What is a 'pre-mortem'?",
+                    options: [
+                        "Analyzing failure after it happens",
+                        "Imagining a decision failed and working backwards to prevent it",
+                        "A medical procedure",
+                        "Reviewing past mistakes"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'backcasting'?",
+                    options: [
+                        "Predicting the past",
+                        "Imagining success and working backward to achieve it",
+                        "Looking at historical data",
+                        "Reversing a decision"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is mental time travel useful?",
+                    options: [
+                        "It's entertaining",
+                        "It helps identify obstacles and opportunities",
+                        "It predicts the future accurately",
+                        "It replaces actual experience"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'scenario planning'?",
+                    options: [
+                        "Planning one specific future",
+                    "Considering multiple possible futures and preparing for each",
+                        "Daydreaming about success",
+                        "Making rigid long-term plans"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How does considering your 'future self' help decisions?",
+                    options: [
+                        "It delays decisions",
+                        "It helps you consider long-term consequences",
+                        "It's just imagination",
+                        "It makes you anxious"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "When should you do a pre-mortem?",
+                    options: [
+                        "After a failure",
+                        "Before making an important decision",
+                        "When reviewing past trades",
+                        "During a winning streak"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What question should you ask in a pre-mortem?",
+                    options: [
+                        "Why did we fail?",
+                        "Imagine it's one year from now and this failed. Why?",
+                        "What went right?",
+                        "Who is to blame?"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How does backcasting differ from forecasting?",
+                    options: [
+                        "Backcasting looks at the past",
+                        "Backcasting starts with success and works backward",
+                        "Forecasting is more accurate",
+                        "They're the same thing"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why create multiple scenarios instead of one prediction?",
+                    options: [
+                        "It's more work",
+                        "The future is uncertain and multiple outcomes are possible",
+                        "It confuses the decision",
+                        "It's required by law"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'future self empathy'?",
+                    options: [
+                        "Feeling sorry for your future self",
+                        "Making decisions that your future self will thank you for",
+                        "Predicting emotions",
+                        "Avoiding future decisions"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 7 - Chesley Sullenberger's Crash Landing
+        {
+            id: 7,
+            chapter_id: 7,
+            questions: [
+                {
+                    question: "What is 'hindsight bias'?",
+                    options: [
+                        "Predicting the future",
+                        "Believing after an outcome that you knew it would happen",
+                        "Learning from history",
+                        "Being wise after the event"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'Monday morning quarterbacking'?",
+                    options: [
+                        "Watching football on Monday",
+                        "Criticizing decisions after knowing the outcome",
+                        "Planning for the week",
+                        "Making Monday trades"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'outcome bias'?",
+                    options: [
+                        "Bias toward positive outcomes",
+                        "Judging decisions by their results rather than quality",
+                        "Being biased against outcomes",
+                        "Predicting outcomes"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is it unfair to judge decisions by outcomes?",
+                    options: [
+                        "People try their best",
+                        "Good decisions can have bad outcomes due to luck",
+                        "It's not nice",
+                        "Outcomes are random"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the 'passenger perspective'?",
+                    options: [
+                        "Viewing decisions without knowing the outcome",
+                        "Flying on airplanes",
+                        "Being passive",
+                        "Letting others decide"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "How can you avoid hindsight bias?",
+                    options: [
+                        "Trust your memory",
+                        "Document your reasoning before knowing the outcome",
+                        "Forget past decisions",
+                        "Always predict correctly"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why do we say 'I knew it' after events?",
+                    options: [
+                        "We actually knew",
+                        "Hindsight bias makes us reconstruct our memory",
+                        "We're psychic",
+                        "It's a figure of speech"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How should you evaluate a trade that lost money?",
+                    options: [
+                        "It was a bad trade",
+                        "Was the reasoning sound at the time of the decision?",
+                        "Blame the market",
+                        "Never take that trade again"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is dangerous about outcome bias in trading?",
+                    options: [
+                        "It makes you feel bad",
+                        "You might abandon good strategies that had unlucky outcomes",
+                        "It affects your P&L",
+                        "Other traders will judge you"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How do you judge decision quality fairly?",
+                    options: [
+                        "By the outcome",
+                        "By the process and information available at the time",
+                        "By how you feel about it",
+                        "By what others think"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 8 - The Value of Negative Thinking
+        {
+            id: 8,
+            chapter_id: 8,
+            questions: [
+                {
+                    question: "What is 'productive regret'?",
+                    options: [
+                        "Feeling bad forever",
+                        "Using disappointment to fuel better future decisions",
+                        "Avoiding all risks",
+                        "Being pessimistic"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'counterfactual thinking'?",
+                    options: [
+                        "Thinking that goes against facts",
+                        "Imagining alternative outcomes to learn",
+                        "Being contrary",
+                        "Denying reality"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is a 'near-miss'?",
+                    options: [
+                        "A successful trade",
+                        "An outcome that almost went differently",
+                        "Missing a trade opportunity",
+                        "A complete failure"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why analyze near-misses?",
+                    options: [
+                        "To feel lucky",
+                        "They contain valuable information about risk",
+                        "To avoid them",
+                        "They're interesting stories"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'toxic regret'?",
+                    options: [
+                        "Dangerous chemicals",
+                        "Unproductive dwelling on past mistakes",
+                        "Regretting toxic relationships",
+                        "Environmental concerns"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How is productive regret different from toxic regret?",
+                    options: [
+                        "Productive regret feels better",
+                        "Productive regret leads to learning and action",
+                        "Toxic regret is shorter",
+                        "They're the same"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What should you do after a loss?",
+                    options: [
+                        "Forget about it",
+                        "Analyze what you can learn without dwelling",
+                        "Blame external factors",
+                        "Quit trading"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How can negative thinking improve decisions?",
+                    options: [
+                        "It makes you pessimistic",
+                        "It helps you identify risks and failure modes",
+                        "It prevents action",
+                        "It scares you"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the danger of only focusing on positive outcomes?",
+                    options: [
+                        "You miss opportunities to learn from what went wrong",
+                        "You become too happy",
+                        "You attract good luck",
+                        "Nothing - positivity is always good"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "How do you turn regret into a learning opportunity?",
+                    options: [
+                        "Feel bad about it",
+                        "Identify what you'd do differently and apply it",
+                        "Blame others",
+                        "Pretend it didn't happen"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 9 - Rubber-Band Routines
+        {
+            id: 9,
+            chapter_id: 9,
+            questions: [
+                {
+                    question: "What is a 'rubber-band routine'?",
+                    options: [
+                        "Stretching exercises",
+                        "A routine that snaps you back to good decisions when you drift",
+                        "A flexible schedule",
+                        "A workout routine"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why are decision routines important?",
+                    options: [
+                        "They're boring",
+                        "They prevent you from making impulsive choices",
+                        "They slow you down",
+                        "They're required"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'decision hygiene'?",
+                    options: [
+                        "Being clean",
+                        "Practices that keep your decision-making process healthy",
+                        "Avoiding germs",
+                        "Organizing your desk"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How can checklists improve decisions?",
+                    options: [
+                        "They make you slow",
+                        "They ensure you consider all important factors",
+                        "They're annoying",
+                        "Only pilots need them"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What are common decision traps?",
+                    options: [
+                        "Physical holes",
+                        "Biases and habits that lead to poor choices",
+                        "Mouse traps",
+                        "Legal issues"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "When should you use your rubber-band routine?",
+                    options: [
+                        "Only when winning",
+                        "When you notice yourself drifting from good practices",
+                        "Once a week",
+                        "Never"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is an example of a trading checklist item?",
+                    options: [
+                        "Is the chart pretty?",
+                        "Have I identified my stop-loss and position size?",
+                        "Do I feel lucky?",
+                        "Is it a round number?"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How do routines help under pressure?",
+                    options: [
+                        "They add stress",
+                        "They provide a pre-planned process to follow",
+                        "They slow you down too much",
+                        "They eliminate creativity"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why create routines before you need them?",
+                    options: [
+                        "It's more work",
+                        "Good decisions are harder to make in the moment",
+                        "Routines are fun",
+                        "You have more time"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What happens without decision routines?",
+                    options: [
+                        "You're more flexible",
+                        "You fall into bad habits and biases",
+                        "You're more creative",
+                        "Nothing significant"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 10 - Beat the Dealer
+        {
+            id: 10,
+            chapter_id: 10,
+            questions: [
+                {
+                    question: "What are 'base rates'?",
+                    options: [
+                        "Interest rates",
+                        "The historical frequency of an event",
+                        "Basic math rates",
+                        "Starting rates for beginners"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the 'outside view'?",
+                    options: [
+                        "Looking out the window",
+                        "Using base rates and similar cases rather than your specific situation",
+                        "External opinions",
+                        "Market outlook"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'regression to the mean'?",
+                    options: [
+                        "Going back to average performance after extreme results",
+                        "A statistical error",
+                        "Getting worse over time",
+                        "Consistent results"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "What is the 'planning fallacy'?",
+                    options: [
+                        "Planning too much",
+                        "Underestimating time and difficulty based on optimism",
+                        "Making detailed plans",
+                        "Planning for failure"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why are base rates important in prediction?",
+                    options: [
+                        "They're historical facts",
+                        "They provide a starting point before adjusting for specifics",
+                        "They're always correct",
+                        "They're easy to find"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How do you use the outside view?",
+                    options: [
+                        "Look at your specific case only",
+                        "Find similar cases and their outcomes first",
+                        "Ask outsiders",
+                        "Ignore your situation"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What happens after an extreme trading result?",
+                    options: [
+                        "You'll keep performing at that level",
+                        "Results will likely regress toward your average",
+                        "You've found an edge",
+                        "You should increase size"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why do we underestimate task completion time?",
+                    options: [
+                        "We're lazy",
+                        "The planning fallacy makes us optimistic about our specific case",
+                        "We don't care about deadlines",
+                        "Time moves faster"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'reference class forecasting'?",
+                    options: [
+                        "Weather forecasting",
+                        "Predicting based on outcomes of similar situations",
+                        "Classroom predictions",
+                        "Reference book forecasts"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How should you react to a winning streak?",
+                    options: [
+                        "Increase position sizes dramatically",
+                        "Recognize regression to the mean and stay disciplined",
+                        "Assume you've mastered trading",
+                        "Tell everyone you're a genius"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 11 - Outcomes
+        {
+            id: 11,
+            chapter_id: 11,
+            questions: [
+                {
+                    question: "What is 'path dependence'?",
+                    options: [
+                        "Following a path",
+                        "How you got somewhere affects where you can go",
+                        "GPS navigation",
+                        "A hiking trail"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How can timing affect outcomes?",
+                    options: [
+                        "It doesn't matter",
+                        "Small timing differences can lead to very different results",
+                        "Only for day traders",
+                        "Timing is everything"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the relationship between luck and skill in outcomes?",
+                    options: [
+                        "Skill determines everything",
+                        "Both play roles, often hard to separate",
+                        "Luck doesn't exist",
+                        "Only luck matters"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is outcome variance important to understand?",
+                    options: [
+                        "It makes trading exciting",
+                        "Same decisions can produce different results",
+                        "It's a statistical concept",
+                        "It affects taxes"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What does 'temporal perspective' mean in decision-making?",
+                    options: [
+                        "Being on time",
+                        "Considering how timing affects outcomes",
+                        "Having a watch",
+                        "Trading hours"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why shouldn't you judge a strategy by one outcome?",
+                    options: [
+                        "One outcome isn't enough data",
+                        "Variance means results fluctuate",
+                        "Both of the above",
+                        "You should judge immediately"
+                    ],
+                    correct: 2
+                },
+                {
+                    question: "How does path dependence affect trading?",
+                    options: [
+                        "It doesn't",
+                        "Your current position limits future options",
+                        "You should always change paths",
+                        "Paths are random"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What can you control in trading?",
+                    options: [
+                        "The outcomes",
+                        "The decision process, not the results",
+                        "The market",
+                        "Other traders"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is it hard to replicate successful outcomes?",
+                    options: [
+                        "Success is easy",
+                        "Timing and context matter, not just actions",
+                        "You need better tools",
+                        "Others block you"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What should you focus on: outcomes or process?",
+                    options: [
+                        "Outcomes - they pay the bills",
+                        "Process - it's what you control",
+                        "Both equally",
+                        "Neither"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        // Chapter 12 - The Long Game
+        {
+            id: 12,
+            chapter_id: 12,
+            questions: [
+                {
+                    question: "What does 'the long game' mean in decision-making?",
+                    options: [
+                        "A long board game",
+                        "Focusing on long-term improvement over short-term results",
+                        "Taking forever to decide",
+                        "Long-term investments only"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is continuous improvement important?",
+                    options: [
+                        "It's trendy",
+                        "Small improvements compound over time",
+                        "It impresses others",
+                        "It's required"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is 'decision practice'?",
+                    options: [
+                        "Rehearsing speeches",
+                        "Regularly working on improving your decision-making skills",
+                        "Making random decisions",
+                        "Avoiding decisions"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How should you treat trading?",
+                    options: [
+                        "As a get-rich-quick scheme",
+                        "As a skill to develop over time",
+                        "As gambling",
+                        "As entertainment"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the danger of focusing on individual trades?",
+                    options: [
+                        "You miss the big picture",
+                        "You lose sight of the long-term process",
+                        "Both of the above",
+                        "Nothing"
+                    ],
+                    correct: 2
+                },
+                {
+                    question: "How do skills develop?",
+                    options: [
+                        "Overnight",
+                        "Through consistent practice and learning",
+                        "By reading only",
+                        "By watching others"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is patience important in skill development?",
+                    options: [
+                        "It's a virtue",
+                        "Mastery takes time and consistent effort",
+                        "It looks good",
+                        "Markets reward patience"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What should you track for long-term improvement?",
+                    options: [
+                        "Only your P&L",
+                        "Your decision process and patterns over time",
+                        "What others are doing",
+                        "Market predictions"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How do you maintain motivation for the long game?",
+                    options: [
+                        "Focus only on results",
+                        "Celebrate process improvements, not just outcomes",
+                        "Compare yourself to others",
+                        "Expect quick wins"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the ultimate goal of thinking in bets?",
+                    options: [
+                        "To never lose",
+                        "To make better decisions by embracing uncertainty",
+                        "To predict the future",
+                        "To win every trade"
+                    ],
+                    correct: 1
+                }
+            ]
         }
     ],
 
