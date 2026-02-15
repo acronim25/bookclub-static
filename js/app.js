@@ -445,6 +445,47 @@ const BookClub = {
     getAllNotes,
     addNote,
     markChapterComplete,
+    showNotification,
+    submitQuiz: (chapterId, answers) => {
+        const user = getCurrentUser();
+        if (!user) {
+            showNotification('Please select a user first', 'error');
+            return null;
+        }
+        
+        const quiz = getQuiz(chapterId);
+        if (!quiz) return null;
+        
+        // Calculate score
+        let correct = 0;
+        answers.forEach((answer, idx) => {
+            if (answer === quiz.questions[idx].correct) {
+                correct++;
+            }
+        });
+        
+        const maxScore = quiz.questions.length;
+        const score = Math.round((correct / maxScore) * 10);
+        const percentage = Math.round((correct / maxScore) * 100);
+        
+        // Save result
+        saveQuizResult(user.id, quiz.id, score);
+        
+        // Check for badges
+        const newBadges = checkAndAwardBadges(user.id);
+        
+        return {
+            score,
+            maxScore: 10,
+            percentage,
+            correct,
+            total: maxScore,
+            newBadges: newBadges.map(id => {
+                const badge = getAllBadges().find(b => b.id === id);
+                return badge ? { id: badge.id, name: badge.name, emoji: badge.emoji } : null;
+            }).filter(Boolean)
+        };
+    },
     getCompletedChapters: (userId) => {
         const progress = getProgress(userId);
         return Object.keys(progress).filter(key => progress[key]).map(Number);
