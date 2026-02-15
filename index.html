@@ -262,6 +262,8 @@
                 option.value = user.id;
                 option.textContent = user.name;
                 select.appendChild(option);
+            }
+                }
             });
         }
         
@@ -272,7 +274,9 @@
                 BookClub.setCurrentUser(userId);
                 location.reload();
             }
-        });
+        }
+                }
+            });
         
         document.addEventListener('DOMContentLoaded', function() {
             populateUserDropdown();
@@ -292,7 +296,9 @@
                 document.getElementById('welcome-state').style.display = 'block';
                 document.getElementById('current-user-display').style.display = 'none';
             }
-        });
+        }
+                }
+            });
 
         function loadDashboard(user) {
             // Load stats
@@ -363,7 +369,7 @@
 
         function loadRecentActivity(user) {
             const container = document.getElementById('activity-list');
-            const notes = BookClub.getNotes().filter(n => n.user_id === user.id).slice(0, 5);
+            const notes = BookClub.getAllNotes().filter(n => n.user_id === user.id).slice(0, 5);
             const completedChapters = BookClub.getCompletedChapters(user.id).slice(-5);
             
             if (notes.length === 0 && completedChapters.length === 0) {
@@ -374,12 +380,18 @@
             // Combine and sort activities (most recent first)
             const activities = [];
             
-            completedChapters.forEach(ch => {
+            completedChapters.forEach(chapterId => {
+                const chapter = BookClub.getChapterById(chapterId);
+                if (chapter) {
                 activities.push({
                     type: 'chapter',
-                    title: ch.title,
+                    title: chapter.title,
                     time: 'Completed'
-                });
+                }
+                }
+            });
+            }
+                }
             });
             
             notes.forEach(note => {
@@ -387,7 +399,11 @@
                     type: 'note',
                     title: `Note on ${note.chapter_title}`,
                     time: BookClub.formatRelativeTime(note.created_at)
-                });
+                }
+                }
+            });
+            }
+                }
             });
             
             container.innerHTML = activities.slice(0, 5).map(act => `
