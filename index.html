@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Trading Book Club</title>
+    <title>Panou | Club de Lectură Trading</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,11 +112,11 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link active">📊 Dashboard</a></li>
-                <li><a href="library.html" class="nav-link">📚 Library</a></li>
-                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
-                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
-                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+                <li><a href="index.html" class="nav-link active">📊 Panou</a></li>
+                <li><a href="library.html" class="nav-link">📚 Bibliotecă</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notițe</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Clasament</a></li>
+                <li><a href="insigne.html" class="nav-link">🏅 Insigne</a></li>
             </ul>
         </div>
     </nav>
@@ -124,21 +124,21 @@
     <main class="main-content">
         <!-- User Selector -->
         <div class="user-selector-container">
-            <label for="user-selector">Select User:</label>
+            <label for="user-selector">Selectează Utilizatorul:</label>
             <select id="user-selector">
-                <option value="">Select a user...</option>
+                <option value="">Selectează un utilizator...</option>
             </select>
             <div class="current-user-display" id="current-user-display" style="display: none;">
-                <span>Logged in as:</span>
+                <span>Autentificat ca:</span>
                 <span class="user-name" id="display-user-name"></span>
             </div>
         </div>
 
-        <!-- Dashboard Content -->
+        <!-- Panou Content -->
         <div id="dashboard-content" style="display: none;">
             <div class="page-header">
-                <h1>📊 Dashboard</h1>
-                <p class="subtitle">Track your reading progress and achievements</p>
+                <h1>📊 Panou</h1>
+                <p class="subtitle">Urmărește progresul tău de lectură and achievements</p>
             </div>
 
             <div class="dashboard-grid">
@@ -147,8 +147,8 @@
                     <div class="stat-card">
                         <div class="stat-icon">📖</div>
                         <div class="stat-content">
-                            <div class="stat-value" id="stat-chapters">0</div>
-                            <div class="stat-label">Chapters Read</div>
+                            <div class="stat-value" id="stat-capitole">0</div>
+                            <div class="stat-label">Capitole Citite</div>
                         </div>
                     </div>
                     
@@ -156,7 +156,7 @@
                         <div class="stat-icon accent-orange">🔥</div>
                         <div class="stat-content">
                             <div class="stat-value" id="stat-streak">0</div>
-                            <div class="stat-label">Day Streak</div>
+                            <div class="stat-label">Zile Consecutive</div>
                         </div>
                     </div>
                     
@@ -164,7 +164,7 @@
                         <div class="stat-icon accent-green">✓</div>
                         <div class="stat-content">
                             <div class="stat-value" id="stat-score">0</div>
-                            <div class="stat-label">Avg Quiz Score</div>
+                            <div class="stat-label">Scor Mediu Quiz</div>
                         </div>
                     </div>
                     
@@ -172,7 +172,7 @@
                         <div class="stat-icon accent-purple">📝</div>
                         <div class="stat-content">
                             <div class="stat-value" id="stat-notes">0</div>
-                            <div class="stat-label">Notes Shared</div>
+                            <div class="stat-label">Notițe Shared</div>
                         </div>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                 <!-- Current Book Section -->
                 <div class="card current-book-card">
                     <div class="card-header">
-                        <h2>🔖 Currently Reading</h2>
+                        <h2>🔖 În curs de citire</h2>
                     </div>
                     <div class="card-body">
                         <div class="book-info">
@@ -189,25 +189,25 @@
                             
                             <div class="progress-section">
                                 <div class="progress-header">
-                                    <span>Progress</span>
+                                    <span>Progres</span>
                                     <span class="progress-percent" id="progress-percent">0%</span>
                                 </div>
                                 <div class="progress-bar">
                                     <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
                                 </div>
-                                <p class="progress-text" id="progress-text">0 of 12 chapters completed</p>
+                                <p class="progress-text" id="progress-text">0 din 12 capitole completed</p>
                             </div>
                             
-                            <a href="library.html" class="btn btn-primary">📚 Continue Reading</a>
+                            <a href="library.html" class="btn btn-primary">📚 Continuă Lectura</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Badge Progress Section -->
-                <div class="card badges-preview-card">
+                <!-- Progres Insigne Section -->
+                <div class="card insigne-preview-card">
                     <div class="card-header">
-                        <h2>🏅 Badge Progress</h2>
-                        <a href="badges.html" class="btn btn-sm btn-secondary">View All</a>
+                        <h2>🏅 Progres Insigne</h2>
+                        <a href="insigne.html" class="btn btn-sm btn-secondary">Vezi Toate</a>
                     </div>
                     <div class="card-body">
                         <div class="badge-progress-grid" id="badge-progress-grid">
@@ -216,14 +216,14 @@
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
+                <!-- Activitate Recentă -->
                 <div class="card">
                     <div class="card-header">
-                        <h2>🕐 Recent Activity</h2>
+                        <h2>🕐 Activitate Recentă</h2>
                     </div>
                     <div class="card-body">
                         <div class="activity-list" id="activity-list">
-                            <p class="empty-state">No recent activity. Start reading to track your progress!</p>
+                            <p class="empty-state">Nicio activitate recentă. Începe lectura pentru a urmări your progress!</p>
                         </div>
                     </div>
                 </div>
@@ -233,14 +233,14 @@
         <!-- Welcome State (No User) -->
         <div id="welcome-state" class="empty-state-container">
             <div class="empty-state-icon">👋</div>
-            <h2>Welcome to Book Club</h2>
-            <p>Select a user above to track your reading progress, earn badges, and compete on the leaderboard.</p>
-            <a href="library.html" class="btn btn-primary">Browse Books</a>
+            <h2>Bine ai venit la Book Club</h2>
+            <p>Selectează un utilizator above to track your reading progress, earn insigne, and compete on the leaderboard.</p>
+            <a href="library.html" class="btn btn-primary">Răsfoiește Cărți</a>
         </div>
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
     </footer>
 
     <script src="js/data.js"></script>
@@ -286,7 +286,7 @@
                 document.getElementById('display-user-name').textContent = user.name;
                 document.getElementById('user-selector').value = user.id;
                 
-                loadDashboard(user);
+                loadPanou(user);
             } else {
                 document.getElementById('dashboard-content').style.display = 'none';
                 document.getElementById('welcome-state').style.display = 'block';
@@ -294,13 +294,13 @@
             }
         });
 
-        function loadDashboard(user) {
+        function loadPanou(user) {
             // Load stats
-            const completedChapters = BookClub.getCompletedChapters(user.id);
+            const completedCapitole = BookClub.getCompletateCapitole(user.id);
             const streak = BookClub.getStreakStatus(user.id);
             const noteCount = BookClub.getUserNoteCount(user.id);
             
-            document.getElementById('stat-chapters').textContent = completedChapters.length;
+            document.getElementById('stat-capitole').textContent = completedCapitole.length;
             document.getElementById('stat-streak').textContent = streak.current;
             document.getElementById('stat-notes').textContent = noteCount;
             
@@ -320,27 +320,27 @@
             document.getElementById('stat-score').textContent = avgScore;
             
             // Update progress bar
-            const totalChapters = 12;
-            const progress = Math.round((completedChapters.length / totalChapters) * 100);
+            const totalCapitole = 12;
+            const progress = Math.round((completedCapitole.length / totalCapitole) * 100);
             document.getElementById('progress-percent').textContent = progress + '%';
             document.getElementById('progress-fill').style.width = progress + '%';
-            document.getElementById('progress-text').textContent = `${completedChapters.length} of ${totalChapters} chapters completed`;
+            document.getElementById('progress-text').textContent = `${completedCapitole.length} din ${totalCapitole} capitole completed`;
             
             // Load badge progress
-            loadBadgeProgress(user);
+            loadBadgeProgres(user);
             
             // Load recent activity
             loadRecentActivity(user);
         }
 
-        function loadBadgeProgress(user) {
-            const progress = BookClub.getBadgeProgress(user.id);
+        function loadBadgeProgres(user) {
+            const progress = BookClub.getBadgeProgres(user.id);
             const container = document.getElementById('badge-progress-grid');
             
             const badgeIds = Object.keys(progress).slice(0, 4);
             
             if (badgeIds.length === 0) {
-                container.innerHTML = '<p class="empty-state">Complete chapters to earn badges!</p>';
+                container.innerHTML = '<p class="empty-state">Complet capitole to earn insigne!</p>';
                 return;
             }
             
@@ -363,22 +363,22 @@
 
         function loadRecentActivity(user) {
             const container = document.getElementById('activity-list');
-            const notes = BookClub.getNotes().filter(n => n.user_id === user.id).slice(0, 5);
-            const completedChapters = BookClub.getCompletedChapters(user.id).slice(-5);
+            const notes = BookClub.getNotițe().filter(n => n.user_id === user.id).slice(0, 5);
+            const completedCapitole = BookClub.getCompletateCapitole(user.id).slice(-5);
             
-            if (notes.length === 0 && completedChapters.length === 0) {
-                container.innerHTML = '<p class="empty-state">No recent activity. Start reading to track your progress!</p>';
+            if (notes.length === 0 && completedCapitole.length === 0) {
+                container.innerHTML = '<p class="empty-state">Nicio activitate recentă. Începe lectura pentru a urmări your progress!</p>';
                 return;
             }
             
             // Combine and sort activities (most recent first)
             const activities = [];
             
-            completedChapters.forEach(ch => {
+            completedCapitole.forEach(ch => {
                 activities.push({
                     type: 'chapter',
                     title: ch.title,
-                    time: 'Completed'
+                    time: 'Completate'
                 });
             });
             
@@ -394,7 +394,7 @@
                 <div class="activity-item">
                     <div class="activity-icon">${act.type === 'chapter' ? '✓' : '📝'}</div>
                     <div class="activity-content">
-                        <p>${act.type === 'chapter' ? 'Completed' : 'Added note to'} <strong>${act.title}</strong></p>
+                        <p>${act.type === 'chapter' ? 'Completate' : 'Added note to'} <strong>${act.title}</strong></p>
                         <span class="activity-time">${act.time}</span>
                     </div>
                 </div>

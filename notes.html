@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes | Trading Book Club</title>
+    <title>Notițe | Club de Lectură Trading</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,18 +112,18 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
-                <li><a href="library.html" class="nav-link">📚 Library</a></li>
-                <li><a href="notes.html" class="nav-link active">📝 Notes</a></li>
-                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
-                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+                <li><a href="index.html" class="nav-link">📊 Panou</a></li>
+                <li><a href="library.html" class="nav-link">📚 Bibliotecă</a></li>
+                <li><a href="notes.html" class="nav-link active">📝 Notițe</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Clasament</a></li>
+                <li><a href="insigne.html" class="nav-link">🏅 Insigne</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="main-content">
         <header class="page-header">
-            <h1>💬 Shared Notes</h1>
+            <h1>💬 Shared Notițe</h1>
             <p class="subtitle">Insights and reflections from your reading journey</p>
         </header>
 
@@ -133,7 +133,7 @@
             
             <form class="note-form" id="note-form" onsubmit="handleSubmit(event)">
                 <div class="form-group">
-                    <label>Chapter</label>
+                    <label>Capitolul</label>
                     <select id="chapter-select" required>
                         <option value="">Select a chapter...</option>
                         <!-- Populated by JS -->
@@ -142,16 +142,16 @@
                 
                 <div class="form-group">
                     <label>Your Note</label>
-                    <textarea id="note-text" rows="4" placeholder="Share your insights..." required></textarea>
+                    <textarea id="note-text" rows="4" placeholder="Împărtășește ideile tale..." required></textarea>
                 </div>
                 
                 <button type="submit" class="btn btn-primary">📝 Post Note</button>
             </form>
         </section>
 
-        <!-- All Notes Section -->
+        <!-- All Notițe Section -->
         <section class="all-notes">
-            <h2>All Notes</h2>
+            <h2>All Notițe</h2>
             
             <div class="notes-timeline" id="notes-timeline">
                 <!-- Populated by JS -->
@@ -160,7 +160,7 @@
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
     </footer>
 
     <script src="js/data.js"></script>
@@ -172,24 +172,24 @@
             if (!user) {
                 document.getElementById('add-note-section').style.display = 'none';
             } else {
-                populateChapterSelect();
+                populateCapitolulSelect();
             }
             
-            loadNotes();
+            loadNotițe();
         });
 
-        function populateChapterSelect() {
+        function populateCapitolulSelect() {
             const select = document.getElementById('chapter-select');
             
             BOOKCLUB_DATA.books.forEach(book => {
                 const optgroup = document.createElement('optgroup');
                 optgroup.label = book.title;
                 
-                const chapters = BookClub.getChaptersByBook(book.id);
-                chapters.forEach(chapter => {
+                const capitole = BookClub.getCapitoleByBook(book.id);
+                capitole.forEach(chapter => {
                     const option = document.createElement('option');
                     option.value = chapter.id;
-                    option.textContent = `Chapter ${chapter.number}: ${chapter.title}`;
+                    option.textContent = `Capitolul ${chapter.number}: ${chapter.title}`;
                     optgroup.appendChild(option);
                 });
                 
@@ -197,16 +197,16 @@
             });
         }
 
-        function loadNotes() {
+        function loadNotițe() {
             const container = document.getElementById('notes-timeline');
-            const notes = BookClub.getNotes();
+            const notes = BookClub.getNotițe();
             
             if (notes.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <span class="empty-state-icon">📝</span>
-                        <h3>No notes yet</h3>
-                        <p>Be the first to share your thoughts on a chapter!</p>
+                        <h3>Nicio notiță încă</h3>
+                        <p>Fii primul to share your thoughts on a chapter!</p>
                     </div>
                 `;
                 return;
@@ -248,7 +248,7 @@
             if (BookClub.addNote(chapterId, noteText)) {
                 document.getElementById('note-form').reset();
                 setTimeout(() => {
-                    loadNotes();
+                    loadNotițe();
                 }, 500);
             }
         }

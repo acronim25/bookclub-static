@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Detail | Trading Book Club</title>
+    <title>Book Detail | Club de Lectură Trading</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,18 +112,18 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
-                <li><a href="library.html" class="nav-link">📚 Library</a></li>
-                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
-                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
-                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+                <li><a href="index.html" class="nav-link">📊 Panou</a></li>
+                <li><a href="library.html" class="nav-link">📚 Bibliotecă</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notițe</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Clasament</a></li>
+                <li><a href="insigne.html" class="nav-link">🏅 Insigne</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="main-content">
         <div class="breadcrumb">
-            <a href="library.html">← Back to Library</a>
+            <a href="library.html">← Back to Bibliotecă</a>
         </div>
 
         <div id="book-content">
@@ -132,7 +132,7 @@
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
     </footer>
 
     <script src="js/data.js"></script>
@@ -150,19 +150,19 @@
             const container = document.getElementById('book-content');
             
             if (!book) {
-                container.innerHTML = '<div class="empty-state"><h2>Book not found</h2></div>';
+                container.innerHTML = '<div class="empty-state"><h2>Carte negăsită</h2></div>';
                 return;
             }
             
             const user = BookClub.getCurrentUser();
-            const chapters = BookClub.getChaptersByBook(book.id);
+            const capitole = BookClub.getCapitoleByBook(book.id);
             
             let completedCount = 0;
             if (user) {
-                completedCount = chapters.filter(ch => BookClub.isChapterCompleted(user.id, ch.id)).length;
+                completedCount = capitole.filter(ch => BookClub.isCapitolulCompletate(user.id, ch.id)).length;
             }
             
-            const progressPercent = chapters.length > 0 ? Math.round((completedCount / chapters.length) * 100) : 0;
+            const progressPercent = capitole.length > 0 ? Math.round((completedCount / capitole.length) * 100) : 0;
             
             container.innerHTML = `
                 <div class="book-detail-header">
@@ -180,12 +180,12 @@
                         
                         <div class="book-stats">
                             <div class="book-stat">
-                                <span class="stat-number">${chapters.length}</span>
-                                <span class="stat-label">Chapters</span>
+                                <span class="stat-number">${capitole.length}</span>
+                                <span class="stat-label">Capitole</span>
                             </div>
                             <div class="book-stat">
                                 <span class="stat-number">${progressPercent}%</span>
-                                <span class="stat-label">Complete</span>
+                                <span class="stat-label">Complet</span>
                             </div>
                         </div>
                         
@@ -199,16 +199,16 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h2>📑 Chapters</h2>
+                        <h2>📑 Capitole</h2>
                     </div>
                     <div class="card-body">
-                        <div class="chapters-list">
-                            ${chapters.map(chapter => {
-                                const isCompleted = user && BookClub.isChapterCompleted(user.id, chapter.id);
+                        <div class="capitole-list">
+                            ${capitole.map(chapter => {
+                                const isCompletate = user && BookClub.isCapitolulCompletate(user.id, chapter.id);
                                 return `
-                                    <div class="chapter-item ${isCompleted ? 'completed' : ''}">
+                                    <div class="chapter-item ${isCompletate ? 'completed' : ''}">
                                         <div class="chapter-status">
-                                            ${isCompleted ? '✓' : '○'}
+                                            ${isCompletate ? '✓' : '○'}
                                         </div>
                                         
                                         <div class="chapter-number">${chapter.number}</div>
@@ -227,7 +227,7 @@
                                         </div>
                                         
                                         <a href="chapter.html?id=${chapter.id}" class="btn btn-sm btn-secondary">
-                                            ${isCompleted ? 'Review' : 'Read'}
+                                            ${isCompletate ? 'Review' : 'Read'}
                                         </a>
                                     </div>
                                 `;

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard | Trading Book Club</title>
+    <title>Clasament | Club de Lectură Trading</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,18 +112,18 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
-                <li><a href="library.html" class="nav-link">📚 Library</a></li>
-                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
-                <li><a href="leaderboard.html" class="nav-link active">🏆 Leaderboard</a></li>
-                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+                <li><a href="index.html" class="nav-link">📊 Panou</a></li>
+                <li><a href="library.html" class="nav-link">📚 Bibliotecă</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notițe</a></li>
+                <li><a href="leaderboard.html" class="nav-link active">🏆 Clasament</a></li>
+                <li><a href="insigne.html" class="nav-link">🏅 Insigne</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="main-content">
         <header class="page-header">
-            <h1>🏆 Leaderboard</h1>
+            <h1>🏆 Clasament</h1>
             <p class="subtitle">Friendly competition drives growth</p>
         </header>
 
@@ -131,33 +131,33 @@
         <div class="stats-overview" id="stats-overview">
             <div class="overview-card">
                 <span class="overview-value" id="stat-users">0</span>
-                <span class="overview-label">Readers</span>
+                <span class="overview-label">Cititori</span>
             </div>
             <div class="overview-card">
-                <span class="overview-value" id="stat-chapters">0</span>
-                <span class="overview-label">Chapters Read</span>
+                <span class="overview-value" id="stat-capitole">0</span>
+                <span class="overview-label">Capitole Citite</span>
             </div>
             <div class="overview-card">
                 <span class="overview-value" id="stat-quizzes">0</span>
-                <span class="overview-label">Quizzes Taken</span>
+                <span class="overview-label">Quiz-uri Rezolvate</span>
             </div>
             <div class="overview-card">
                 <span class="overview-value" id="stat-avg">0</span>
-                <span class="overview-label">Avg Quiz Score</span>
+                <span class="overview-label">Scor Mediu Quiz</span>
             </div>
         </div>
 
-        <!-- Leaderboard Table -->
+        <!-- Clasament Table -->
         <div class="leaderboard-table-container">
             <table class="leaderboard-table">
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Reader</th>
-                        <th>Chapters</th>
+                        <th>Loc</th>
+                        <th>Cititor</th>
+                        <th>Capitole</th>
                         <th>Streak</th>
                         <th>Avg Score</th>
-                        <th>Badges</th>
+                        <th>Insigne</th>
                     </tr>
                 </thead>
                 <tbody id="leaderboard-body">
@@ -168,7 +168,7 @@
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
     </footer>
 
     <script src="js/data.js"></script>
@@ -176,21 +176,21 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             loadStats();
-            loadLeaderboard();
+            loadClasament();
         });
 
         function loadStats() {
             const stats = BookClub.getStats();
             
             document.getElementById('stat-users').textContent = stats.total_users;
-            document.getElementById('stat-chapters').textContent = stats.total_chapters_read;
+            document.getElementById('stat-capitole').textContent = stats.total_capitole_read;
             document.getElementById('stat-quizzes').textContent = stats.total_quizzes_taken;
             document.getElementById('stat-avg').textContent = stats.average_quiz_score;
         }
 
-        function loadLeaderboard() {
+        function loadClasament() {
             const tbody = document.getElementById('leaderboard-body');
-            const leaderboard = BookClub.getLeaderboard();
+            const leaderboard = BookClub.getClasament();
             
             if (leaderboard.length === 0) {
                 tbody.innerHTML = `
@@ -215,13 +215,13 @@
                     <tr class="${rank <= 3 ? 'top-' + rank : ''}">
                         <td class="rank">${rankDisplay}</td>
                         <td class="user-name">${user.name}</td>
-                        <td class="chapters-count">${user.chapters_completed}</td>
+                        <td class="capitole-count">${user.capitole_completed}</td>
                         <td class="streak">
                             ${user.current_streak > 0 ? `🔥 ${user.current_streak}` : '-'}
                         </td>
                         <td class="avg-score">${user.avg_quiz_score}/10</td>
-                        <td class="badges-cell">
-                            ${user.badges_list.slice(0, 5).map(badge => `
+                        <td class="insigne-cell">
+                            ${user.insigne_list.slice(0, 5).map(badge => `
                                 <span class="badge-mini" title="${badge.name}">${badge.emoji}</span>
                             `).join('')}
                         </td>
