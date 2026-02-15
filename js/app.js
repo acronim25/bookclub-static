@@ -472,7 +472,7 @@ const BookClub = {
         saveQuizResult(user.id, chapterId, score);
         
         // Check for badges
-        const newBadges = checkAndAwardBadges(user.id);
+        const newBadges = checkBadges(getAllUsers()[user.id]);
         
         return {
             score,
