@@ -468,8 +468,8 @@ const BookClub = {
         const score = Math.round((correct / maxScore) * 10);
         const percentage = Math.round((correct / maxScore) * 100);
         
-        // Save result
-        saveQuizResult(user.id, quiz.id, score);
+        // Save result - folosim chapterId nu quiz.id
+        saveQuizResult(user.id, chapterId, score);
         
         // Check for badges
         const newBadges = checkAndAwardBadges(user.id);
