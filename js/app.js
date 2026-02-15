@@ -449,7 +449,7 @@ const BookClub = {
     markChapterComplete: (chapterId, notes = '') => {
         const user = getCurrentUser();
         if (!user) {
-            showNotification('Selectează un utilizator mai întâi', 'error');
+            showNotification('Please select a user first', 'error');
             return [];
         }
         return markChapterComplete(user.id, chapterId, notes);
@@ -458,7 +458,7 @@ const BookClub = {
     submitQuiz: (chapterId, answers) => {
         const user = getCurrentUser();
         if (!user) {
-            showNotification('Selectează un utilizator mai întâi', 'error');
+            showNotification('Please select a user first', 'error');
             return null;
         }
         

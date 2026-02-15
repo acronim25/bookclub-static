@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capitolul | Club de Lectură Trading</title>
+    <title>Chapter | Trading Book Club</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,11 +112,11 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">📊 Panou</a></li>
-                <li><a href="library.html" class="nav-link">📚 Bibliotecă</a></li>
-                <li><a href="notes.html" class="nav-link">📝 Notițe</a></li>
-                <li><a href="leaderboard.html" class="nav-link">🏆 Clasament</a></li>
-                <li><a href="insigne.html" class="nav-link">🏅 Insigne</a></li>
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
             </ul>
         </div>
     </nav>
@@ -128,7 +128,7 @@
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
     </footer>
 
     <script src="js/data.js"></script>
@@ -138,58 +138,58 @@
             const urlParams = new URLSearchParams(window.location.search);
             const chapterId = parseInt(urlParams.get('id')) || 1;
             
-            loadCapitolul(chapterId);
+            loadChapter(chapterId);
         });
 
-        function loadCapitolul(chapterId) {
-            const chapter = BookClub.getCapitolulById(chapterId);
+        function loadChapter(chapterId) {
+            const chapter = BookClub.getChapterById(chapterId);
             const container = document.getElementById('chapter-content');
             
             if (!chapter) {
-                container.innerHTML = '<div class="empty-state"><h2>Capitolul not found</h2></div>';
+                container.innerHTML = '<div class="empty-state"><h2>Chapter not found</h2></div>';
                 return;
             }
             
             const book = BookClub.getBookById(chapter.book_id);
             const user = BookClub.getCurrentUser();
-            const isCompletate = user && BookClub.isCapitolulCompletate(user.id, chapter.id);
-            const quiz = BookClub.getQuizByCapitolul(chapter.id);
+            const isCompleted = user && BookClub.isChapterCompleted(user.id, chapter.id);
+            const quiz = BookClub.getQuizByChapter(chapter.id);
             const quizResult = user ? BookClub.getQuizResult(user.id, chapter.id) : null;
             
-            const allCapitole = BookClub.getCapitoleByBook(chapter.book_id);
-            const currentIndex = allCapitole.findIndex(c => c.id === chapterId);
-            const prevCapitolul = currentIndex > 0 ? allCapitole[currentIndex - 1] : null;
-            const nextCapitolul = currentIndex < allCapitole.length - 1 ? allCapitole[currentIndex + 1] : null;
+            const allChapters = BookClub.getChaptersByBook(chapter.book_id);
+            const currentIndex = allChapters.findIndex(c => c.id === chapterId);
+            const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
+            const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
             
-            const notes = BookClub.getNotițeForCapitolul(chapterId);
+            const notes = BookClub.getNotesForChapter(chapterId);
             
             container.innerHTML = `
                 <div class="breadcrumb">
-                    <a href="library.html">Bibliotecă</a>
+                    <a href="library.html">Library</a>
                     <span class="breadcrumb-separator">/</span>
                     <a href="book.html?id=${book.id}">${book.title}</a>
                     <span class="breadcrumb-separator">/</span>
-                    <span>Capitolul ${chapter.number}</span>
+                    <span>Chapter ${chapter.number}</span>
                 </div>
 
                 <div class="chapter-navigation">
-                    ${prevCapitolul ? `
-                        <a href="chapter.html?id=${prevCapitolul.id}" class="btn btn-sm btn-secondary">← Anterior</a>
-                    ` : '<span class="btn btn-sm btn-disabled">← Anterior</span>'}
+                    ${prevChapter ? `
+                        <a href="chapter.html?id=${prevChapter.id}" class="btn btn-sm btn-secondary">← Previous</a>
+                    ` : '<span class="btn btn-sm btn-disabled">← Previous</span>'}
                     
-                    <span class="chapter-indicator">Capitolul ${chapter.number} din ${allCapitole.length}</span>
+                    <span class="chapter-indicator">Chapter ${chapter.number} of ${allChapters.length}</span>
                     
-                    ${nextCapitolul ? `
-                        <a href="chapter.html?id=${nextCapitolul.id}" class="btn btn-sm btn-secondary">Următor →</a>
-                    ` : '<span class="btn btn-sm btn-disabled">Următor →</span>'}
+                    ${nextChapter ? `
+                        <a href="chapter.html?id=${nextChapter.id}" class="btn btn-sm btn-secondary">Next →</a>
+                    ` : '<span class="btn btn-sm btn-disabled">Next →</span>'}
                 </div>
 
                 <div class="chapter-header">
                     <h1>${chapter.title}</h1>
                     
-                    ${isCompletate ? `
+                    ${isCompleted ? `
                         <div class="completion-badge">
-                            ✓ Completate
+                            ✓ Completed
                         </div>
                     ` : ''}
                 </div>
@@ -198,16 +198,16 @@
                     <!-- Main Content -->
                     <div class="card chapter-content-card">
                         <div class="card-header">
-                            <h2>📝 Rezumat</h2>
+                            <h2>📝 Summary</h2>
                         </div>
                         <div class="card-body">
                             <div class="chapter-summary">
-                                ${chapter.summary || '<p class="empty-state">Niciun rezumat disponibil.</p>'}
+                                ${chapter.summary || '<p class="empty-state">No summary available.</p>'}
                             </div>
                             
                             ${chapter.key_concepts ? `
                                 <div class="key-concepts-section">
-                                    <h4>Concepte Cheie</h4>
+                                    <h4>Key Concepts</h4>
                                     <div class="key-concepts">
                                         ${chapter.key_concepts.map(concept => `
                                             <span class="concept-tag">${concept}</span>
@@ -233,26 +233,26 @@
                                                 <span class="score-value">${quizResult.score}</span>
                                                 <span class="score-total">/${quizResult.maxScore}</span>
                                             </div>
-                                            <p>${quizResult.score >= 8 ? 'Excellent!' : quizResult.score >= 6 ? 'Good job!' : 'Continuă să înveți!'}</p>
-                                            <a href="quiz.html?chapter=${chapter.id}" class="btn btn-secondary btn-block">Reia Quiz</a>
+                                            <p>${quizResult.score >= 8 ? 'Excellent!' : quizResult.score >= 6 ? 'Good job!' : 'Keep learning!'}</p>
+                                            <a href="quiz.html?chapter=${chapter.id}" class="btn btn-secondary btn-block">Retake Quiz</a>
                                         </div>
                                     ` : `
-                                        <p>Testează-ți cunoștințele with ${quiz.questions.length} questions.</p>
-                                        <a href="quiz.html?chapter=${chapter.id}" class="btn btn-primary btn-block">🎯 Începe Quiz</a>
+                                        <p>Test your knowledge with ${quiz.questions.length} questions.</p>
+                                        <a href="quiz.html?chapter=${chapter.id}" class="btn btn-primary btn-block">🎯 Start Quiz</a>
                                     `}
                                 </div>
                             </div>
                         ` : ''}
 
-                        <!-- Mark Complet Card -->
-                        ${user && !isCompletate ? `
+                        <!-- Mark Complete Card -->
+                        ${user && !isCompleted ? `
                             <div class="card">
                                 <div class="card-header">
-                                    <h3>✓ Progres</h3>
+                                    <h3>✓ Progress</h3>
                                 </div>
                                 <div class="card-body">
-                                    <button class="btn btn-success btn-block" onclick="handleComplet(${chapter.id})">
-                                        Mark as Complet
+                                    <button class="btn btn-success btn-block" onclick="handleComplete(${chapter.id})">
+                                        Mark as Complete
                                     </button>
                                 </div>
                             </div>
@@ -260,20 +260,20 @@
                     </div>
                 </div>
 
-                <!-- Notițe Section -->
+                <!-- Notes Section -->
                 <div class="card">
                     <div class="card-header">
-                        <h2>💬 Shared Notițe</h2>
+                        <h2>💬 Shared Notes</h2>
                     </div>
                     <div class="card-body">
                         ${user ? `
                             <div class="add-note-form">
-                                <textarea id="note-input" placeholder="Împărtășește ideile tale, key takeaways, or questions about this chapter..." rows="3"></textarea>
+                                <textarea id="note-input" placeholder="Share your insights, key takeaways, or questions about this chapter..." rows="3"></textarea>
                                 <button class="btn btn-primary" onclick="handleAddNote(${chapter.id})">
-                                    📝 Partajează Notița
+                                    📝 Share Note
                                 </button>
                             </div>
-                        ` : '<p class="empty-state"><a href="index.html">Selectează un utilizator</a> to add notes.</p>'}
+                        ` : '<p class="empty-state"><a href="index.html">Select a user</a> to add notes.</p>'}
                         
                         <div id="notes-list" class="notes-list">
                             ${notes.length > 0 ? notes.map(note => `
@@ -284,15 +284,15 @@
                                     </div>
                                     <div class="note-content">${note.note}</div>
                                 </div>
-                            `).join('') : '<p class="empty-state" id="no-notes-msg">Nicio notiță încă. Fii primul to share your thoughts!</p>'}
+                            `).join('') : '<p class="empty-state" id="no-notes-msg">No notes yet. Be the first to share your thoughts!</p>'}
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        function handleComplet(chapterId) {
-            BookClub.markCapitolulComplet(chapterId);
+        function handleComplete(chapterId) {
+            BookClub.markChapterComplete(chapterId);
             setTimeout(() => location.reload(), 1000);
         }
 

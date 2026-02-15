@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insigne | Club de Lectură Trading</title>
+    <title>Badges | Trading Book Club</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,29 +112,29 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">📊 Panou</a></li>
-                <li><a href="library.html" class="nav-link">📚 Bibliotecă</a></li>
-                <li><a href="notes.html" class="nav-link">📝 Notițe</a></li>
-                <li><a href="leaderboard.html" class="nav-link">🏆 Clasament</a></li>
-                <li><a href="insigne.html" class="nav-link active">🏅 Insigne</a></li>
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link active">🏅 Badges</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="main-content">
         <header class="page-header">
-            <h1>🏅 Insigne</h1>
+            <h1>🏅 Badges</h1>
             <p class="subtitle">Earn achievements as you progress through your reading journey</p>
         </header>
 
-        <!-- Insigne Grid -->
-        <div class="insigne-grid" id="insigne-grid">
+        <!-- Badges Grid -->
+        <div class="badges-grid" id="badges-grid">
             <!-- Populated by JS -->
         </div>
 
-        <!-- Your Progres -->
+        <!-- Your Progress -->
         <div class="your-progress" id="your-progress">
-            <h2>Your Progres</h2>
+            <h2>Your Progress</h2>
             
             <div class="progress-summary">
                 <div class="progress-circle">
@@ -142,34 +142,34 @@
                     <span class="progress-total">/ <span id="progress-total">0</span></span>
                 </div>
                 
-                <p id="progress-message">Selectează un utilizator to see your progress</p>
+                <p id="progress-message">Select a user to see your progress</p>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
     </footer>
 
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            loadInsigne();
-            loadProgres();
+            loadBadges();
+            loadProgress();
         });
 
-        function loadInsigne() {
-            const container = document.getElementById('insigne-grid');
+        function loadBadges() {
+            const container = document.getElementById('badges-grid');
             const user = BookClub.getCurrentUser();
             
             let progress = {};
             if (user) {
-                progress = BookClub.getBadgeProgres(user.id);
+                progress = BookClub.getBadgeProgress(user.id);
             }
             
-            container.innerHTML = BOOKCLUB_DATA.insigne.map(badge => {
-                const badgeProgres = progress[badge.id] || { 
+            container.innerHTML = BOOKCLUB_DATA.badges.map(badge => {
+                const badgeProgress = progress[badge.id] || { 
                     earned: false, 
                     current: 0, 
                     target: badge.target, 
@@ -177,22 +177,22 @@
                 };
                 
                 return `
-                    <div class="badge-card ${badgeProgres.earned ? 'earned' : 'locked'}">
+                    <div class="badge-card ${badgeProgress.earned ? 'earned' : 'locked'}">
                         <div class="badge-icon">
                             <span class="emoji">${badge.emoji}</span>
-                            ${badgeProgres.earned ? '<span class="earned-check">✓</span>' : ''}
+                            ${badgeProgress.earned ? '<span class="earned-check">✓</span>' : ''}
                         </div>
                         
                         <div class="badge-info">
                             <h3>${badge.name}</h3>
                             <p>${badge.description}</p>
                             
-                            ${!badgeProgres.earned ? `
+                            ${!badgeProgress.earned ? `
                                 <div class="progress-section">
                                     <div class="progress-bar small">
-                                        <div class="progress-fill" style="width: ${badgeProgres.percentage}%"></div>
+                                        <div class="progress-fill" style="width: ${badgeProgress.percentage}%"></div>
                                     </div>
-                                    <span class="progress-text">${badgeProgres.current} / ${badgeProgres.target}</span>
+                                    <span class="progress-text">${badgeProgress.current} / ${badgeProgress.target}</span>
                                 </div>
                             ` : '<span class="earned-date">✓ Earned</span>'}
                         </div>
@@ -201,22 +201,22 @@
             }).join('');
         }
 
-        function loadProgres() {
+        function loadProgress() {
             const user = BookClub.getCurrentUser();
             const earnedEl = document.getElementById('progress-earned');
             const totalEl = document.getElementById('progress-total');
             const messageEl = document.getElementById('progress-message');
             
-            const totalInsigne = BOOKCLUB_DATA.insigne.length;
-            totalEl.textContent = totalInsigne;
+            const totalBadges = BOOKCLUB_DATA.badges.length;
+            totalEl.textContent = totalBadges;
             
             if (!user) {
                 earnedEl.textContent = '0';
-                messageEl.textContent = 'Selectează un utilizator on the Panou to see your progress';
+                messageEl.textContent = 'Select a user on the Dashboard to see your progress';
                 return;
             }
             
-            const progress = BookClub.getBadgeProgres(user.id);
+            const progress = BookClub.getBadgeProgress(user.id);
             let earnedCount = 0;
             
             for (const id in progress) {
@@ -224,7 +224,7 @@
             }
             
             earnedEl.textContent = earnedCount;
-            messageEl.textContent = `Ai câștigat ${earnedCount} out din ${totalInsigne} insigne. Keep reading!`;
+            messageEl.textContent = `You've earned ${earnedCount} out of ${totalBadges} badges. Keep reading!`;
         }
     </script>
 </body>

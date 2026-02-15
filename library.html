@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bibliotecă | Club de Lectură Trading</title>
+    <title>Library | Trading Book Club</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,19 +112,19 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">📊 Panou</a></li>
-                <li><a href="library.html" class="nav-link active">📚 Bibliotecă</a></li>
-                <li><a href="notes.html" class="nav-link">📝 Notițe</a></li>
-                <li><a href="leaderboard.html" class="nav-link">🏆 Clasament</a></li>
-                <li><a href="insigne.html" class="nav-link">🏅 Insigne</a></li>
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link active">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="main-content">
         <header class="page-header">
-            <h1>📚 Bibliotecă</h1>
-            <p class="subtitle">Colecția ta de psihologie trading</p>
+            <h1>📚 Library</h1>
+            <p class="subtitle">Your trading psychology collection</p>
         </header>
 
         <div class="books-grid" id="books-grid">
@@ -133,7 +133,7 @@
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
     </footer>
 
     <script src="js/data.js"></script>
@@ -148,14 +148,14 @@
             const user = BookClub.getCurrentUser();
             
             container.innerHTML = BOOKCLUB_DATA.books.map(book => {
-                const capitole = BookClub.getCapitoleByBook(book.id);
+                const chapters = BookClub.getChaptersByBook(book.id);
                 let completedCount = 0;
                 
                 if (user) {
-                    completedCount = capitole.filter(ch => BookClub.isCapitolulCompletate(user.id, ch.id)).length;
+                    completedCount = chapters.filter(ch => BookClub.isChapterCompleted(user.id, ch.id)).length;
                 }
                 
-                const progress = capitole.length > 0 ? Math.round((completedCount / capitole.length) * 100) : 0;
+                const progress = chapters.length > 0 ? Math.round((completedCount / chapters.length) * 100) : 0;
                 
                 return `
                     <a href="book.html?id=${book.id}" class="book-card-link">
@@ -175,7 +175,7 @@
                                     <div class="mini-progress-bar">
                                         <div class="mini-progress-fill" style="width: ${progress}%"></div>
                                     </div>
-                                    <span class="progress-count">${completedCount}/${capitole.length} capitole</span>
+                                    <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
                                 </div>
                             </div>
                         </div>

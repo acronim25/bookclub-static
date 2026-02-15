@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz | Club de Lectură Trading</title>
+    <title>Quiz | Trading Book Club</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,11 +112,11 @@
             <button class="nav-toggle" id="navToggle">☰</button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">📊 Panou</a></li>
-                <li><a href="library.html" class="nav-link">📚 Bibliotecă</a></li>
-                <li><a href="notes.html" class="nav-link">📝 Notițe</a></li>
-                <li><a href="leaderboard.html" class="nav-link">🏆 Clasament</a></li>
-                <li><a href="insigne.html" class="nav-link">🏅 Insigne</a></li>
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
             </ul>
         </div>
     </nav>
@@ -128,14 +128,14 @@
     </main>
 
     <footer class="footer">
-        <p>© 2026 Trading Book Club. Îmbunătățește-ți cunoștințele de trading.</p>
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
     </footer>
 
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
     <script>
         let currentQuiz = null;
-        let currentCapitolulId = null;
+        let currentChapterId = null;
 
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -146,64 +146,64 @@
         });
 
         function loadQuiz(chapterId, retake) {
-            const chapter = BookClub.getCapitolulById(chapterId);
+            const chapter = BookClub.getChapterById(chapterId);
             const container = document.getElementById('quiz-content');
             
             if (!chapter) {
-                container.innerHTML = '<div class="empty-state"><h2>Capitolul not found</h2></div>';
+                container.innerHTML = '<div class="empty-state"><h2>Chapter not found</h2></div>';
                 return;
             }
             
             const book = BookClub.getBookById(chapter.book_id);
-            const quiz = BookClub.getQuizByCapitolul(chapterId);
+            const quiz = BookClub.getQuizByChapter(chapterId);
             const user = BookClub.getCurrentUser();
             
             if (!quiz) {
                 container.innerHTML = `
                     <div class="breadcrumb">
-                        <a href="library.html">Bibliotecă</a>
+                        <a href="library.html">Library</a>
                         <span class="breadcrumb-separator">/</span>
                         <a href="book.html?id=${book.id}">${book.title}</a>
                         <span class="breadcrumb-separator">/</span>
-                        <a href="chapter.html?id=${chapter.id}">Capitolul ${chapter.number}</a>
+                        <a href="chapter.html?id=${chapter.id}">Chapter ${chapter.number}</a>
                         <span class="breadcrumb-separator">/</span>
                         <span>Quiz</span>
                     </div>
                     <div class="empty-state-container">
                         <div class="empty-state-icon">📝</div>
-                        <h2>Nu există Quiz</h2>
+                        <h2>No Quiz Available</h2>
                         <p>There is no quiz for this chapter yet.</p>
-                        <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">Back to Capitolul</a>
+                        <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">Back to Chapter</a>
                     </div>
                 `;
                 return;
             }
             
             currentQuiz = quiz;
-            currentCapitolulId = chapterId;
+            currentChapterId = chapterId;
             
             const quizResult = user ? BookClub.getQuizResult(user.id, chapterId) : null;
             const hasTaken = quizResult && !retake;
             
             container.innerHTML = `
                 <div class="breadcrumb">
-                    <a href="library.html">Bibliotecă</a>
+                    <a href="library.html">Library</a>
                     <span class="breadcrumb-separator">/</span>
                     <a href="book.html?id=${book.id}">${book.title}</a>
                     <span class="breadcrumb-separator">/</span>
-                    <a href="chapter.html?id=${chapter.id}">Capitolul ${chapter.number}</a>
+                    <a href="chapter.html?id=${chapter.id}">Chapter ${chapter.number}</a>
                     <span class="breadcrumb-separator">/</span>
                     <span>Quiz</span>
                 </div>
 
                 <div class="quiz-container">
                     <div class="quiz-header">
-                        <h1>❓ Capitolul Quiz</h1>
-                        <p class="quiz-subtitle">${book.title} - Capitolul ${chapter.number}: ${chapter.title}</p>
+                        <h1>❓ Chapter Quiz</h1>
+                        <p class="quiz-subtitle">${book.title} - Chapter ${chapter.number}: ${chapter.title}</p>
                     </div>
 
                     ${hasTaken ? `
-                        <!-- Anterior Results View -->
+                        <!-- Previous Results View -->
                         <div class="quiz-results" id="previous-results">
                             <div class="result-score-card">
                                 <div class="result-emoji">
@@ -212,19 +212,19 @@
                                 <div class="result-score">${quizResult.score}<span>/${quizResult.maxScore}</span></div>
                                 <div class="result-percentage">${quizResult.percentage}%</div>
                                 <div class="result-message">
-                                    ${quizResult.score >= 9 ? 'Remarcabil! You really know this material.' : 
-                                      quizResult.score >= 8 ? 'Bravo! You\'re mastering these concepts.' : 
-                                      quizResult.score >= 6 ? 'Bine lucrat! Keep reviewing to improve.' : 
-                                      'Continuă să înveți! Review the chapter and try again.'}
+                                    ${quizResult.score >= 9 ? 'Outstanding! You really know this material.' : 
+                                      quizResult.score >= 8 ? 'Great job! You\'re mastering these concepts.' : 
+                                      quizResult.score >= 6 ? 'Good work! Keep reviewing to improve.' : 
+                                      'Keep learning! Review the chapter and try again.'}
                                 </div>
                             </div>
 
                             <div class="result-actions">
                                 <button class="btn btn-secondary" onclick="retakeQuiz()">
-                                    🔄 Reia Quiz
+                                    🔄 Retake Quiz
                                 </button>
                                 <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">
-                                    ← Back to Capitolul
+                                    ← Back to Chapter
                                 </a>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                         <form id="quiz-form" onsubmit="handleSubmit(event)">
                             ${quiz.questions.map((q, idx) => `
                                 <div class="question-card" data-question="${idx}">
-                                    <div class="question-number">Întrebarea ${idx + 1}</div>
+                                    <div class="question-number">Question ${idx + 1}</div>
                                     <h3 class="question-text">${q.question}</h3>
                                     
                                     <div class="options-list">
@@ -254,7 +254,7 @@
 
                             <div class="quiz-actions">
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    ✓ Trimite Quiz
+                                    ✓ Submit Quiz
                                 </button>
                             </div>
                         </form>
@@ -266,17 +266,17 @@
                             <div class="result-emoji" id="result-emoji">🎉</div>
                             <div class="result-score" id="result-score">0<span>/10</span></div>
                             <div class="result-percentage" id="result-percentage">0%</div>
-                            <div class="result-message" id="result-message">Bravo!</div>
+                            <div class="result-message" id="result-message">Great job!</div>
                         </div>
 
-                        <div id="new-insigne" class="new-insigne"></div>
+                        <div id="new-badges" class="new-badges"></div>
 
                         <div class="result-actions">
                             <button class="btn btn-secondary" onclick="tryAgain()">
-                                🔄 Încearcă Din Nou
+                                🔄 Try Again
                             </button>
                             <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">
-                                ← Back to Capitolul
+                                ← Back to Chapter
                             </a>
                         </div>
                     </div>
@@ -301,12 +301,12 @@
             
             // Check all questions answered
             if (answers.some(a => a === -1)) {
-                BookClub.showNotification('Te rugăm să răspunzi la toate întrebările', 'warning');
+                BookClub.showNotification('Please answer all questions', 'warning');
                 return;
             }
             
             // Submit quiz
-            const result = BookClub.submitQuiz(currentCapitolulId, answers);
+            const result = BookClub.submitQuiz(currentChapterId, answers);
             
             if (result) {
                 showResults(result);
@@ -328,24 +328,24 @@
             
             if (result.percentage >= 90) {
                 emojiEl.textContent = '🎉';
-                messageEl.textContent = 'Remarcabil! You really know this material.';
+                messageEl.textContent = 'Outstanding! You really know this material.';
             } else if (result.percentage >= 80) {
                 emojiEl.textContent = '👍';
-                messageEl.textContent = 'Bravo! You\'re mastering these concepts.';
+                messageEl.textContent = 'Great job! You\'re mastering these concepts.';
             } else if (result.percentage >= 60) {
                 emojiEl.textContent = '💪';
-                messageEl.textContent = 'Bine lucrat! Keep reviewing to improve.';
+                messageEl.textContent = 'Good work! Keep reviewing to improve.';
             } else {
                 emojiEl.textContent = '📚';
-                messageEl.textContent = 'Continuă să înveți! Review the chapter and try again.';
+                messageEl.textContent = 'Keep learning! Review the chapter and try again.';
             }
             
-            // Show new insigne
-            if (result.newInsigne && result.newInsigne.length > 0) {
-                const insigneContainer = document.getElementById('new-insigne');
-                insigneContainer.innerHTML = `
-                    <h3>🏆 New Insigne Earned!</h3>
-                    ${result.newInsigne.map(badge => `
+            // Show new badges
+            if (result.newBadges && result.newBadges.length > 0) {
+                const badgesContainer = document.getElementById('new-badges');
+                badgesContainer.innerHTML = `
+                    <h3>🏆 New Badges Earned!</h3>
+                    ${result.newBadges.map(badge => `
                         <div class="badge-earned">
                             <span class="badge-emoji">${badge.emoji}</span>
                             <span class="badge-name">${badge.name}</span>
