@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes | Trading Book Club</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+        <!-- Chart Bars Left -->
+    <div class="chart-bars chart-bars-left">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <!-- Chart Bars Right -->
+    <div class="chart-bars chart-bars-right">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>📚</span>
+                <span>BookClub</span>
+            </a>
+            
+            <button class="nav-toggle" id="navToggle">☰</button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link active">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>💬 Shared Notes</h1>
+            <p class="subtitle">Insights and reflections from your reading journey</p>
+        </header>
+
+        <!-- Add Note Section -->
+        <section class="add-note-section" id="add-note-section">
+            <h2>Add a Note</h2>
+            
+            <form class="note-form" id="note-form" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label>Chapter</label>
+                    <select id="chapter-select" required>
+                        <option value="">Select a chapter...</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Your Note</label>
+                    <textarea id="note-text" rows="4" placeholder="Share your insights..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">📝 Post Note</button>
+            </form>
+        </section>
+
+        <!-- All Notes Section -->
+        <section class="all-notes">
+            <h2>All Notes</h2>
+            
+            <div class="notes-timeline" id="notes-timeline">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = BookClub.getCurrentUser();
+            
+            if (!user) {
+                document.getElementById('add-note-section').style.display = 'none';
+            } else {
+                populateChapterSelect();
+            }
+            
+            loadNotes();
+        });
+
+        function populateChapterSelect() {
+            const select = document.getElementById('chapter-select');
+            
+            BOOKCLUB_DATA.books.forEach(book => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = book.title;
+                
+                const chapters = BookClub.getChaptersByBook(book.id);
+                chapters.forEach(chapter => {
+                    const option = document.createElement('option');
+                    option.value = chapter.id;
+                    option.textContent = `Chapter ${chapter.number}: ${chapter.title}`;
+                    optgroup.appendChild(option);
+                });
+                
+                select.appendChild(optgroup);
+            });
+        }
+
+        function loadNotes() {
+            const container = document.getElementById('notes-timeline');
+            const notes = BookClub.getNotes();
+            
+            if (notes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-state-icon">📝</span>
+                        <h3>No notes yet</h3>
+                        <p>Be the first to share your thoughts on a chapter!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = notes.map(note => `
+                <div class="note-timeline-item">
+                    <div class="note-timeline-header">
+                        <div class="note-author-info">
+                            <span class="author-name">${note.user_name}</span>
+                            <span class="note-chapter-link">${note.book_title} - Ch. ${note.chapter_title.split(' ')[0]}</span>
+                        </div>
+                        <time class="note-time">${BookClub.formatRelativeTime(note.created_at)}</time>
+                    </div>
+                    
+                    <div class="note-content">
+                        <p>${note.note}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const chapterId = parseInt(document.getElementById('chapter-select').value);
+            const noteText = document.getElementById('note-text').value.trim();
+            
+            if (!chapterId) {
+                BookClub.showNotification('Please select a chapter', 'warning');
+                return;
+            }
+            
+            if (!noteText) {
+                BookClub.showNotification('Please enter a note', 'warning');
+                return;
+            }
+            
+            if (BookClub.addNote(chapterId, noteText)) {
+                document.getElementById('note-form').reset();
+                setTimeout(() => {
+                    loadNotes();
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>

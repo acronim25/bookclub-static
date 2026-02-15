@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter | Trading Book Club</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+        <!-- Chart Bars Left -->
+    <div class="chart-bars chart-bars-left">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <!-- Chart Bars Right -->
+    <div class="chart-bars chart-bars-right">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>📚</span>
+                <span>BookClub</span>
+            </a>
+            
+            <button class="nav-toggle" id="navToggle">☰</button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div id="chapter-content">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chapterId = parseInt(urlParams.get('id')) || 1;
+            
+            loadChapter(chapterId);
+        });
+
+        function loadChapter(chapterId) {
+            const chapter = BookClub.getChapterById(chapterId);
+            const container = document.getElementById('chapter-content');
+            
+            if (!chapter) {
+                container.innerHTML = '<div class="empty-state"><h2>Chapter not found</h2></div>';
+                return;
+            }
+            
+            const book = BookClub.getBookById(chapter.book_id);
+            const user = BookClub.getCurrentUser();
+            const isCompleted = user && BookClub.isChapterCompleted(user.id, chapter.id);
+            const quiz = BookClub.getQuizByChapter(chapter.id);
+            const quizResult = user ? BookClub.getQuizResult(user.id, chapter.id) : null;
+            
+            const allChapters = BookClub.getChaptersByBook(chapter.book_id);
+            const currentIndex = allChapters.findIndex(c => c.id === chapterId);
+            const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
+            const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
+            
+            const notes = BookClub.getNotesForChapter(chapterId);
+            
+            container.innerHTML = `
+                <div class="breadcrumb">
+                    <a href="library.html">Library</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="book.html?id=${book.id}">${book.title}</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span>Chapter ${chapter.number}</span>
+                </div>
+
+                <div class="chapter-navigation">
+                    ${prevChapter ? `
+                        <a href="chapter.html?id=${prevChapter.id}" class="btn btn-sm btn-secondary">← Previous</a>
+                    ` : '<span class="btn btn-sm btn-disabled">← Previous</span>'}
+                    
+                    <span class="chapter-indicator">Chapter ${chapter.number} of ${allChapters.length}</span>
+                    
+                    ${nextChapter ? `
+                        <a href="chapter.html?id=${nextChapter.id}" class="btn btn-sm btn-secondary">Next →</a>
+                    ` : '<span class="btn btn-sm btn-disabled">Next →</span>'}
+                </div>
+
+                <div class="chapter-header">
+                    <h1>${chapter.title}</h1>
+                    
+                    ${isCompleted ? `
+                        <div class="completion-badge">
+                            ✓ Completed
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="chapter-content-grid">
+                    <!-- Main Content -->
+                    <div class="card chapter-content-card">
+                        <div class="card-header">
+                            <h2>📝 Summary</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chapter-summary">
+                                ${chapter.summary || '<p class="empty-state">No summary available.</p>'}
+                            </div>
+                            
+                            ${chapter.key_concepts ? `
+                                <div class="key-concepts-section">
+                                    <h4>Key Concepts</h4>
+                                    <div class="key-concepts">
+                                        ${chapter.key_concepts.map(concept => `
+                                            <span class="concept-tag">${concept}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="chapter-sidebar">
+                        <!-- Quiz Card -->
+                        ${quiz ? `
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>❓ Quiz</h3>
+                                </div>
+                                <div class="card-body">
+                                    ${quizResult ? `
+                                        <div class="quiz-status">
+                                            <div class="quiz-score ${quizResult.score >= 8 ? 'excellent' : quizResult.score >= 6 ? 'good' : 'needs-work'}">
+                                                <span class="score-value">${quizResult.score}</span>
+                                                <span class="score-total">/${quizResult.maxScore}</span>
+                                            </div>
+                                            <p>${quizResult.score >= 8 ? 'Excellent!' : quizResult.score >= 6 ? 'Good job!' : 'Keep learning!'}</p>
+                                            <a href="quiz.html?chapter=${chapter.id}" class="btn btn-secondary btn-block">Retake Quiz</a>
+                                        </div>
+                                    ` : `
+                                        <p>Test your knowledge with ${quiz.questions.length} questions.</p>
+                                        <a href="quiz.html?chapter=${chapter.id}" class="btn btn-primary btn-block">🎯 Start Quiz</a>
+                                    `}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Mark Complete Card -->
+                        ${user && !isCompleted ? `
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>✓ Progress</h3>
+                                </div>
+                                <div class="card-body">
+                                    <button class="btn btn-success btn-block" onclick="handleComplete(${chapter.id})">
+                                        Mark as Complete
+                                    </button>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- Notes Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>💬 Shared Notes</h2>
+                    </div>
+                    <div class="card-body">
+                        ${user ? `
+                            <div class="add-note-form">
+                                <textarea id="note-input" placeholder="Share your insights, key takeaways, or questions about this chapter..." rows="3"></textarea>
+                                <button class="btn btn-primary" onclick="handleAddNote(${chapter.id})">
+                                    📝 Share Note
+                                </button>
+                            </div>
+                        ` : '<p class="empty-state"><a href="index.html">Select a user</a> to add notes.</p>'}
+                        
+                        <div id="notes-list" class="notes-list">
+                            ${notes.length > 0 ? notes.map(note => `
+                                <div class="note-item">
+                                    <div class="note-header">
+                                        <span class="note-author">👤 ${note.user_name}</span>
+                                        <span class="note-time">${BookClub.formatRelativeTime(note.created_at)}</span>
+                                    </div>
+                                    <div class="note-content">${note.note}</div>
+                                </div>
+                            `).join('') : '<p class="empty-state" id="no-notes-msg">No notes yet. Be the first to share your thoughts!</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleComplete(chapterId) {
+            BookClub.markChapterComplete(chapterId);
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        function handleAddNote(chapterId) {
+            const noteInput = document.getElementById('note-input');
+            const noteText = noteInput.value.trim();
+            
+            if (!noteText) {
+                BookClub.showNotification('Please enter a note!', 'warning');
+                return;
+            }
+            
+            if (BookClub.addNote(chapterId, noteText)) {
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+    </script>
+</body>
+</html>

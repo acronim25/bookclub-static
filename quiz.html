@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz | Trading Book Club</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+        <!-- Chart Bars Left -->
+    <div class="chart-bars chart-bars-left">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <!-- Chart Bars Right -->
+    <div class="chart-bars chart-bars-right">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>📚</span>
+                <span>BookClub</span>
+            </a>
+            
+            <button class="nav-toggle" id="navToggle">☰</button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div id="quiz-content">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let currentQuiz = null;
+        let currentChapterId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chapterId = parseInt(urlParams.get('chapter')) || 1;
+            const retake = urlParams.get('retake') === 'true';
+            
+            loadQuiz(chapterId, retake);
+        });
+
+        function loadQuiz(chapterId, retake) {
+            const chapter = BookClub.getChapterById(chapterId);
+            const container = document.getElementById('quiz-content');
+            
+            if (!chapter) {
+                container.innerHTML = '<div class="empty-state"><h2>Chapter not found</h2></div>';
+                return;
+            }
+            
+            const book = BookClub.getBookById(chapter.book_id);
+            const quiz = BookClub.getQuizByChapter(chapterId);
+            const user = BookClub.getCurrentUser();
+            
+            if (!quiz) {
+                container.innerHTML = `
+                    <div class="breadcrumb">
+                        <a href="library.html">Library</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <a href="book.html?id=${book.id}">${book.title}</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <a href="chapter.html?id=${chapter.id}">Chapter ${chapter.number}</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span>Quiz</span>
+                    </div>
+                    <div class="empty-state-container">
+                        <div class="empty-state-icon">📝</div>
+                        <h2>No Quiz Available</h2>
+                        <p>There is no quiz for this chapter yet.</p>
+                        <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">Back to Chapter</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            currentQuiz = quiz;
+            currentChapterId = chapterId;
+            
+            const quizResult = user ? BookClub.getQuizResult(user.id, chapterId) : null;
+            const hasTaken = quizResult && !retake;
+            
+            container.innerHTML = `
+                <div class="breadcrumb">
+                    <a href="library.html">Library</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="book.html?id=${book.id}">${book.title}</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="chapter.html?id=${chapter.id}">Chapter ${chapter.number}</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span>Quiz</span>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <h1>❓ Chapter Quiz</h1>
+                        <p class="quiz-subtitle">${book.title} - Chapter ${chapter.number}: ${chapter.title}</p>
+                    </div>
+
+                    ${hasTaken ? `
+                        <!-- Previous Results View -->
+                        <div class="quiz-results" id="previous-results">
+                            <div class="result-score-card">
+                                <div class="result-emoji">
+                                    ${quizResult.score >= 8 ? '🎉' : quizResult.score >= 6 ? '👍' : '📚'}
+                                </div>
+                                <div class="result-score">${quizResult.score}<span>/${quizResult.maxScore}</span></div>
+                                <div class="result-percentage">${quizResult.percentage}%</div>
+                                <div class="result-message">
+                                    ${quizResult.score >= 9 ? 'Outstanding! You really know this material.' : 
+                                      quizResult.score >= 8 ? 'Great job! You\'re mastering these concepts.' : 
+                                      quizResult.score >= 6 ? 'Good work! Keep reviewing to improve.' : 
+                                      'Keep learning! Review the chapter and try again.'}
+                                </div>
+                            </div>
+
+                            <div class="result-actions">
+                                <button class="btn btn-secondary" onclick="retakeQuiz()">
+                                    🔄 Retake Quiz
+                                </button>
+                                <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">
+                                    ← Back to Chapter
+                                </a>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Quiz Form -->
+                    <div id="quiz-form-container" class="${hasTaken ? 'hidden' : ''}">
+                        <form id="quiz-form" onsubmit="handleSubmit(event)">
+                            ${quiz.questions.map((q, idx) => `
+                                <div class="question-card" data-question="${idx}">
+                                    <div class="question-number">Question ${idx + 1}</div>
+                                    <h3 class="question-text">${q.question}</h3>
+                                    
+                                    <div class="options-list">
+                                        ${q.options.map((opt, optIdx) => `
+                                            <label class="option-label">
+                                                <input type="radio" name="question_${idx}" value="${optIdx}" required>
+                                                <span class="option-letter">${String.fromCharCode(65 + optIdx)}</span>
+                                                <span class="option-text">${opt}</span>
+                                            </label>
+                                        `).join('')}
+                                    </div>
+                                    
+                                    <div class="feedback" id="feedback-${idx}"></div>
+                                </div>
+                            `).join('')}
+
+                            <div class="quiz-actions">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    ✓ Submit Quiz
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Results View -->
+                    <div id="quiz-results" class="quiz-results hidden">
+                        <div class="result-score-card">
+                            <div class="result-emoji" id="result-emoji">🎉</div>
+                            <div class="result-score" id="result-score">0<span>/10</span></div>
+                            <div class="result-percentage" id="result-percentage">0%</div>
+                            <div class="result-message" id="result-message">Great job!</div>
+                        </div>
+
+                        <div id="new-badges" class="new-badges"></div>
+
+                        <div class="result-actions">
+                            <button class="btn btn-secondary" onclick="tryAgain()">
+                                🔄 Try Again
+                            </button>
+                            <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">
+                                ← Back to Chapter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            if (!currentQuiz) return;
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const answers = [];
+            
+            // Collect answers
+            for (let i = 0; i < currentQuiz.questions.length; i++) {
+                const answer = formData.get(`question_${i}`);
+                answers.push(answer ? parseInt(answer) : -1);
+            }
+            
+            // Check all questions answered
+            if (answers.some(a => a === -1)) {
+                BookClub.showNotification('Please answer all questions', 'warning');
+                return;
+            }
+            
+            // Submit quiz
+            const result = BookClub.submitQuiz(currentChapterId, answers);
+            
+            if (result) {
+                showResults(result);
+            }
+        }
+
+        function showResults(result) {
+            // Hide form, show results
+            document.getElementById('quiz-form-container').classList.add('hidden');
+            document.getElementById('quiz-results').classList.remove('hidden');
+            
+            // Update score
+            document.getElementById('result-score').innerHTML = `${result.score}<span>/${result.maxScore}</span>`;
+            document.getElementById('result-percentage').textContent = `${result.percentage}%`;
+            
+            // Set emoji and message
+            const emojiEl = document.getElementById('result-emoji');
+            const messageEl = document.getElementById('result-message');
+            
+            if (result.percentage >= 90) {
+                emojiEl.textContent = '🎉';
+                messageEl.textContent = 'Outstanding! You really know this material.';
+            } else if (result.percentage >= 80) {
+                emojiEl.textContent = '👍';
+                messageEl.textContent = 'Great job! You\'re mastering these concepts.';
+            } else if (result.percentage >= 60) {
+                emojiEl.textContent = '💪';
+                messageEl.textContent = 'Good work! Keep reviewing to improve.';
+            } else {
+                emojiEl.textContent = '📚';
+                messageEl.textContent = 'Keep learning! Review the chapter and try again.';
+            }
+            
+            // Show new badges
+            if (result.newBadges && result.newBadges.length > 0) {
+                const badgesContainer = document.getElementById('new-badges');
+                badgesContainer.innerHTML = `
+                    <h3>🏆 New Badges Earned!</h3>
+                    ${result.newBadges.map(badge => `
+                        <div class="badge-earned">
+                            <span class="badge-emoji">${badge.emoji}</span>
+                            <span class="badge-name">${badge.name}</span>
+                        </div>
+                    `).join('')}
+                `;
+            }
+            
+            // Scroll to results
+            document.getElementById('quiz-results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function retakeQuiz() {
+            document.getElementById('previous-results').classList.add('hidden');
+            document.getElementById('quiz-form-container').classList.remove('hidden');
+            document.getElementById('quiz-form').reset();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function tryAgain() {
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('quiz-form-container').classList.remove('hidden');
+            document.getElementById('quiz-form').reset();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

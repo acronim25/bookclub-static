@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Detail | Trading Book Club</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+        <!-- Chart Bars Left -->
+    <div class="chart-bars chart-bars-left">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <!-- Chart Bars Right -->
+    <div class="chart-bars chart-bars-right">
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+        <div class="chart-bar-group">
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+            <div class="chart-bar"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>📚</span>
+                <span>BookClub</span>
+            </a>
+            
+            <button class="nav-toggle" id="navToggle">☰</button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="library.html" class="nav-link">📚 Library</a></li>
+                <li><a href="notes.html" class="nav-link">📝 Notes</a></li>
+                <li><a href="leaderboard.html" class="nav-link">🏆 Leaderboard</a></li>
+                <li><a href="badges.html" class="nav-link">🏅 Badges</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="library.html">← Back to Library</a>
+        </div>
+
+        <div id="book-content">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = parseInt(urlParams.get('id')) || 1;
+            
+            loadBook(bookId);
+        });
+
+        function loadBook(bookId) {
+            const book = BookClub.getBookById(bookId);
+            const container = document.getElementById('book-content');
+            
+            if (!book) {
+                container.innerHTML = '<div class="empty-state"><h2>Book not found</h2></div>';
+                return;
+            }
+            
+            const user = BookClub.getCurrentUser();
+            const chapters = BookClub.getChaptersByBook(book.id);
+            
+            let completedCount = 0;
+            if (user) {
+                completedCount = chapters.filter(ch => BookClub.isChapterCompleted(user.id, ch.id)).length;
+            }
+            
+            const progressPercent = chapters.length > 0 ? Math.round((completedCount / chapters.length) * 100) : 0;
+            
+            container.innerHTML = `
+                <div class="book-detail-header">
+                    <div class="book-detail-cover">
+                        <div class="book-cover-placeholder large">
+                            <span style="font-size: 5rem;">${book.emoji || '📖'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="book-detail-info">
+                        <h1>${book.title}</h1>
+                        <p class="book-author large">by ${book.author}</p>
+                        
+                        <p class="book-description full">${book.description}</p>
+                        
+                        <div class="book-stats">
+                            <div class="book-stat">
+                                <span class="stat-number">${chapters.length}</span>
+                                <span class="stat-label">Chapters</span>
+                            </div>
+                            <div class="book-stat">
+                                <span class="stat-number">${progressPercent}%</span>
+                                <span class="stat-label">Complete</span>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-section">
+                            <div class="progress-bar large">
+                                <div class="progress-fill ${progressPercent === 100 ? 'complete' : ''}" style="width: ${progressPercent}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📑 Chapters</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chapters-list">
+                            ${chapters.map(chapter => {
+                                const isCompleted = user && BookClub.isChapterCompleted(user.id, chapter.id);
+                                return `
+                                    <div class="chapter-item ${isCompleted ? 'completed' : ''}">
+                                        <div class="chapter-status">
+                                            ${isCompleted ? '✓' : '○'}
+                                        </div>
+                                        
+                                        <div class="chapter-number">${chapter.number}</div>
+                                        
+                                        <div class="chapter-info">
+                                            <h4>${chapter.title}</h4>
+                                            ${chapter.summary ? `<p>${chapter.summary.substring(0, 100)}${chapter.summary.length > 100 ? '...' : ''}</p>` : ''}
+                                            
+                                            ${chapter.key_concepts ? `
+                                                <div class="key-concepts">
+                                                    ${chapter.key_concepts.slice(0, 3).map(concept => `
+                                                        <span class="concept-tag">${concept}</span>
+                                                    `).join('')}
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                        
+                                        <a href="chapter.html?id=${chapter.id}" class="btn btn-sm btn-secondary">
+                                            ${isCompleted ? 'Review' : 'Read'}
+                                        </a>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
