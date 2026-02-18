@@ -719,6 +719,8 @@ const BookClub = {
         const user = getAllUsers()[userId];
         return user?.notes?.length || 0;
     },
+    getNotes: getAllNotes,
+    getNotesForChapter: getNotesByChapter,
     getRecentActivity: (userId, limit = 3) => {
         const activities = getRecentActivities(userId, limit);
         return activities.map(formatActivity);
