@@ -721,6 +721,14 @@ const BookClub = {
         const user = getAllUsers()[userId];
         return user?.notes?.length || 0;
     },
+    addNote: (chapterId, noteText) => {
+        const user = getCurrentUser();
+        if (!user) {
+            showNotification('Please select a user first', 'error');
+            return null;
+        }
+        return addNote(user.id, chapterId, noteText);
+    },
     getNotes: getAllNotes,
     getNotesForChapter: getNotesByChapter,
     getRecentActivity: (userId, limit = 3) => {
