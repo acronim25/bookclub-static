@@ -212,21 +212,27 @@
                 return;
             }
             
-            container.innerHTML = notes.map(note => `
-                <div class="note-timeline-item">
-                    <div class="note-timeline-header">
-                        <div class="note-author-info">
-                            <span class="author-name">${note.user_name}</span>
-                            <span class="note-chapter-link">${note.book_title} - Ch. ${note.chapter_title.split(' ')[0]}</span>
+            container.innerHTML = notes.map(note => {
+                // Parse chapter number from title (e.g., "Chapter 1: Title" -> "1")
+                const chapterNum = note.chapter_title ? note.chapter_title.match(/\d+/) : null;
+                const chapterDisplay = chapterNum ? chapterNum[0] : note.chapter_title;
+                
+                return `
+                    <div class="note-timeline-item">
+                        <div class="note-timeline-header">
+                            <div class="note-author-info">
+                                <span class="author-name">${note.user_name || 'Unknown'}</span>
+                                <span class="note-chapter-link">${note.book_title || 'Unknown Book'} - Ch. ${chapterDisplay}</span>
+                            </div>
+                            <time class="note-time">${BookClub.formatRelativeTime ? BookClub.formatRelativeTime(note.created_at) : BookClub.formatDate(note.created_at)}</time>
                         </div>
-                        <time class="note-time">${BookClub.formatRelativeTime(note.created_at)}</time>
+                        
+                        <div class="note-content">
+                            <p>${note.note || ''}</p>
+                        </div>
                     </div>
-                    
-                    <div class="note-content">
-                        <p>${note.note}</p>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function handleSubmit(event) {

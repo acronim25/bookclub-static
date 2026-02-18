@@ -395,6 +395,7 @@ function addNote(userId, chapterId, noteText) {
     const notes = JSON.parse(localStorage.getItem(STORAGE_KEYS.NOTES) || '[]');
     const chapter = getChapter(chapterId);
     const user = getAllUsers()[userId];
+    const book = chapter ? getBook(chapter.book_id) : null;
     
     const note = {
         id: Date.now(),
@@ -402,6 +403,7 @@ function addNote(userId, chapterId, noteText) {
         user_name: user ? user.name : 'Unknown',
         chapter_id: chapterId,
         chapter_title: chapter ? chapter.title : '',
+        book_title: book ? book.title : 'Unknown Book',
         note: noteText,
         created_at: new Date().toISOString()
     };
