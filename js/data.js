@@ -1481,10 +1481,9 @@ const BOOKCLUB_DATA = {
         }
     ],
 
-    // Chapters for The Hour Between Dog and Wolf
-    chapters: [
-        {
-            id: 101,
+    // Chapters for The Hour Between Dog and Wolf (continuing chapters array)
+    {
+        id: 101,
             book_id: 2,
             number: 1,
             title: "The Biology of Risk",
