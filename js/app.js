@@ -592,6 +592,8 @@ const BookClub = {
     },
     getRecentActivity: () => [],
     getQuizResults: () => JSON.parse(localStorage.getItem('bookclub_quiz_results') || '{}'),
+    // Utility functions
+    formatDate,
     // Auto-save functions
     setupAutoSave,
     getDraft,
