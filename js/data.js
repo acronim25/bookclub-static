@@ -1478,12 +1478,10 @@ const BOOKCLUB_DATA = {
                     correct: 1
                 }
             ]
-        }
-    ],
+        },
 
-    // Chapters for The Hour Between Dog and Wolf (continuing chapters array)
-    {
-        id: 101,
+        {
+            id: 101,
             book_id: 2,
             number: 1,
             title: "The Biology of Risk",
@@ -1621,11 +1619,8 @@ const BOOKCLUB_DATA = {
                 "Health and trading",
                 "Body as trading tool"
             ]
-        }
-    ],
+        },
 
-    // Quizzes for The Hour Between Dog and Wolf
-    quizzes: [
         {
             id: 101,
             chapter_id: 101,
