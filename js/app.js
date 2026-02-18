@@ -8,7 +8,8 @@ const STORAGE_KEYS = {
     CURRENT_USER: 'bookclub_current_user',
     USER_DATA: 'bookclub_user_data',
     NOTES: 'bookclub_notes',
-    PROGRESS: 'bookclub_progress'
+    PROGRESS: 'bookclub_progress',
+    ACTIVITIES: 'bookclub_activities'
 };
 
 // Initialize data from seed
@@ -89,6 +90,106 @@ function getAllBadges() {
     return BOOKCLUB_DATA.badges;
 }
 
+// ==================== ACTIVITY TRACKING ====================
+
+// Add activity to history
+function addActivity(userId, type, data = {}) {
+    const activities = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACTIVITIES) || '[]');
+    
+    const activity = {
+        id: Date.now(),
+        user_id: userId,
+        type: type, // 'chapter_complete', 'badge_earned', 'quiz_completed', 'note_added'
+        data: data,
+        created_at: new Date().toISOString()
+    };
+    
+    activities.unshift(activity); // Add to beginning
+    
+    // Keep only last 50 activities per user to prevent bloat
+    const userActivities = activities.filter(a => a.user_id === userId);
+    const otherActivities = activities.filter(a => a.user_id !== userId);
+    const trimmedUserActivities = userActivities.slice(0, 50);
+    
+    localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify([...trimmedUserActivities, ...otherActivities]));
+    
+    return activity;
+}
+
+// Get recent activities for user
+function getRecentActivities(userId, limit = 3) {
+    const activities = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACTIVITIES) || '[]');
+    return activities
+        .filter(a => a.user_id === userId)
+        .slice(0, limit);
+}
+
+// Format activity for display
+function formatActivity(activity) {
+    const chapter = activity.data.chapter_id ? getChapter(activity.data.chapter_id) : null;
+    const badge = activity.data.badge_id ? getAllBadges().find(b => b.id === activity.data.badge_id) : null;
+    
+    switch (activity.type) {
+        case 'chapter_complete':
+            return {
+                icon: chapter?.number === 12 ? '🏆' : '📖',
+                color: '#22c55e',
+                title: chapter ? `Completed Chapter ${chapter.number}` : 'Completed Chapter',
+                subtitle: chapter?.title || '',
+                time: formatRelativeTime(activity.created_at)
+            };
+        case 'badge_earned':
+            return {
+                icon: badge?.emoji || '🏅',
+                color: '#fbbf24',
+                title: 'Badge Earned!',
+                subtitle: badge?.name || 'New Badge',
+                time: formatRelativeTime(activity.created_at)
+            };
+        case 'quiz_completed':
+            return {
+                icon: activity.data.score >= 8 ? '🌟' : activity.data.score >= 6 ? '⭐' : '📝',
+                color: activity.data.score >= 8 ? '#22c55e' : activity.data.score >= 6 ? '#3b82f6' : '#f59e0b',
+                title: `Quiz Completed: ${activity.data.score}/10`,
+                subtitle: chapter?.title || '',
+                time: formatRelativeTime(activity.created_at)
+            };
+        case 'note_added':
+            return {
+                icon: '💬',
+                color: '#8b5cf6',
+                title: 'Note Shared',
+                subtitle: chapter?.title || '',
+                time: formatRelativeTime(activity.created_at)
+            };
+        default:
+            return {
+                icon: '📌',
+                color: '#6b7280',
+                title: 'Activity',
+                subtitle: '',
+                time: formatRelativeTime(activity.created_at)
+            };
+    }
+}
+
+// Format relative time (e.g., "2 hours ago")
+function formatRelativeTime(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+    
+    if (diffSec < 60) return 'just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    if (diffHour < 24) return `${diffHour}h ago`;
+    if (diffDay < 7) return `${diffDay}d ago`;
+    return formatDate(dateString);
+}
+
 // Check if chapter is completed
 function isChapterCompleted(userId, chapterId) {
     const progress = getProgress(userId);
@@ -143,6 +244,14 @@ function markChapterComplete(userId, chapterId, notes = '') {
         const newBadges = checkBadges(user);
         user.badges = [...new Set([...user.badges, ...newBadges])];
         
+        // Track activity
+        addActivity(userId, 'chapter_complete', { chapter_id: chapterId });
+        
+        // Track badge activities
+        newBadges.forEach(badgeId => {
+            addActivity(userId, 'badge_earned', { badge_id: badgeId });
+        });
+        
         saveUser(userId, user);
         
         return newBadges;
@@ -160,6 +269,17 @@ function saveQuizResult(userId, chapterId, score) {
         // Check for badges
         const newBadges = checkBadges(user);
         user.badges = [...new Set([...user.badges, ...newBadges])];
+        
+        // Track activity
+        addActivity(userId, 'quiz_completed', { 
+            chapter_id: chapterId, 
+            score: score 
+        });
+        
+        // Track badge activities
+        newBadges.forEach(badgeId => {
+            addActivity(userId, 'badge_earned', { badge_id: badgeId });
+        });
         
         saveUser(userId, user);
         return newBadges;
@@ -295,6 +415,14 @@ function addNote(userId, chapterId, noteText) {
         // Check for badges
         const newBadges = checkBadges(user);
         user.badges = [...new Set([...user.badges, ...newBadges])];
+        
+        // Track activity
+        addActivity(userId, 'note_added', { chapter_id: chapterId });
+        
+        // Track badge activities
+        newBadges.forEach(badgeId => {
+            addActivity(userId, 'badge_earned', { badge_id: badgeId });
+        });
         
         saveUser(userId, user);
         return newBadges;
@@ -590,10 +718,18 @@ const BookClub = {
         const user = getAllUsers()[userId];
         return user?.notes?.length || 0;
     },
-    getRecentActivity: () => [],
+    getRecentActivity: (userId, limit = 3) => {
+        const activities = getRecentActivities(userId, limit);
+        return activities.map(formatActivity);
+    },
     getQuizResults: () => JSON.parse(localStorage.getItem('bookclub_quiz_results') || '{}'),
     // Utility functions
     formatDate,
+    formatRelativeTime,
+    // Activity functions
+    addActivity,
+    getRecentActivities,
+    formatActivity,
     // Auto-save functions
     setupAutoSave,
     getDraft,

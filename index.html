@@ -233,23 +233,27 @@
 
         function loadRecentActivity(user) {
             const container = document.getElementById('activity-list');
-            const notes = BookClub.getAllNotes().filter(n => n.user_id === user.id).slice(0, 5);
-            const completed = BookClub.getCompletedChapters(user.id).slice(-5);
+            const activities = BookClub.getRecentActivity(user.id, 3);
             
-            if (notes.length === 0 && completed.length === 0) {
+            if (activities.length === 0) {
                 container.innerHTML = '<p class="empty-state">No recent activity. Start reading to track your progress!</p>';
                 return;
             }
             
-            let html = '';
-            completed.forEach(chId => {
-                const ch = BookClub.getChapterById(chId);
-                if (ch) html += `<div class="activity-item"><div class="activity-icon">✓</div><div class="activity-content"><p>Completed <strong>${ch.title}</strong></p></div></div>`;
-            });
-            notes.forEach(n => {
-                html += `<div class="activity-item"><div class="activity-icon">📝</div><div class="activity-content"><p>Added note to <strong>${n.chapter_title}</strong></p></div></div>`;
-            });
-            container.innerHTML = html;
+            container.innerHTML = activities.map(activity => {
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: ${activity.color}20; color: ${activity.color}; border-color: ${activity.color}40;">
+                            ${activity.icon}
+                        </div>
+                        <div class="activity-content">
+                            <p class="activity-title">${activity.title}</p>
+                            ${activity.subtitle ? `<p class="activity-subtitle">${activity.subtitle}</p>` : ''}
+                            <span class="activity-time">${activity.time}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
     </script>
 </body>
