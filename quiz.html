@@ -271,11 +271,8 @@
 
                         <div id="new-badges" class="new-badges"></div>
 
-                        <div class="result-actions">
-                            <button class="btn btn-secondary" onclick="tryAgain()">
-                                🔄 Try Again
-                            </button>
-                            <a href="chapter.html?id=${chapter.id}" class="btn btn-primary">
+                        <div class="result-actions" style="justify-content: center;">
+                            <a href="chapter.html?id=${chapter.id}" class="btn btn-primary" style="min-width: 200px; text-align: center;">
                                 ← Back to Chapter
                             </a>
                         </div>
@@ -310,9 +307,10 @@
                 return;
             }
             
-            // Show loading state
+            // Show loading state - change text instead of spinner
             const submitBtn = document.getElementById('submit-btn');
-            submitBtn.classList.add('btn-loading');
+            submitBtn.dataset.originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '⏳ Submitting...';
             submitBtn.disabled = true;
             
             // Submit quiz
@@ -370,13 +368,6 @@
 
         function retakeQuiz() {
             document.getElementById('previous-results').classList.add('hidden');
-            document.getElementById('quiz-form-container').classList.remove('hidden');
-            document.getElementById('quiz-form').reset();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function tryAgain() {
-            document.getElementById('quiz-results').classList.add('hidden');
             document.getElementById('quiz-form-container').classList.remove('hidden');
             document.getElementById('quiz-form').reset();
             window.scrollTo({ top: 0, behavior: 'smooth' });
