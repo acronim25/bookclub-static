@@ -13,6 +13,14 @@ const BOOKCLUB_DATA = {
             description: "Making Smarter Decisions When You Don't Have All the Facts. A professional poker player's guide to decision-making under uncertainty.",
             total_chapters: 12,
             emoji: "🎯"
+        },
+        {
+            id: 2,
+            title: "The Hour Between Dog and Wolf",
+            author: "John Coates",
+            description: "How Risk Taking Transforms Us, Body and Mind. A neuroscientist's journey into the biology of risk and the trading floor.",
+            total_chapters: 10,
+            emoji: "🐺"
         }
     ],
 
@@ -1466,6 +1474,424 @@ const BOOKCLUB_DATA = {
                         "To make better decisions by embracing uncertainty",
                         "To predict the future",
                         "To win every trade"
+                    ],
+                    correct: 1
+                }
+            ]
+        }
+    ],
+
+    // Chapters for The Hour Between Dog and Wolf
+    chapters: [
+        {
+            id: 101,
+            book_id: 2,
+            number: 1,
+            title: "The Biology of Risk",
+            summary: "John Coates explores how our bodies respond to financial risk. The stress response isn't just psychological—it's deeply biological, affecting traders' decision-making through hormones like cortisol and testosterone.",
+            key_concepts: [
+                "Stress response physiology",
+                "Hormones and trading",
+                "Cortisol and testosterone",
+                "Body-mind connection",
+                "Biological markets hypothesis"
+            ]
+        },
+        {
+            id: 102,
+            book_id: 2,
+            number: 2,
+            title: "The Trader's Body",
+            summary: "How the physical stress of trading affects decision-making. Traders experience real physiological changes during market volatility that can impair or enhance their judgment.",
+            key_concepts: [
+                "Physiological stress markers",
+                "Trading floor biology",
+                "Stress and cognition",
+                "Body awareness",
+                "Performance under pressure"
+            ]
+        },
+        {
+            id: 103,
+            book_id: 2,
+            number: 3,
+            title: "Testosterone and Risk",
+            summary: "The winner effect: how winning streaks boost testosterone and lead to increased risk-taking. Understanding this cycle helps traders recognize when they're becoming overconfident.",
+            key_concepts: [
+                "Winner effect",
+                "Testosterone and confidence",
+                "Risk-taking behavior",
+                "Winning streaks",
+                "Overconfidence biology"
+            ]
+        },
+        {
+            id: 104,
+            book_id: 2,
+            number: 4,
+            title: "Cortisol and Fear",
+            summary: "The stress hormone cortisol rises during losses and uncertainty. Chronic stress can lead to risk aversion and poor decision-making. Learning to manage cortisol is crucial for trading.",
+            key_concepts: [
+                "Cortisol response",
+                "Fear and risk aversion",
+                "Chronic stress effects",
+                "Loss psychology",
+                "Stress management"
+            ]
+        },
+        {
+            id: 105,
+            book_id: 2,
+            number: 5,
+            title: "The Hour Between Dog and Wolf",
+            summary: "The title chapter explores the transitional state between bull and bear markets. Traders must recognize these transformation periods and adjust their biology accordingly.",
+            key_concepts: [
+                "Market transitions",
+                "Bull to bear shifts",
+                "Transformation periods",
+                "Market state recognition",
+                "Adaptive biology"
+            ]
+        },
+        {
+            id: 106,
+            book_id: 2,
+            number: 6,
+            title: "Intuitive Trading",
+            summary: "How experienced traders develop gut feelings that are actually sophisticated biological responses. Intuition emerges from pattern recognition and bodily awareness.",
+            key_concepts: [
+                "Trading intuition",
+                "Pattern recognition",
+                "Embodied cognition",
+                "Experienced judgment",
+                "Gut feelings science"
+            ]
+        },
+        {
+            id: 107,
+            book_id: 2,
+            number: 7,
+            title: "Risk and the Brain",
+            summary: "Neuroscience reveals how different brain regions process risk and reward. Understanding your brain's risk circuits can help you make better trading decisions.",
+            key_concepts: [
+                "Brain risk circuits",
+                "Neuroscience of trading",
+                "Risk processing",
+                "Reward pathways",
+                "Prefrontal cortex"
+            ]
+        },
+        {
+            id: 108,
+            book_id: 2,
+            number: 8,
+            title: "Groups and Markets",
+            summary: "Markets are collective biological phenomena. Group emotions spread through markets, creating bubbles and crashes. Understanding group biology helps you stay rational.",
+            key_concepts: [
+                "Market contagion",
+                "Group emotions",
+                "Herd behavior biology",
+                "Market bubbles",
+                "Collective stress"
+            ]
+        },
+        {
+            id: 109,
+            book_id: 2,
+            number: 9,
+            title: "Managing Your Biology",
+            summary: "Practical strategies for managing your biological state while trading. Exercise, sleep, and stress management aren't luxuries—they're trading tools.",
+            key_concepts: [
+                "Biological self-regulation",
+                "Trading fitness",
+                "Sleep and performance",
+                "Exercise benefits",
+                "Stress management strategies"
+            ]
+        },
+        {
+            id: 110,
+            book_id: 2,
+            number: 10,
+            title: "The Biology of Success",
+            summary: "Long-term trading success requires biological sustainability. Understanding and managing your body's responses to risk is as important as technical analysis.",
+            key_concepts: [
+                "Sustainable trading",
+                "Biological edge",
+                "Long-term performance",
+                "Health and trading",
+                "Body as trading tool"
+            ]
+        }
+    ],
+
+    // Quizzes for The Hour Between Dog and Wolf
+    quizzes: [
+        {
+            id: 101,
+            chapter_id: 101,
+            questions: [
+                {
+                    question: "What hormones does Coates focus on in trading?",
+                    options: [
+                        "Adrenaline and insulin",
+                        "Cortisol and testosterone",
+                        "Serotonin and dopamine",
+                        "Melatonin and growth hormone"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What is the 'biological markets hypothesis'?",
+                    options: [
+                        "Markets are purely psychological",
+                        "Markets involve biological responses in participants",
+                        "Markets follow biological cycles",
+                        "Markets are like ecosystems"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How does the body respond to financial risk?",
+                    options: [
+                        "Only mentally",
+                        "Through measurable physiological changes",
+                        "Not at all",
+                        "Only through emotion"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 102,
+            chapter_id: 102,
+            questions: [
+                {
+                    question: "What happens to traders during market volatility?",
+                    options: [
+                        "Nothing physical",
+                        "Real physiological changes",
+                        "Only emotional changes",
+                        "Memory loss"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is body awareness important for traders?",
+                    options: [
+                        "It's not important",
+                        "To recognize stress signals early",
+                        "For weight loss",
+                        "To impress others"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 103,
+            chapter_id: 103,
+            questions: [
+                {
+                    question: "What is the 'winner effect'?",
+                    options: [
+                        "Always winning",
+                        "Winning boosts testosterone and increases risk-taking",
+                        "Winning makes you tired",
+                        "Winning reduces confidence"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How can winning streaks be dangerous?",
+                    options: [
+                        "They never are",
+                        "They can lead to overconfidence and excessive risk",
+                        "They make you sleepy",
+                        "They reduce testosterone"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 104,
+            chapter_id: 104,
+            questions: [
+                {
+                    question: "What does cortisol do during losses?",
+                    options: [
+                        "Decreases",
+                        "Rises and can cause risk aversion",
+                        "Stays the same",
+                        "Makes you happy"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is chronic cortisol elevation bad for trading?",
+                    options: [
+                        "It's not bad",
+                        "It leads to poor decision-making",
+                        "It increases profits",
+                        "It improves sleep"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 105,
+            chapter_id: 105,
+            questions: [
+                {
+                    question: "What does 'hour between dog and wolf' represent?",
+                    options: [
+                        "Lunch time",
+                        "Market transition periods",
+                        "Sleep time",
+                        "Market opening"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why is recognizing market transitions important?",
+                    options: [
+                        "It's not",
+                        "To adjust your biology accordingly",
+                        "For entertainment",
+                        "To predict exact prices"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 106,
+            chapter_id: 106,
+            questions: [
+                {
+                    question: "What is trading intuition according to Coates?",
+                    options: [
+                        "Magic",
+                        "Sophisticated biological pattern recognition",
+                        "Luck",
+                        "Mystical power"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How do experienced traders develop gut feelings?",
+                    options: [
+                        "They don't",
+                        "Through pattern recognition and bodily awareness",
+                        "By reading books only",
+                        "Through meditation alone"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 107,
+            chapter_id: 107,
+            questions: [
+                {
+                    question: "Which brain region is crucial for risk processing?",
+                    options: [
+                        "Occipital lobe",
+                        "Prefrontal cortex",
+                        "Cerebellum",
+                        "Brain stem"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Why understand your brain's risk circuits?",
+                    options: [
+                        "It's not important",
+                        "To make better trading decisions",
+                        "For brain surgery",
+                        "To impress friends"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 108,
+            chapter_id: 108,
+            questions: [
+                {
+                    question: "How do group emotions spread through markets?",
+                    options: [
+                        "They don't",
+                        "Through biological contagion",
+                        "Only through news",
+                        "Only through Twitter"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What creates market bubbles biologically?",
+                    options: [
+                        "Rational analysis",
+                        "Group emotional contagion",
+                        "Math formulas",
+                        "Government policy"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 109,
+            chapter_id: 109,
+            questions: [
+                {
+                    question: "Why is sleep important for trading?",
+                    options: [
+                        "It's not",
+                        "It affects decision-making quality",
+                        "Only for dreams",
+                        "To pass time"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "What are biological self-regulation strategies?",
+                    options: [
+                        "Ignoring your body",
+                        "Exercise, sleep, and stress management",
+                        "Trading more",
+                        "Taking supplements only"
+                    ],
+                    correct: 1
+                }
+            ]
+        },
+        {
+            id: 110,
+            chapter_id: 110,
+            questions: [
+                {
+                    question: "What does Coates say about long-term trading success?",
+                    options: [
+                        "It's all about charts",
+                        "Requires biological sustainability",
+                        "Depends on luck",
+                        "Is impossible"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "How is managing your body like technical analysis?",
+                    options: [
+                        "It's not",
+                        "Both are important for trading success",
+                        "They are the same",
+                        "Body doesn't matter"
                     ],
                     correct: 1
                 }
