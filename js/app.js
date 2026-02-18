@@ -724,6 +724,8 @@ const BookClub = {
         return activities.map(formatActivity);
     },
     getQuizResults: () => JSON.parse(localStorage.getItem('bookclub_quiz_results') || '{}'),
+    getStats,
+    getLeaderboard,
     // Utility functions
     formatDate,
     formatRelativeTime,
