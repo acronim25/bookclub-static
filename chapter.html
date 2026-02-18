@@ -231,7 +231,7 @@
                                         <div class="quiz-status">
                                             <div class="quiz-score ${quizResult.score >= 8 ? 'excellent' : quizResult.score >= 6 ? 'good' : 'needs-work'}">
                                                 <span class="score-value">${quizResult.score}</span>
-                                                <span class="score-total">/${quizResult.maxScore}</span>
+                                                <span class="score-total">/${quiz.questions.length}</span>
                                             </div>
                                             <p>${quizResult.score >= 8 ? 'Excellent!' : quizResult.score >= 6 ? 'Good job!' : 'Keep learning!'}</p>
                                         </div>
