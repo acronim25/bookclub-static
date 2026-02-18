@@ -696,7 +696,7 @@ const BookClub = {
         
         return {
             score,
-            maxScore: 10,
+            maxScore,
             percentage,
             correct,
             total: maxScore,
