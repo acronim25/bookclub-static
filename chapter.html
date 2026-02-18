@@ -268,28 +268,12 @@
                     <div class="card-body">
                         ${user ? `
                             <div class="add-note-form">
-                                <textarea id="note-input" placeholder="Share your insights, key takeaways, or questions about this chapter..." rows="3"></textarea>
+                                <textarea id="note-input" data-chapter-id="${chapter.id}" placeholder="Share your insights, key takeaways, or questions about this chapter..." rows="3"></textarea>
                                 <div class="draft-indicator" id="draft-indicator">💾 Draft saved</div>
                                 <button class="btn btn-primary" onclick="handleAddNote(${chapter.id})">
                                     📝 Share Note
                                 </button>
                             </div>
-                            <script>
-                                // Setup auto-save for this chapter
-                                setTimeout(() => {
-                                    BookClub.setupAutoSave('note-input', ${chapter.id});
-                                    
-                                    // Show draft indicator when typing
-                                    const textarea = document.getElementById('note-input');
-                                    const indicator = document.getElementById('draft-indicator');
-                                    if (textarea && indicator) {
-                                        textarea.addEventListener('input', () => {
-                                            indicator.classList.add('visible');
-                                            setTimeout(() => indicator.classList.remove('visible'), 2000);
-                                        });
-                                    }
-                                }, 100);
-                            </script>
                         ` : '<p class="empty-state"><a href="index.html">Select a user</a> to add notes.</p>'}
                         
                         <div id="notes-list" class="notes-list">
@@ -331,6 +315,27 @@
                 setTimeout(() => location.reload(), 1500);
             }
         }
+        // Setup auto-save after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const textarea = document.getElementById('note-input');
+                if (textarea) {
+                    const chapterId = textarea.dataset.chapterId;
+                    if (chapterId) {
+                        BookClub.setupAutoSave('note-input', parseInt(chapterId));
+                        
+                        // Show draft indicator when typing
+                        const indicator = document.getElementById('draft-indicator');
+                        if (indicator) {
+                            textarea.addEventListener('input', () => {
+                                indicator.classList.add('visible');
+                                setTimeout(() => indicator.classList.remove('visible'), 2000);
+                            });
+                        }
+                    }
+                }
+            }, 100);
+        });
     </script>
 </body>
 </html>
