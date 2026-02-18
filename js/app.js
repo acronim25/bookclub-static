@@ -684,7 +684,7 @@ const BookClub = {
         });
         
         const maxScore = quiz.questions.length;
-        const score = Math.round((correct / maxScore) * 10);
+        const score = correct; // Numărul de răspunsuri corecte, nu procentajul
         const percentage = Math.round((correct / maxScore) * 100);
         
         // Save result - folosim chapterId nu quiz.id
