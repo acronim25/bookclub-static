@@ -253,7 +253,7 @@
                             `).join('')}
 
                             <div class="quiz-actions">
-                                <button type="submit" class="btn btn-primary btn-lg">
+                                <button type="submit" id="submit-btn" class="btn btn-primary btn-lg">
                                     ✓ Submit Quiz
                                 </button>
                             </div>
@@ -304,6 +304,16 @@
                 BookClub.showNotification('Please answer all questions', 'warning');
                 return;
             }
+            
+            // Confirm submission
+            if (!confirm('Submit your answers? You cannot change them after submission.')) {
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.classList.add('btn-loading');
+            submitBtn.disabled = true;
             
             // Submit quiz
             const result = BookClub.submitQuiz(currentChapterId, answers);

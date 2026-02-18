@@ -420,6 +420,85 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Auto-save draft notes
+const DRAFT_KEY = 'bookclub_draft_notes';
+
+function saveDraft(chapterId, content) {
+    const drafts = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}');
+    drafts[chapterId] = {
+        content,
+        savedAt: new Date().toISOString()
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(drafts));
+}
+
+function getDraft(chapterId) {
+    const drafts = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}');
+    return drafts[chapterId] || null;
+}
+
+function clearDraft(chapterId) {
+    const drafts = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}');
+    delete drafts[chapterId];
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(drafts));
+}
+
+// Setup auto-save for textarea
+function setupAutoSave(textareaId, chapterId) {
+    const textarea = document.getElementById(textareaId);
+    if (!textarea) return;
+    
+    // Restore draft
+    const draft = getDraft(chapterId);
+    if (draft && draft.content && !textarea.value) {
+        textarea.value = draft.content;
+        showNotification('Draft restored', 'info');
+    }
+    
+    // Auto-save on input
+    let timeout;
+    textarea.addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            saveDraft(chapterId, textarea.value);
+        }, 1000);
+    });
+    
+    // Clear draft on form submit
+    const form = textarea.closest('form');
+    if (form) {
+        form.addEventListener('submit', () => {
+            clearDraft(chapterId);
+        });
+    }
+}
+
+// Confirm before leaving with unsaved changes
+let hasUnsavedChanges = false;
+
+function setUnsavedChanges(value) {
+    hasUnsavedChanges = value;
+}
+
+window.addEventListener('beforeunload', (e) => {
+    if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+
+// Smooth scroll for anchor links
+document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (link) {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+});
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', initializeData);
 
@@ -513,5 +592,10 @@ const BookClub = {
     },
     getRecentActivity: () => [],
     getQuizResults: () => JSON.parse(localStorage.getItem('bookclub_quiz_results') || '{}'),
+    // Auto-save functions
+    setupAutoSave,
+    getDraft,
+    clearDraft,
+    setUnsavedChanges,
     initializeData
 };

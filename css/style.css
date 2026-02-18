@@ -1641,3 +1641,115 @@ h3 {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-primary);
 }
+
+/* Loading States */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Draft indicator */
+.draft-indicator {
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    margin-top: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.draft-indicator.visible {
+    opacity: 1;
+}
+
+/* Button loading state */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Page transitions */
+.page-transition {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Better focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* Disabled state */
+.disabled,
+:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Toast notification improvements */
+.notification {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Hover effects enhancement */
+.book-card-link:hover .book-card {
+    transform: translateY(-8px);
+}
+
+/* Card skeleton loading */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-secondary) 25%,
+        var(--bg-tertiary) 50%,
+        var(--bg-secondary) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
