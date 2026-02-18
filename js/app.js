@@ -379,6 +379,7 @@ function getBadgeProgress(userId) {
         }
         
         progress[badge.id] = {
+            badge: badge,  // Adaug referinta la badge
             current,
             target: badge.target,
             percentage: Math.min(100, (current / badge.target) * 100),
