@@ -159,30 +159,44 @@
                 
                 return `
                     <a href="book.html?id=${book.id}" class="book-card-link">
-                        <div class="book-card">
-                            <div class="book-cover">
-                                ${book.id === 1 ? `
-                                    <img src="images/thinking-in-bets-cover.png" alt="${book.title}" class="book-cover-img">
-                                ` : `
+                        ${book.id === 1 ? `
+                            <div class="book-card book-card-featured">
+                                <div class="book-card-bg">
+                                    <img src="images/thinking-in-bets-cover.png" alt="${book.title}" class="book-bg-img">
+                                    <div class="book-bg-overlay"></div>
+                                </div>
+                                <div class="book-card-content">
+                                    <h3 class="book-title-featured">${book.title}</h3>
+                                    <p class="book-author-featured">${book.author}</p>
+                                    <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
+                                    <div class="book-progress-featured">
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: ${progress}%"></div>
+                                        </div>
+                                        <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="book-card">
+                                <div class="book-cover">
                                     <div class="cover-placeholder">
                                         <span class="book-emoji">${book.emoji || '📖'}</span>
                                     </div>
-                                `}
-                            </div>
-                            
-                            <div class="book-details">
-                                <h3 class="book-title">${book.title}</h3>
-                                <p class="book-author">${book.author}</p>
-                                <p class="book-description">${book.description.substring(0, 120)}${book.description.length > 120 ? '...' : ''}</p>
-                                
-                                <div class="book-progress">
-                                    <div class="mini-progress-bar">
-                                        <div class="mini-progress-fill" style="width: ${progress}%"></div>
+                                </div>
+                                <div class="book-details">
+                                    <h3 class="book-title">${book.title}</h3>
+                                    <p class="book-author">${book.author}</p>
+                                    <p class="book-description">${book.description.substring(0, 120)}${book.description.length > 120 ? '...' : ''}</p>
+                                    <div class="book-progress">
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: ${progress}%"></div>
+                                        </div>
+                                        <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
                                     </div>
-                                    <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
                                 </div>
                             </div>
-                        </div>
+                        `}
                     </a>
                 `;
             }).join('');

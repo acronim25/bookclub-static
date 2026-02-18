@@ -462,6 +462,94 @@ h3 {
     box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
 }
 
+/* Featured Book Card with Background Image */
+.book-card-featured {
+    position: relative;
+    overflow: hidden;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.book-card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.book-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px) brightness(0.4);
+    transform: scale(1.1);
+}
+
+.book-bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(13, 17, 23, 0.3) 0%,
+        rgba(13, 17, 23, 0.7) 50%,
+        rgba(13, 17, 23, 0.95) 100%
+    );
+}
+
+.book-card-content {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem;
+}
+
+.book-title-featured {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.book-author-featured {
+    color: #ff8c42;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.book-description-featured {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.book-progress-featured {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.book-progress-featured .mini-progress-bar {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.book-progress-featured .progress-count {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
 .cover-placeholder.large {
     height: 280px;
     width: 200px;
