@@ -161,9 +161,13 @@
                     <a href="book.html?id=${book.id}" class="book-card-link">
                         <div class="book-card">
                             <div class="book-cover">
-                                <div class="cover-placeholder">
-                                    <span class="book-emoji">${book.emoji || '📖'}</span>
-                                </div>
+                                ${book.id === 1 ? `
+                                    <img src="images/thinking-in-bets-cover.png" alt="${book.title}" class="book-cover-img">
+                                ` : `
+                                    <div class="cover-placeholder">
+                                        <span class="book-emoji">${book.emoji || '📖'}</span>
+                                    </div>
+                                `}
                             </div>
                             
                             <div class="book-details">
