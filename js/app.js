@@ -531,6 +531,16 @@ function getNotesByChapter(chapterId) {
     return getAllNotes().filter(n => n.chapter_id === parseInt(chapterId));
 }
 
+// Get completed chapters for a user (standalone function)
+function getCompletedChapters(userId) {
+    const progress = getProgress(userId);
+    // Handle both old format (boolean) and new format (object with completed property)
+    return Object.keys(progress).filter(key => {
+        const val = progress[key];
+        return val === true || (val && val.completed === true);
+    }).map(Number);
+}
+
 // Get leaderboard
 function getLeaderboard() {
     const users = getAllUsers();
@@ -790,14 +800,6 @@ const BookClub = {
                 return badge ? { id: badge.id, name: badge.name, emoji: badge.emoji } : null;
             }).filter(Boolean)
         };
-    },
-    getCompletedChapters: (userId) => {
-        const progress = getProgress(userId);
-        // Handle both old format (boolean) and new format (object with completed property)
-        return Object.keys(progress).filter(key => {
-            const val = progress[key];
-            return val === true || (val && val.completed === true);
-        }).map(Number);
     },
     getProgress: (userId) => {
         return getProgress(userId);
