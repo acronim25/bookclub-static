@@ -804,6 +804,9 @@ const BookClub = {
     getProgress: (userId) => {
         return getProgress(userId);
     },
+    getCompletedChapters: (userId) => {
+        return getCompletedChapters(userId);
+    },
     getStreakStatus: (userId) => {
         const user = getAllUsers()[userId];
         return { 
