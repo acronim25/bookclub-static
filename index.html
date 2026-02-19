@@ -191,6 +191,12 @@
     <script src="js/app.js?v=2"></script>
     <script src="js/sync.js?v=3"></script>
     <script>
+        // PATCH: Ensure SyncAPI exists (fallback for cache issues)
+        if (typeof SyncAPI === 'undefined' && typeof BookClubSync !== 'undefined') {
+            console.log('Creating SyncAPI from BookClubSync...');
+            window.SyncAPI = new BookClubSync();
+        }
+        
         // Mobile Navigation Toggle
         document.getElementById('navToggle')?.addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
