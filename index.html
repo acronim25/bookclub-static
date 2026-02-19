@@ -191,6 +191,17 @@
     <script src="js/app.js"></script>
     <script src="js/sync.js"></script>
     <script>
+        // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
+        if (!BookClub.getCompletedChapters) {
+            BookClub.getCompletedChapters = function(userId) {
+                const progress = BookClub.getProgress(userId);
+                return Object.keys(progress).filter(key => {
+                    const val = progress[key];
+                    return val === true || (val && val.completed === true);
+                }).map(Number);
+            };
+        }
+        
         function populateUserDropdown() {
             const select = document.getElementById('user-selector');
             const users = BookClub.getAllUsers();
