@@ -274,22 +274,26 @@
             }
             
             // Sort by timestamp (newest first)
+            // For old format (boolean true), use a default old timestamp so they still count
             const sortedChapters = progressEntries
                 .map(([chapterId, data]) => {
                     let timestamp = 0;
+                    let isCompleted = false;
                     
                     // New format: object with completed_at
-                    if (data && typeof data === 'object' && data.completed_at) {
-                        timestamp = new Date(data.completed_at).getTime();
+                    if (data && typeof data === 'object' && data.completed === true) {
+                        isCompleted = true;
+                        timestamp = data.completed_at ? new Date(data.completed_at).getTime() : Date.now();
                     }
-                    // Old format: boolean true - treat as very old (0)
+                    // Old format: boolean true
                     else if (data === true) {
-                        timestamp = 0;
+                        isCompleted = true;
+                        timestamp = 1; // Give old entries a minimal timestamp so they count
                     }
                     
-                    return { chapterId: parseInt(chapterId), timestamp };
+                    return { chapterId: parseInt(chapterId), timestamp, isCompleted };
                 })
-                .filter(item => item.timestamp > 0 || progress[item.chapterId] === true)
+                .filter(item => item.isCompleted) // Only include completed chapters
                 .sort((a, b) => b.timestamp - a.timestamp);
             
             // Get the most recent chapter
@@ -301,15 +305,8 @@
                 }
             }
             
-            // Fallback: if we have progress but no timestamps (all old format),
-            // get the book for the first completed chapter
-            const firstCompletedId = parseInt(progressEntries[0][0]);
-            const firstChapter = BookClub.getChapter(firstCompletedId);
-            if (firstChapter) {
-                return BookClub.getBook(firstChapter.book_id);
-            }
-            
-            // Ultimate fallback
+            // Fallback: if we have progress but no completed chapters,
+            // return the first book
             const books = BookClub.getAllBooks();
             return books.length > 0 ? books[0] : null;
         }
