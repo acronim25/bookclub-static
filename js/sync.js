@@ -3,17 +3,20 @@
  * Handles syncing data between frontend (localStorage) and backend (SQLite)
  */
 
-// Auto-detect API URL based on hostname
+// Auto-detect API URL based on hostname and protocol
 // For local development: use localhost
-// For production (VPS): use the same hostname as the frontend
+// For production (VPS): use the same hostname with port 5000
 const API_BASE_URL = (() => {
     const hostname = window.location.hostname;
+    const protocol = window.location.protocol === 'https:' ? 'https' : 'http';
+    
     // If running locally (file:// or localhost), use localhost:5000
     if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
         return 'http://localhost:5000/api';
     }
     // For VPS/production - use the same hostname with port 5000
-    return `http://${hostname}:5000/api`;
+    // Note: If frontend is on HTTPS, API must also be HTTPS (or use same origin)
+    return `${protocol}://${hostname}:5000/api`;
 })();
 
 const SyncAPI = {
@@ -50,15 +53,32 @@ const SyncAPI = {
         }
     },
 
-    // Get all users (for transparency)
+    // Get all users (for transparency) - fallback to localStorage if API unavailable
     async getAllUsers() {
         try {
-            const response = await fetch(`${API_BASE_URL}/users`);
-            return await response.json();
+            const response = await fetch(`${API_BASE_URL}/users`, { 
+                mode: 'cors',
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                return await response.json();
+            }
         } catch (error) {
-            console.error('Get users error:', error);
-            return [];
+            console.log('API unavailable, using localStorage fallback for users');
         }
+        
+        // Fallback: return users from localStorage
+        const users = BookClub.getAllUsers();
+        return Object.values(users).map(u => ({
+            id: u.id,
+            discord_id: u.discord_id || u.id,
+            name: u.name,
+            current_streak: u.current_streak || 0,
+            longest_streak: u.longest_streak || 0,
+            total_chapters_read: u.chapters_read || 0,
+            badges: u.badges || [],
+            chapters_completed: BookClub.getCompletedChapters(u.id).length
+        }));
     },
 
     // Save chapter progress to backend
@@ -142,15 +162,31 @@ const SyncAPI = {
         return backendData;
     },
 
-    // Get all notes (shared between users)
+    // Get all notes (shared between users) - fallback to localStorage if API unavailable
     async getAllNotes() {
         try {
-            const response = await fetch(`${API_BASE_URL}/notes`);
-            return await response.json();
+            const response = await fetch(`${API_BASE_URL}/notes`, {
+                mode: 'cors',
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                return await response.json();
+            }
         } catch (error) {
-            console.error('Get notes error:', error);
-            return [];
+            console.log('API unavailable, using localStorage fallback for notes');
         }
+        
+        // Fallback: return notes from localStorage
+        const notes = BookClub.getNotes ? BookClub.getNotes() : [];
+        return notes.map(n => ({
+            id: n.id,
+            user_name: n.user_name || n.userName || 'Unknown',
+            chapter_id: n.chapter_id,
+            chapter_title: n.chapter_title || 'Unknown Chapter',
+            book_title: n.book_title || 'Unknown Book',
+            note: n.note || n.text || '',
+            created_at: n.created_at || n.createdAt
+        }));
     },
 
     // Add a new note

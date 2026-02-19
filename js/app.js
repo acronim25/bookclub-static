@@ -800,6 +800,8 @@ const BookClub = {
     },
     getNotes: getAllNotes,
     getNotesForChapter: getNotesByChapter,
+    getChapter: getChapter,
+    getBook: getBook,
     getRecentActivity: (userId, limit = 3) => {
         const activities = getRecentActivities(userId, limit);
         return activities.map(formatActivity);
