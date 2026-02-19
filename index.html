@@ -142,6 +142,21 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Data Backup -->
+                <div class="card backup-card" style="border: 1px solid var(--accent-gold); background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(22,27,34,0.85) 100%);">
+                    <div class="card-header"><h2>💾 Data Backup</h2></div>
+                    <div class="card-body">
+                        <p class="backup-info" style="color: var(--accent-gold); margin-bottom: 1rem;">⚠️ Your progress is saved in your browser. Download a backup to keep your data safe!</p>
+                        <div class="backup-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn btn-secondary" onclick="downloadBackup()">📥 Download Backup</button>
+                            <div class="restore-section">
+                                <input type="file" id="restore-file" accept=".json" style="display:none" onchange="restoreBackup(this)">
+                                <button class="btn btn-primary" onclick="document.getElementById('restore-file').click()">📤 Restore from Backup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -293,6 +308,44 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // Backup/Restore Functions
+        function downloadBackup() {
+            const data = BookClub.exportData();
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bookclub-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('✅ Backup downloaded! Keep this file safe.');
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (!confirm('⚠️ This will REPLACE all current data. Are you sure?')) {
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const result = BookClub.importData(e.target.result);
+                if (result.success) {
+                    alert('✅ ' + result.message + '\n\nPage will reload now.');
+                    location.reload();
+                } else {
+                    alert('❌ ' + result.message);
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
         }
     </script>
 </body>

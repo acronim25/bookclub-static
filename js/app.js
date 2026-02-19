@@ -754,6 +754,31 @@ const BookClub = {
     getStats,
     getBookProgress,
     getLeaderboard,
+    // Backup/Restore functions
+    exportData: () => {
+        const data = {
+            user_data: localStorage.getItem(STORAGE_KEYS.USER_DATA),
+            progress: localStorage.getItem(STORAGE_KEYS.PROGRESS),
+            notes: localStorage.getItem(STORAGE_KEYS.NOTES),
+            activities: localStorage.getItem(STORAGE_KEYS.ACTIVITIES),
+            current_user: localStorage.getItem(STORAGE_KEYS.CURRENT_USER),
+            exported_at: new Date().toISOString()
+        };
+        return JSON.stringify(data, null, 2);
+    },
+    importData: (jsonString) => {
+        try {
+            const data = JSON.parse(jsonString);
+            if (data.user_data) localStorage.setItem(STORAGE_KEYS.USER_DATA, data.user_data);
+            if (data.progress) localStorage.setItem(STORAGE_KEYS.PROGRESS, data.progress);
+            if (data.notes) localStorage.setItem(STORAGE_KEYS.NOTES, data.notes);
+            if (data.activities) localStorage.setItem(STORAGE_KEYS.ACTIVITIES, data.activities);
+            if (data.current_user) localStorage.setItem(STORAGE_KEYS.CURRENT_USER, data.current_user);
+            return { success: true, message: 'Data restored successfully!' };
+        } catch (e) {
+            return { success: false, message: 'Invalid backup file: ' + e.message };
+        }
+    },
     // Utility functions
     formatDate,
     formatRelativeTime,
