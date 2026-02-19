@@ -167,6 +167,9 @@
     <script src="js/app.js"></script>
     <script src="js/sync.js"></script>
     <script>
+        // Initialize data first
+        BookClub.initializeData();
+        
         document.addEventListener('DOMContentLoaded', async function() {
             const user = BookClub.getCurrentUser();
             
