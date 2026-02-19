@@ -3,7 +3,18 @@
  * Handles syncing data between frontend (localStorage) and backend (SQLite)
  */
 
-const API_BASE_URL = 'http://localhost:5000/api'; // Change this to your server URL
+// Auto-detect API URL based on hostname
+// For local development: use localhost
+// For production (VPS): use the same hostname as the frontend
+const API_BASE_URL = (() => {
+    const hostname = window.location.hostname;
+    // If running locally (file:// or localhost), use localhost:5000
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
+        return 'http://localhost:5000/api';
+    }
+    // For VPS/production - use the same hostname with port 5000
+    return `http://${hostname}:5000/api`;
+})();
 
 const SyncAPI = {
     // Sync all data to backend
