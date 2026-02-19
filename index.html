@@ -157,6 +157,20 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Cloud Sync -->
+                <div class="card sync-card" style="border: 1px solid var(--accent-primary); background: linear-gradient(135deg, rgba(0,212,255,0.05) 0%, rgba(22,27,34,0.85) 100%);">
+                    <div class="card-header"><h2>☁️ Cloud Sync</h2></div>
+                    <div class="card-body">
+                        <p class="sync-info" style="color: var(--accent-primary); margin-bottom: 1rem;">🔄 Your progress is synced to the cloud. Both Alex and Dhianna can see each other's progress!</p>
+                        <div class="sync-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="syncToCloud()">⬆️ Save to Cloud</button>
+                            <button class="btn btn-secondary" onclick="syncFromCloud()">⬇️ Load from Cloud</button>
+                            <button class="btn btn-secondary" onclick="viewAllProgress()">👥 View Both Progress</button>
+                        </div>
+                        <div id="sync-status" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -175,6 +189,7 @@
 
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/sync.js"></script>
     <script>
         function populateUserDropdown() {
             const select = document.getElementById('user-selector');
@@ -347,6 +362,127 @@
             reader.readAsText(file);
             input.value = '';
         }
+
+        // Cloud Sync Functions
+        async function syncToCloud() {
+            const user = BookClub.getCurrentUser();
+            if (!user) {
+                alert('Please select a user first');
+                return;
+            }
+
+            const statusEl = document.getElementById('sync-status');
+            statusEl.textContent = '⏳ Syncing to cloud...';
+            statusEl.style.color = 'var(--accent-primary)';
+
+            const users = BookClub.getAllUsers();
+            const userData = users[user.id];
+            const progress = BookClub.getCompletedChapters(user.id);
+            
+            // Convert to progress object
+            const progressObj = {};
+            progress.forEach(chId => {
+                progressObj[chId] = { completed: true, notes: '' };
+            });
+
+            const result = await SyncAPI.syncToBackend(user.discord_id || user.id, {
+                name: user.name,
+                progress: progressObj
+            });
+
+            if (result.success) {
+                statusEl.textContent = '✅ Saved to cloud successfully!';
+                statusEl.style.color = 'var(--accent-success)';
+                setTimeout(() => statusEl.textContent = '', 3000);
+            } else {
+                statusEl.textContent = '❌ Sync failed: ' + (result.error || 'Unknown error');
+                statusEl.style.color = 'var(--accent-danger)';
+            }
+        }
+
+        async function syncFromCloud() {
+            const user = BookClub.getCurrentUser();
+            if (!user) {
+                alert('Please select a user first');
+                return;
+            }
+
+            const statusEl = document.getElementById('sync-status');
+            statusEl.textContent = '⏳ Loading from cloud...';
+            statusEl.style.color = 'var(--accent-primary)';
+
+            const discordId = user.discord_id || user.id;
+            const result = await SyncAPI.fullSync(discordId);
+
+            if (result) {
+                statusEl.textContent = '✅ Loaded from cloud! Reloading...';
+                statusEl.style.color = 'var(--accent-success)';
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                statusEl.textContent = '❌ No cloud data found for this user';
+                statusEl.style.color = 'var(--accent-danger)';
+            }
+        }
+
+        async function viewAllProgress() {
+            const statusEl = document.getElementById('sync-status');
+            statusEl.textContent = '⏳ Loading all users...';
+            statusEl.style.color = 'var(--accent-primary)';
+
+            const users = await SyncAPI.getAllUsers();
+            
+            if (users.length === 0) {
+                statusEl.textContent = '❌ No users found in cloud';
+                statusEl.style.color = 'var(--accent-danger)';
+                return;
+            }
+
+            // Create a nice display
+            let html = '<h3>👥 Everyone\'s Progress</h3><div style="margin-top: 1rem;">';
+            users.forEach(u => {
+                const pct = Math.round((u.chapters_completed / 22) * 100);
+                html += `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,212,255,0.1); border-radius: 8px;">
+                        <strong>${u.name}</strong> (${u.discord_id})<br>
+                        📚 ${u.chapters_completed} chapters | 🔥 ${u.current_streak} streak | 🏅 ${u.badges.length} badges<br>
+                        <div style="margin-top: 0.5rem; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                            <div style="height: 8px; background: var(--accent-primary); width: ${pct}%;"></div>
+                        </div>
+                        <small>${pct}% complete</small>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            // Show in a modal or alert (simpler for now)
+            const win = window.open('', 'Progress', 'width=500,height=600');
+            win.document.write(`
+                <html>
+                <head>
+                    <style>
+                        body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 20px; }
+                        h3 { color: #00d4ff; }
+                    </style>
+                </head>
+                <body>${html}</body>
+                </html>
+            `);
+
+            statusEl.textContent = '';
+        }
+
+        // Auto-sync when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            const user = BookClub.getCurrentUser();
+            if (user) {
+                // Try to sync from cloud on load
+                const discordId = user.discord_id || user.id;
+                const backendData = await SyncAPI.getUserFromBackend(discordId);
+                if (backendData) {
+                    console.log('Cloud data available for', user.name);
+                }
+            }
+        });
     </script>
 </body>
 </html>
