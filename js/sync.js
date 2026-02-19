@@ -1,8 +1,10 @@
 // Book Club Cloud Sync Module
-// Force cache refresh v2
+// Force cache refresh v3 - SyncAPI fix
+
+console.log('Loading sync.js v3...');
 
 const API_BASE_URL = 'https://5.189.142.233/api';
-const API_VERSION = 'v2';
+const API_VERSION = 'v3';
 
 class BookClubSync {
     constructor() {
@@ -117,3 +119,6 @@ class BookClubSync {
 
 // Export pentru utilizare în alte module
 window.BookClubSync = BookClubSync;
+
+// Creează instanță globală pentru compatibilitate cu codul existent
+window.SyncAPI = new BookClubSync();
