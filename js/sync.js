@@ -1,10 +1,10 @@
 // Book Club Cloud Sync Module
 // Force cache refresh v3 - SyncAPI fix
 
-console.log('Loading sync.js v3...');
+console.log('Loading sync.js v4...');
 
 const API_BASE_URL = 'https://5.189.142.233/api';
-const API_VERSION = 'v3';
+const API_VERSION = 'v4';
 
 class BookClubSync {
     constructor() {
@@ -113,6 +113,96 @@ class BookClubSync {
             return response.ok;
         } catch (error) {
             return false;
+        }
+    }
+
+    // === METODE PENTRU COMPATIBILITATE CU CODUL EXISTENT ===
+
+    // Sincronizare către backend (upload progres)
+    async syncToBackend(userId, data) {
+        try {
+            const response = await fetch(`${this.apiUrl}/users/${userId}/progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Eroare la sincronizare:', error);
+            throw error;
+        }
+    }
+
+    // Sincronizare completă
+    async fullSync(userId) {
+        try {
+            const response = await fetch(`${this.apiUrl}/sync`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ userId })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Eroare la full sync:', error);
+            throw error;
+        }
+    }
+
+    // Obține toți utilizatorii
+    async getAllUsers() {
+        try {
+            const response = await fetch(`${this.apiUrl}/users`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Eroare la preluarea utilizatorilor:', error);
+            return [];
+        }
+    }
+
+    // Obține utilizator de pe backend
+    async getUserFromBackend(discordId) {
+        try {
+            const response = await fetch(`${this.apiUrl}/user/${discordId}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Eroare la preluarea utilizatorului:', error);
+            return null;
         }
     }
 }
