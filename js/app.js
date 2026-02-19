@@ -55,14 +55,6 @@ function initializeData() {
     
     console.log('BookClub data initialized');
 }
-    
-    if (!localStorage.getItem(STORAGE_KEYS.PROGRESS)) {
-        localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify({}));
-    }
-    
-    // Migrate old format progress to new format
-    migrateProgressData();
-}
 
 // Migrate old boolean progress format to new object format
 function migrateProgressData() {
