@@ -105,8 +105,8 @@
                     <div class="card-header"><h2>🔖 Currently Reading</h2></div>
                     <div class="card-body">
                         <div class="book-info">
-                            <h3>Thinking in Bets</h3>
-                            <p class="book-author">by Annie Duke</p>
+                            <h3 id="current-book-title">Select a book to read</h3>
+                            <p class="book-author" id="current-book-author"></p>
                             <div class="progress-section">
                                 <div class="progress-header">
                                     <span>Progress</span>
@@ -115,9 +115,9 @@
                                 <div class="progress-bar">
                                     <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
                                 </div>
-                                <p class="progress-text" id="progress-text">0 of 12 chapters completed</p>
+                                <p class="progress-text" id="progress-text">0 of 0 chapters completed</p>
                             </div>
-                            <a href="library.html" class="btn btn-primary">📚 Continue Reading</a>
+                            <a href="library.html" id="continue-reading-link" class="btn btn-primary">📚 Continue Reading</a>
                         </div>
                     </div>
                 </div>
@@ -208,13 +208,52 @@
             }
             document.getElementById('stat-score').textContent = quizCount > 0 ? Math.round(totalScore / quizCount) : 0;
             
-            const pct = Math.round((completed.length / 12) * 100);
-            document.getElementById('progress-percent').textContent = pct + '%';
-            document.getElementById('progress-fill').style.width = pct + '%';
-            document.getElementById('progress-text').textContent = `${completed.length} of 12 chapters completed`;
+            // Find the most recently read book
+            const currentBook = getMostRecentlyReadBook(user.id);
+            if (currentBook) {
+                const bookProgress = BookClub.getBookProgress(user.id, currentBook.id);
+                const pct = Math.round((bookProgress.completed / currentBook.total_chapters) * 100);
+                document.getElementById('current-book-title').textContent = currentBook.title;
+                document.getElementById('current-book-author').textContent = `by ${currentBook.author}`;
+                document.getElementById('progress-percent').textContent = pct + '%';
+                document.getElementById('progress-fill').style.width = pct + '%';
+                document.getElementById('progress-text').textContent = `${bookProgress.completed} of ${currentBook.total_chapters} chapters completed`;
+                document.getElementById('continue-reading-link').href = `book.html?id=${currentBook.id}`;
+            } else {
+                document.getElementById('current-book-title').textContent = 'Start your reading journey!';
+                document.getElementById('current-book-author').textContent = 'Visit the library to begin';
+                document.getElementById('progress-percent').textContent = '0%';
+                document.getElementById('progress-fill').style.width = '0%';
+                document.getElementById('progress-text').textContent = '0 of 0 chapters completed';
+                document.getElementById('continue-reading-link').href = 'library.html';
+            }
             
             loadBadgeProgress(user);
             loadRecentActivity(user);
+        }
+
+        function getMostRecentlyReadBook(userId) {
+            const activities = BookClub.getRecentActivity(userId, 50);
+            const chapterActivities = activities.filter(a => a.type === 'chapter_complete');
+            
+            if (chapterActivities.length === 0) {
+                // No chapters completed yet, return first book
+                const books = BookClub.getAllBooks();
+                return books.length > 0 ? books[0] : null;
+            }
+            
+            // Get the most recent chapter completion
+            const mostRecent = chapterActivities[0];
+            const chapterId = mostRecent.data?.chapter_id;
+            
+            if (chapterId) {
+                const chapter = BookClub.getChapter(chapterId);
+                if (chapter) {
+                    return BookClub.getBook(chapter.book_id);
+                }
+            }
+            
+            return null;
         }
 
         function loadBadgeProgress(user) {

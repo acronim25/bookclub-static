@@ -203,6 +203,18 @@ function getProgress(userId) {
     return progress[userId] || {};
 }
 
+// Get progress for a specific book
+function getBookProgress(userId, bookId) {
+    const progress = getProgress(userId);
+    const chapters = getChaptersByBook(bookId);
+    const completedChapters = chapters.filter(ch => progress[ch.id]).length;
+    return {
+        completed: completedChapters,
+        total: chapters.length,
+        percentage: chapters.length > 0 ? Math.round((completedChapters / chapters.length) * 100) : 0
+    };
+}
+
 // Mark chapter complete
 function markChapterComplete(userId, chapterId, notes = '') {
     const progress = getProgress(userId);
@@ -737,6 +749,7 @@ const BookClub = {
     },
     getQuizResults: () => JSON.parse(localStorage.getItem('bookclub_quiz_results') || '{}'),
     getStats,
+    getBookProgress,
     getLeaderboard,
     // Utility functions
     formatDate,
