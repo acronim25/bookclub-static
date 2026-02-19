@@ -21,6 +21,14 @@ const BOOKCLUB_DATA = {
             description: "Risk Taking, Gut Feelings and the Biology of Boom and Bust. A neuroscientist's exploration of the biology of financial risk.",
             total_chapters: 10,
             emoji: "🐺"
+        },
+        {
+            id: 3,
+            title: "The 80/80 Marriage",
+            author: "Nate Klemp, PhD & Kaley Klemp",
+            description: "A New Model for a Happier, Stronger Relationship. Moving from the 50/50 scorekeeping model to radical generosity in marriage.",
+            total_chapters: 10,
+            emoji: "💕"
         }
     ],
 
@@ -203,6 +211,87 @@ const BOOKCLUB_DATA = {
             title: "The Biology of Success",
             summary: "Putting it all together - understanding your biological self to become a better trader. Practical applications of the science for trading performance.",
             key_concepts: ["Biological self-awareness", "Practical applications", "Trading performance", "Mind-body optimization", "Long-term success"]
+        },
+        // Book 3 - The 80/80 Marriage (ids 111-120)
+        {
+            id: 111,
+            book_id: 3,
+            number: 1,
+            title: "The 50/50 Marriage",
+            summary: "Why the traditional 'fair' 50/50 model of marriage leads to scorekeeping, resentment, and unhappiness. The pitfalls of transactional love and keeping mental ledgers.",
+            key_concepts: ["50/50 model", "Scorekeeping in marriage", "Transactional love", "Mental ledgers", "Fairness trap"]
+        },
+        {
+            id: 112,
+            book_id: 3,
+            number: 2,
+            title: "The 80/80 Model",
+            summary: "Introducing the 80/80 model where both partners aim to give 80% and receive 20%. This creates a surplus of generosity rather than a scarcity mindset.",
+            key_concepts: ["80/80 model", "Radical generosity", "Surplus mindset", "Over-contribution", "Generosity loop"]
+        },
+        {
+            id: 113,
+            book_id: 3,
+            number: 3,
+            title: "Shifting from Fairness to Contribution",
+            summary: "How to move away from 'who did what' mentality toward a mindset of contribution. Recognizing when you're keeping score and how to stop.",
+            key_concepts: ["Fairness vs contribution", "Scorekeeping awareness", "Contribution mindset", "Giving without expectation", "Letting go of ledgers"]
+        },
+        {
+            id: 114,
+            book_id: 3,
+            number: 4,
+            title: "The Power of Shared Purpose",
+            summary: "Creating a shared vision for your marriage. How common goals and values create unity and reduce conflict about daily responsibilities.",
+            key_concepts: ["Shared purpose", "Common goals", "Marriage vision", "Values alignment", "Unity through purpose"]
+        },
+        {
+            id: 115,
+            book_id: 3,
+            number: 5,
+            title: "Communication: From Me to We",
+            summary: "Transforming communication patterns from self-focused to partnership-focused. Tools for expressing needs while prioritizing the relationship.",
+            key_concepts: ["Me to We", "Partnership communication", "Expressing needs", "Listening skills", "Relationship-first language"]
+        },
+        {
+            id: 116,
+            book_id: 3,
+            number: 6,
+            title: "Conflict as Opportunity",
+            summary: "Reframing conflict as a chance for growth rather than a problem. How the 80/80 approach transforms disagreements into connection opportunities.",
+            key_concepts: ["Conflict reframing", "Growth through disagreement", "80/80 conflict resolution", "Connection opportunities", "Healthy conflict"]
+        },
+        {
+            id: 117,
+            book_id: 3,
+            number: 7,
+            title: "The Practice of Appreciation",
+            summary: "How gratitude and appreciation fuel the 80/80 marriage. Building habits of noticing and acknowledging your partner's contributions.",
+            key_concepts: ["Appreciation practice", "Gratitude habits", "Acknowledging contributions", "Positive feedback", "Noticing the good"]
+        },
+        {
+            id: 118,
+            book_id: 3,
+            number: 8,
+            title: "Rituals of Connection",
+            summary: "Creating regular rituals that strengthen your bond. From daily check-ins to weekly reviews, building structure that supports generosity.",
+            key_concepts: ["Connection rituals", "Daily check-ins", "Weekly reviews", "Relationship structure", "Consistent connection"]
+        },
+        {
+            id: 119,
+            book_id: 3,
+            number: 9,
+            title: "When Life Gets Hard",
+            summary: "Applying the 80/80 model during crises, stress, and difficult seasons. How radical generosity becomes even more important under pressure.",
+            key_concepts: ["80/80 under stress", "Crisis generosity", "Supporting your partner", "Hard seasons", "Resilience through giving"]
+        },
+        {
+            id: 120,
+            book_id: 3,
+            number: 10,
+            title: "The 80/80 Lifestyle",
+            summary: "Integrating the 80/80 model into everyday life. Making radical generosity a sustainable, lifelong practice that transforms your marriage.",
+            key_concepts: ["80/80 lifestyle", "Sustainable generosity", "Lifelong practice", "Marriage transformation", "Continuous growth"]
         }
     ],
 
@@ -583,6 +672,178 @@ const BOOKCLUB_DATA = {
                 { question: "Ce înseamnă să fii 'the hour between dog and wolf'?", options: ["Să fii agresiv", "Să fii conștient de transformarea ta biologică între stări", "Să fii nocturn", "Să fii animal"], correct: 1 },
                 { question: "Ce ar trebui să facă un trader după ce citește această carte?", options: ["Să devină biolog", "Să-și dezvolte conștientizarea biologică și să-și optimizeze stările", "Să ignore biologia", "Să schimbe complet strategia"], correct: 1 },
                 { question: "Ce este succesul adevărat în trading conform lui Coates?", options: ["Câștiguri mari rapide", "Abilitatea de a performa consistent în timp prin gestionarea biologiei", "A avea cea mai bună strategie", "A lucra cel mai mult"], correct: 1 }
+            ]
+        },
+
+        // ===== Book 3: The 80/80 Marriage =====
+        // Chapter 1
+        {
+            id: 111,
+            chapter_id: 111,
+            questions: [
+                { question: "Ce este modelul 50/50 în căsnicie?", options: ["Un model de afaceri", "Un model bazat pe egalitate exactă și scorekeeping", "Un model de parenting", "Un model financiar"], correct: 1 },
+                { question: "De ce eșuează modelul 50/50?", options: ["Pentru că oamenii nu sunt egali", "Pentru că duce la resentimente și scorekeeping", "Pentru că este prea vechi", "Nu eșuează"], correct: 1 },
+                { question: "Ce este 'scorekeeping' în căsnicie?", options: ["A ține scorul la jocuri", "A urmări mental cine a făcut ce", "A număra bani", "A face statistici"], correct: 1 },
+                { question: "Ce este 'transactional love'?", options: ["Dragoste bazată pe tranzacții financiare", "Dragoste condiționată de ce primești în schimb", "Dragoste la magazin", "Dragoste calculată"], correct: 1 },
+                { question: "Ce sunt 'mental ledgers' în relație?", options: ["Contabilitatea familiei", "Evidențele mentale despre cine a contribuit ce", "Agenda zilnică", "Lista de cumpărături"], correct: 1 },
+                { question: "De ce caută oamenii 'fairness' în relație?", options: ["Pentru că este corect", "Pentru că simt că trebuie să fie egalitate", "Pentru că așa spun regulile", "Nu caută"], correct: 1 },
+                { question: "Ce este 'fairness trap'?", options: ["O capcană financiară", "Capcana de a crede că egalitatea strictă duce la fericire", "O strategie de parenting", "Un joc"], correct: 1 },
+                { question: "Cum afectează modelul 50/50 fericirea în căsnicie?", options: ["O crește", "O scade prin focus pe măsurare și resentimente", "Nu o afectează", "Depinde de situație"], correct: 1 },
+                { question: "De ce nu funcționează 'keeping score'?", options: ["Pentru că este prea complicat", "Pentru că transformă dragostea în tranzacție", "Pentru că partenerul nu vede", "Funcționează perfect"], correct: 1 },
+                { question: "Ce creează modelul 50/50 pe termen lung?", options: ["Armonie", "Competiție și resentimente", "Independență", "Respect"], correct: 1 }
+            ]
+        },
+        // Chapter 2
+        {
+            id: 112,
+            chapter_id: 112,
+            questions: [
+                { question: "Ce este modelul 80/80?", options: ["Un model de afaceri", "Ambele parteneri dau 80% și primesc 20%", "Un model de economii", "Un model de parenting"], correct: 1 },
+                { question: "Ce creează modelul 80/80?", options: ["Competiție", "Un surplus de generozitate", "Egalitate strictă", "Individualism"], correct: 1 },
+                { question: "Ce este 'radical generosity'?", options: ["A da bani", "A da mult mai mult decât aștepți să primești", "A fi generos doar cu banii", "A te sacrifica"], correct: 1 },
+                { question: "Ce este 'surplus mindset'?", options: ["Mindset de economisire", "Mindset de abundanță și generozitate", "Mindset de competiție", "Mindset de lipsă"], correct: 1 },
+                { question: "Ce înseamnă 'over-contribution'?", options: ["A contribui prea mult", "A contribui mai mult decât 'partea ta'", "A lucra prea mult", "A da bani"], correct: 1 },
+                { question: "Ce este 'generosity loop'?", options: ["Un cerc vicios", "Un cerc virtuos unde generozitatea generează reciprocitate", "Un buclă financiară", "Un joc"], correct: 1 },
+                { question: "De ce funcționează 80/80 mai bine decât 50/50?", options: ["Pentru că este matematic corect", "Pentru că elimină nevoia de a urmări cine a făcut ce", "Pentru că este mai ușor", "Nu funcționează"], correct: 1 },
+                { question: "Ce se întâmplă când amândoi partenerii dau 80%?", options: ["Se ceartă", "Relația prosperă prin surplus de generozitate", "Este inegal", "Este injust"], correct: 1 },
+                { question: "Ce trebuie să renunți în modelul 80/80?", options: ["La dragoste", "La nevoia de a fi 'corect' și de a ține scorul", "La respect", "La comunicare"], correct: 1 },
+                { question: "Ce este rezultatul final al modelului 80/80?", options: ["Resentimente", "O căsnicie mai fericită și mai puternică", "Divorț", "Egalitate perfectă"], correct: 1 }
+            ]
+        },
+        // Chapter 3
+        {
+            id: 113,
+            chapter_id: 113,
+            questions: [
+                { question: "Ce înseamnă să treci de la 'fairness' la 'contribution'?", options: ["De la dreptate la nedreptate", "De la a urmări egalitatea la a da generos", "De la a da la a primi", "De la muncă la odihnă"], correct: 1 },
+                { question: "Cum recunoști când ții scorul?", options: ["Când faci matematică", "Când îți spui mental 'eu am făcut X, tu ai făcut Y'", "Când joci jocuri", "Când numeri banii"], correct: 1 },
+                { question: "Ce este 'contribution mindset'?", options: ["Mindset de competiție", "Mindset de a da fără a urmări ce primești", "Mindset de economisire", "Mindset de a primi"], correct: 1 },
+                { question: "Cum lași deoparte 'ledgers' mentale?", options: ["Nu poți", "Prin conștientizare și decizie activă de a nu urmări", "Prin a uita", "Prin a ignora"], correct: 1 },
+                { question: "Ce înseamnă să dai fără așteptări?", options: ["Să nu primești nimic", "Să contribui fără a aștepta ceva în schimb", "Să fii prost", "Să fii manipulat"], correct: 1 },
+                { question: "De ce este greu să renunți la 'scorekeeping'?", options: ["Pentru că este corect", "Pentru că am fost învățați că fair înseamnă egal", "Pentru că este ușor", "Nu este greu"], correct: 1 },
+                { question: "Ce se întâmplă când te oprești din a ține scorul?", options: ["Ești exploatat", "Eliberezi energie mentală pentru conectare", "Pierzi controlul", "Ești nedreptățit"], correct: 1 },
+                { question: "Cum gestionezi senzația că 'faci mai mult'?", options: ["Te plângi", "Recunoști că 80/80 înseamnă intenție nu măsurare exactă", "Faci și mai puțin", "Iei o pauză"], correct: 1 },
+                { question: "Ce rol joacă intenția în 80/80?", options: ["Niciunul", "Este esențială - să vrei să dai 80%", "Este secundară", "Este opțională"], correct: 1 },
+                { question: "Cum transformi mentalitatea de 'cât am făcut' în 'cum pot contribui'?", options: ["Nu poți", "Prin conștientizare și refocalizare pe generozitate", "Prin a ignora", "Prin a calcula"], correct: 1 }
+            ]
+        },
+        // Chapter 4
+        {
+            id: 114,
+            chapter_id: 114,
+            questions: [
+                { question: "Ce este 'shared purpose' în căsnicie?", options: ["Un scop comun de afaceri", "O viziune comună pentru relație și viață", "Un hobby comun", "Un scop financiar"], correct: 1 },
+                { question: "Cum reduc scopurile comune conflictele?", options: ["Nu reduc", "Prin alinierea valorilor și priorităților", "Prin a evita subiectele", "Prin a câștiga mereu"], correct: 1 },
+                { question: "Ce este 'marriage vision'?", options: ["O viziune romantică", "O imagine clară a relației pe care vrei să o construiești", "Un vis frumos", "O fantezie"], correct: 1 },
+                { question: "De ce sunt importante valorile aliniate?", options: ["Nu sunt", "Pentru că creează unitate și direcție comună", "Pentru că trebuie", "Pentru că este convenabil"], correct: 1 },
+                { question: "Cum creezi 'unity through purpose'?", options: ["Prin forță", "Prin a lucra împreună spre obiective comune", "Prin a fi de acord mereu", "Prin a evita conflictele"], correct: 1 },
+                { question: "Ce faci când scopurile par diferite?", options: ["Te cerți", "Cauți valori și obiective fundamentale comune", "Renunți", "Faci ce vrei"], correct: 1 },
+                { question: "Ce înseamnă să ai o direcție comună?", options: ["Să mergi în aceeași direcție fizic", "Să împărtășești valori și viziune pentru viitor", "Să faci aceleași lucruri", "Să gândești la fel"], correct: 1 },
+                { question: "Cum te ajută scopul comun în decizii zilnice?", options: ["Nu te ajută", "Oferă un criteriu clar pentru ce contează", "Te limitează", "Te confuză"], correct: 1 },
+                { question: "Ce întrebare esențială să vă puneți despre căsnicia voastră?", options: ["Cine câștigă?", "Ce fel de relație vrem să construim împreună?", "Cât câștigăm?", "Cine are dreptate?"], correct: 1 },
+                { question: "Ce creează un scop comun puternic?", options: ["Presiune", "Resiliență și sens în relație", "Competiție", "Conformitate"], correct: 1 }
+            ]
+        },
+        // Chapter 5
+        {
+            id: 115,
+            chapter_id: 115,
+            questions: [
+                { question: "Ce înseamnă comunicarea 'from Me to We'?", options: ["De la mine la noi - focus pe relație nu pe individ", "De la ego la parteneriat", "De la singular la plural", "Toate cele de mai sus"], correct: 3 },
+                { question: "Ce este 'partnership communication'?", options: ["Comunicare de afaceri", "Comunicare care prioritizează relația", "Comunicare formală", "Comunicare scrisă"], correct: 1 },
+                { question: "Cum îți exprimi nevoile în modelul 80/80?", options: ["Nu le exprimi", "Exprimi nevoile dar prioritizezi relația", "Impui nevoile", "Ignori nevoile"], correct: 1 },
+                { question: "Ce sunt 'listening skills' esențiale?", options: ["Auzi cuvintele", "Înțelegi perspectiva partenerului cu empatie", "Aștepți să vorbești tu", "Nodding"], correct: 1 },
+                { question: "Ce este 'relationship-first language'?", options: ["Limba iubirii", "Modul de a vorbi care pune relația pe primul loc", "Termeni tehnici", "Limba străină"], correct: 1 },
+                { question: "Cum eviți comunicarea toxică?", options: ["Nu vorbești", "Prin conștientizare și alegerea cuvintelor", "Prin a câștiga mereu", "Prin a ignora"], correct: 1 },
+                { question: "Ce faci când comunicarea devine dificilă?", options: ["Renunți", "Încerci să înțelegi și să asculți", "Strigi", "Pleci"], correct: 1 },
+                { question: "Ce înseamnă să fii prezent în conversație?", options: ["Să fii fizic acolo", "Să asculți activ și să fii empatic", "Să vorbești mult", "Să fii tăcut"], correct: 1 },
+                { question: "Cum transformi criticile în feedback constructiv?", options: ["Nu poți", "Prin focus pe comportament și intenție de a îmbunătăți", "Prin a ignora", "Prin a acuza"], correct: 1 },
+                { question: "Ce creează comunicarea 80/80?", options: ["Confuzie", "Înțelegere profundă și conexiune", "Competiție", "Evitare"], correct: 1 }
+            ]
+        },
+        // Chapter 6
+        {
+            id: 116,
+            chapter_id: 116,
+            questions: [
+                { question: "Cum reframezi conflictele în 80/80?", options: ["Ca probleme", "Ca oportunități de creștere", "Ca înfrângeri", "Ca ceva de evitat"], correct: 1 },
+                { question: "Ce este 'healthy conflict'?", options: ["Ceartă violentă", "Dezacord constructiv care duce la soluții", "Evitarea", "Ignorarea"], correct: 1 },
+                { question: "Cum transformi dezacordurile în conexiune?", options: ["Nu poți", "Prin ascultare, empatie și căutarea soluțiilor", "Prin a câștiga", "Prin a evita"], correct: 1 },
+                { question: "Ce este '80/80 conflict resolution'?", options: ["A câștiga mereu", "A căuta soluții unde ambii parteneri dau 80% compromis", "A evita conflictul", "A te certa corect"], correct: 1 },
+                { question: "De ce conflictele sunt oportunități?", options: ["Nu sunt", "Pentru că dezvăluie nevoile și creează înțelegere", "Pentru că sunt plăcute", "Pentru că câștigi"], correct: 1 },
+                { question: "Cum abordezi un conflict când ești supărat?", options: ["Ataci", "Respiri, te calmezi, și comunici cu intenție", "Ignori", "Te răzbuni"], correct: 1 },
+                { question: "Ce rol joacă empatia în rezolvarea conflictelor?", options: ["Niciunul", "Este esențială pentru a înțelege perspectiva partenerului", "Este opțională", "Este slabă"], correct: 1 },
+                { question: "Cum găsești 'win-win' în 80/80?", options: ["Nu există", "Căutând soluții care să servească ambii parteneri", "Prin compromisuri slabe", "Prin a câștiga"], correct: 1 },
+                { question: "Ce faci după ce rezolvi un conflict?", options: ["Uit", "Consolidezi înțelegerea și reconectarea", "Ții minte să câștigi data viitoare", "Te răzbuni"], correct: 1 },
+                { question: "Ce învață cuplurile 80/80 din conflicte?", options: ["Să evite", "Să crească și să se înțeleagă mai bine", "Să câștige", "Să se separe"], correct: 1 }
+            ]
+        },
+        // Chapter 7
+        {
+            id: 117,
+            chapter_id: 117,
+            questions: [
+                { question: "Ce este 'appreciation practice'?", options: ["Practica de a aprecia", "Obiceiul constant de a-ți aprecia partenerul", "Practica de a critica", "Practica de a cere"], correct: 1 },
+                { question: "Cum alimentezi căsnicia prin gratitudine?", options: ["Nu poți", "Recunoscând și apreciind contribuțiile partenerului", "Prin a primi", "Prin a critica"], correct: 1 },
+                { question: "De ce este importantă aprecierea zilnică?", options: ["Nu este", "Pentru că creează pozitivitate și conexiune", "Este opțională", "Este enervantă"], correct: 1 },
+                { question: "Ce sunt 'gratitude habits'?", options: ["Obiceiuri de a primi", "Obiceiuri zilnice de a exprima recunoștință", "Obiceiuri de a critica", "Obiceiuri de a cere"], correct: 1 },
+                { question: "Cum 'acknowledge contributions'?", options: ["Ignori", "Vorbești despre ce face partenerul și îi mulțumești", "Critici", "Compari"], correct: 1 },
+                { question: "Ce este 'positive feedback' în relație?", options: ["Feedback fals", "Recunoașterea și aprecierea a ceea ce face partenerul bine", "Critica", "Ignorarea"], correct: 1 },
+                { question: "De ce să 'notice the good'?", options: ["Nu este necesar", "Pentru că cultivă o perspectivă pozitivă", "Este greu", "Este fals"], correct: 1 },
+                { question: "Cum îți crești awareness-ul pentru a aprecia?", options: ["Nu poți", "Prin intenție conștientă de a observa ce face partenerul", "Prin a ignora", "Prin a critica"], correct: 1 },
+                { question: "Ce efect are aprecierea asupra partenerului?", options: ["Îl înfurie", "Îl motivează și îl face să se simtă valorizat", "Nu are efect", "Îl face leneș"], correct: 1 },
+                { question: "Ce creează practica aprecierii în timp?", options: ["Resentimente", "O cultură de recunoștință și generozitate", "Competiție", "Indiferență"], correct: 1 }
+            ]
+        },
+        // Chapter 8
+        {
+            id: 118,
+            chapter_id: 118,
+            questions: [
+                { question: "Ce sunt 'rituals of connection'?", options: ["Ritualuri religioase", "Obiceiuri regulate care întăresc legătura", "Ritualuri formale", "Ritualuri de lucru"], correct: 1 },
+                { question: "De ce sunt importante ritualurile zilnice?", options: ["Nu sunt", "Pentru că creează consistență și predictibilitate", "Sunt plictisitoare", "Sunt opționale"], correct: 1 },
+                { question: "Ce sunt 'daily check-ins'?", options: ["Verificări de securitate", "Momente zilnice de conectare și ascultare", "Verificări de email", "Listă de sarcini"], correct: 1 },
+                { question: "Cum te ajută 'weekly reviews'?", options: ["Nu te ajută", "Să reflectezi și să planifici împreună", "Să critici", "Să numeri"], correct: 1 },
+                { question: "Ce este 'relationship structure'?", options: ["Structură fizică", "Sistemul de obiceiuri care susține relația", "Structură financiară", "Structură socială"], correct: 1 },
+                { question: "Cum creezi 'consistent connection'?", options: ["Nu poți", "Prin ritualuri regulate de calitate", "Prin a fi mereu împreună", "Prin a vorbi mult"], correct: 1 },
+                { question: "Ce ritualuri simple poți implementa?", options: ["Nicio", "Mic dejun împreună, seară de conectare, weekenduri speciale", "Doar cele complexe", "Doar în vacanță"], correct: 1 },
+                { question: "Cum te asiguri că ritualurile rămân relevante?", options: ["Ignori", "Le adaptezi și le reînnoiți împreună", "Le menții fixe", "Le elimini"], correct: 1 },
+                { question: "Ce rol joacă calitatea timpului în ritualuri?", options: ["Niciunul", "Este esențială - prezența și intenția", "Este opțională", "Este secundară"], correct: 1 },
+                { question: "Ce creează ritualurile pe termen lung?", options: ["Rutină plictisitoare", "Siguranță emoțională și conexiune profundă", "Dependență", "Obligație"], correct: 1 }
+            ]
+        },
+        // Chapter 9
+        {
+            id: 119,
+            chapter_id: 119,
+            questions: [
+                { question: "Cum aplici 80/80 în criză?", options: ["Renunți", "Devine și mai important să dai generos", "Te retragi", "Faci 50/50"], correct: 1 },
+                { question: "Ce este 'crisis generosity'?", options: ["Generozitate financiară", "A fi generos când este cel mai greu", "A ajuta străini", "A dona"], correct: 1 },
+                { question: "De ce devine generozitatea mai importantă sub stres?", options: ["Nu devine", "Pentru că stresul distruge conexiunea și generozitatea o reconstruiește", "Este mai ușoară", "Este automată"], correct: 1 },
+                { question: "Cum susții partenerul în momente grele?", options: ["Îl lași singur", "Dând 80% suport și înțelegere", "Critici", "Ignori"], correct: 1 },
+                { question: "Ce sunt 'hard seasons' în căsnicie?", options: ["Iarna", "Perioade dificile de boală, stres sau pierdere", "Sezonul sportiv", "Perioade de vacanță"], correct: 1 },
+                { question: "Cum menții 80/80 când ești epuizat?", options: ["Nu poți", "Prin mici gesturi de generozitate și cerere de ajutor", "Renunți", "Faci 20/20"], correct: 1 },
+                { question: "Ce înseamnă 'resilience through giving'?", options: ["A da bani", "A construi reziliență prin generozitate reciprocă", "A te sacrifica", "A primi"], correct: 1 },
+                { question: "Cum gestionezi momentele când nu poți da 80%?", options: ["Te simți vinovat", "Comunici și ceri sprijin", "Renunți la model", "Critici"], correct: 1 },
+                { question: "Ce învață cuplurile 80/80 din crize?", options: ["Să se despartă", "Puterea și profunzimea relației lor", "Să evite", "Să fie 50/50"], correct: 1 },
+                { question: "Cum transformi crizele în oportunități de creștere?", options: ["Nu poți", "Prin a lucra împreună și a fi generosi", "Prin a evita", "Prin a critica"], correct: 1 }
+            ]
+        },
+        // Chapter 10
+        {
+            id: 120,
+            chapter_id: 120,
+            questions: [
+                { question: "Ce este '80/80 lifestyle'?", options: ["Un stil de viață scump", "Un mod de viață centrat pe generozitate radicală", "Un stil minimalist", "Un stil de lucru"], correct: 1 },
+                { question: "Cum faci generozitatea sustenabilă pe termen lung?", options: ["Nu poți", "Prin obiceiuri, ritualuri și intenție", "Prin forță", "Prin a uita"], correct: 1 },
+                { question: "Ce este 'lifelong practice'?", options: ["Practică medicală", "Angajamentul continuu de a lucra la relație", "Practică de sport", "Practică religioasă"], correct: 1 },
+                { question: "Cum transformi modelul 80/80 în obiceiuri zilnice?", options: ["Nu poți", "Prin mici gesturi constante de generozitate", "Prin decizii mari", "Prin a aștepta"], correct: 1 },
+                { question: "Ce este 'marriage transformation'?", options: ["Divorț", "Transformarea progresivă a relației prin 80/80", "Terapie", "Căsătorie nouă"], correct: 1 },
+                { question: "Cum măsori progresul în 80/80?", options: ["Nu măsori", "Prin calitatea conexiunii și fericirea, nu prin task-uri", "Prin scor", "Prin bani"], correct: 1 },
+                { question: "Ce rol joacă răbdarea în 80/80?", options: ["Niciunul", "Este esențială - schimbarea durează", "Este opțională", "Este slabă"], correct: 1 },
+                { question: "Cum gestionezi zilele când uiți de 80/80?", options: ["Te pedepsești", "Te ierți și revii la intenție", "Renunți", "Critici"], correct: 1 },
+                { question: "Ce înseamnă 'continuous growth' în căsnicie?", options: ["A crește în înălțime", "Îmbunătățirea constantă a relației", "A avea copii", "A câștiga mai mult"], correct: 1 },
+                { question: "Care este rezultatul final al vieții 80/80?", options: ["Epuizare", "O căsnicie profundă, fericită și resilientă", "Divorț", "Conformitate"], correct: 1 }
             ]
         }
     ],
