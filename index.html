@@ -263,27 +263,58 @@
         }
 
         function getMostRecentlyReadBook(userId) {
-            const activities = BookClub.getRecentActivity(userId, 50);
-            const chapterActivities = activities.filter(a => a.type === 'chapter_complete');
+            // Get progress from localStorage
+            const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
+            const userProgress = allProgress[userId] || {};
             
-            if (chapterActivities.length === 0) {
-                // No chapters completed yet, return first book
-                const books = BookClub.getAllBooks();
-                return books.length > 0 ? books[0] : null;
-            }
+            // Find the chapter with the most recent timestamp
+            let mostRecentChapterId = null;
+            let mostRecentTime = 0;
             
-            // Get the most recent chapter completion
-            const mostRecent = chapterActivities[0];
-            const chapterId = mostRecent.chapterId;
+            Object.entries(userProgress).forEach(([chapterId, data]) => {
+                let timestamp = null;
+                
+                // Handle new format (object with completed_at)
+                if (data && typeof data === 'object' && data.completed_at) {
+                    timestamp = new Date(data.completed_at).getTime();
+                }
+                // Handle old format (boolean) - use current time as fallback
+                else if (data === true) {
+                    timestamp = Date.now(); // Assume just completed
+                }
+                
+                if (timestamp && timestamp > mostRecentTime) {
+                    mostRecentTime = timestamp;
+                    mostRecentChapterId = parseInt(chapterId);
+                }
+            });
             
-            if (chapterId) {
-                const chapter = BookClub.getChapter(chapterId);
+            if (mostRecentChapterId) {
+                const chapter = BookClub.getChapter(mostRecentChapterId);
                 if (chapter) {
                     return BookClub.getBook(chapter.book_id);
                 }
             }
             
-            return null;
+            // Fallback: check activities if no progress with timestamp
+            const activities = BookClub.getRecentActivity(userId, 50);
+            const chapterActivities = activities.filter(a => a.type === 'chapter_complete');
+            
+            if (chapterActivities.length > 0) {
+                const mostRecent = chapterActivities[0];
+                const chapterId = mostRecent.chapterId;
+                
+                if (chapterId) {
+                    const chapter = BookClub.getChapter(chapterId);
+                    if (chapter) {
+                        return BookClub.getBook(chapter.book_id);
+                    }
+                }
+            }
+            
+            // No chapters completed yet, return first book
+            const books = BookClub.getAllBooks();
+            return books.length > 0 ? books[0] : null;
         }
 
         function loadBadgeProgress(user) {

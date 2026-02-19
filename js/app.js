@@ -210,7 +210,17 @@ function getProgress(userId) {
 function getBookProgress(userId, bookId) {
     const progress = getProgress(userId);
     const chapters = getChaptersByBook(bookId);
-    const completedChapters = chapters.filter(ch => progress[ch.id]).length;
+    
+    // Count completed chapters (handle both old and new format)
+    const completedChapters = chapters.filter(ch => {
+        const data = progress[ch.id];
+        if (!data) return false;
+        // New format: object with completed property
+        if (typeof data === 'object') return data.completed === true;
+        // Old format: boolean
+        return data === true;
+    }).length;
+    
     return {
         completed: completedChapters,
         total: chapters.length,
@@ -221,7 +231,12 @@ function getBookProgress(userId, bookId) {
 // Mark chapter complete
 function markChapterComplete(userId, chapterId, notes = '') {
     const progress = getProgress(userId);
-    progress[chapterId] = true;
+    // Save with timestamp
+    progress[chapterId] = {
+        completed: true,
+        completed_at: new Date().toISOString(),
+        notes: notes
+    };
     
     const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
     allProgress[userId] = progress;
@@ -723,7 +738,11 @@ const BookClub = {
     },
     getCompletedChapters: (userId) => {
         const progress = getProgress(userId);
-        return Object.keys(progress).filter(key => progress[key]).map(Number);
+        // Handle both old format (boolean) and new format (object with completed property)
+        return Object.keys(progress).filter(key => {
+            const val = progress[key];
+            return val === true || (val && val.completed === true);
+        }).map(Number);
     },
     getStreakStatus: (userId) => {
         const user = getAllUsers()[userId];
