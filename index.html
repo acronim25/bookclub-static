@@ -244,7 +244,7 @@
             
             // Get the most recent chapter completion
             const mostRecent = chapterActivities[0];
-            const chapterId = mostRecent.data?.chapter_id;
+            const chapterId = mostRecent.chapterId;
             
             if (chapterId) {
                 const chapter = BookClub.getChapter(chapterId);

@@ -136,7 +136,8 @@ function formatActivity(activity) {
                 color: '#22c55e',
                 title: chapter ? `Completed Chapter ${chapter.number}` : 'Completed Chapter',
                 subtitle: chapter?.title || '',
-                time: formatRelativeTime(activity.created_at)
+                time: formatRelativeTime(activity.created_at),
+                chapterId: activity.data.chapter_id
             };
         case 'badge_earned':
             return {
@@ -152,7 +153,8 @@ function formatActivity(activity) {
                 color: activity.data.score >= 8 ? '#22c55e' : activity.data.score >= 6 ? '#3b82f6' : '#f59e0b',
                 title: `Quiz Completed: ${activity.data.score}/10`,
                 subtitle: chapter?.title || '',
-                time: formatRelativeTime(activity.created_at)
+                time: formatRelativeTime(activity.created_at),
+                chapterId: activity.data.chapter_id
             };
         case 'note_added':
             return {
@@ -160,7 +162,8 @@ function formatActivity(activity) {
                 color: '#8b5cf6',
                 title: 'Note Shared',
                 subtitle: chapter?.title || '',
-                time: formatRelativeTime(activity.created_at)
+                time: formatRelativeTime(activity.created_at),
+                chapterId: activity.data.chapter_id
             };
         default:
             return {
