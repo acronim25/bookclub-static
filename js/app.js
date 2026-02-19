@@ -31,6 +31,38 @@ function initializeData() {
     if (!localStorage.getItem(STORAGE_KEYS.PROGRESS)) {
         localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify({}));
     }
+    
+    // Migrate old format progress to new format
+    migrateProgressData();
+}
+
+// Migrate old boolean progress format to new object format
+function migrateProgressData() {
+    const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
+    let hasChanges = false;
+    
+    Object.keys(allProgress).forEach(userId => {
+        const userProgress = allProgress[userId];
+        if (!userProgress) return;
+        
+        Object.keys(userProgress).forEach(chapterId => {
+            const data = userProgress[chapterId];
+            // If old format (boolean true), convert to new format
+            if (data === true) {
+                userProgress[chapterId] = {
+                    completed: true,
+                    completed_at: new Date().toISOString(),
+                    notes: ''
+                };
+                hasChanges = true;
+            }
+        });
+    });
+    
+    if (hasChanges) {
+        localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(allProgress));
+        console.log('Progress data migrated to new format');
+    }
 }
 
 // Get current user
@@ -743,6 +775,9 @@ const BookClub = {
             const val = progress[key];
             return val === true || (val && val.completed === true);
         }).map(Number);
+    },
+    getProgress: (userId) => {
+        return getProgress(userId);
     },
     getStreakStatus: (userId) => {
         const user = getAllUsers()[userId];
