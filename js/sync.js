@@ -140,6 +140,52 @@ const SyncAPI = {
         localStorage.setItem('bookclub_progress', JSON.stringify(allProgress));
 
         return backendData;
+    },
+
+    // Get all notes (shared between users)
+    async getAllNotes() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/notes`);
+            return await response.json();
+        } catch (error) {
+            console.error('Get notes error:', error);
+            return [];
+        }
+    },
+
+    // Add a new note
+    async addNote(discordId, chapterId, noteText, userName = 'Unknown') {
+        try {
+            const response = await fetch(`${API_BASE_URL}/notes`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    discord_id: discordId,
+                    chapter_id: chapterId,
+                    note: noteText,
+                    name: userName
+                })
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Add note error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Delete a note
+    async deleteNote(noteId, discordId) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/notes/${noteId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discord_id: discordId })
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Delete note error:', error);
+            return { success: false, error: error.message };
+        }
     }
 };
 
