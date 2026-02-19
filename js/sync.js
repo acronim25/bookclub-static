@@ -3,16 +3,8 @@
  * Handles syncing data between frontend (localStorage) and backend (SQLite)
  */
 
-// Auto-detect API URL based on hostname and protocol
-const API_BASE_URL = (() => {
-    const hostname = window.location.hostname;
-    const protocol = window.location.protocol === 'https:' ? 'https' : 'http';
-    
-    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
-        return 'http://localhost:5000/api';
-    }
-    return `${protocol}://${hostname}:5000/api`;
-})();
+// API URL - Point to VPS backend
+const API_BASE_URL = 'http://5.189.142.233:5000/api';
 
 // API Health Check
 let apiAvailable = null;
