@@ -515,18 +515,17 @@ function getNotesByChapter(chapterId) {
 function getLeaderboard() {
     const users = getAllUsers();
     return Object.values(users).map(user => {
-        const progress = getProgress(user.id);
-        const completedChapters = Object.keys(progress).length;
-        const quizScores = Object.values(user.quiz_scores);
+        const completedChapters = getCompletedChapters(user.id);
+        const quizScores = Object.values(user.quiz_scores || {});
         const avgScore = quizScores.length > 0 
             ? quizScores.reduce((a, b) => a + b, 0) / quizScores.length 
             : 0;
         
         return {
             ...user,
-            completed_chapters: completedChapters,
+            completed_chapters: completedChapters.length,
             avg_quiz_score: avgScore,
-            badge_count: user.badges.length
+            badge_count: (user.badges || []).length
         };
     }).sort((a, b) => {
         if (b.completed_chapters !== a.completed_chapters) {
@@ -540,17 +539,16 @@ function getLeaderboard() {
 function getStats() {
     const users = getAllUsers();
     const notes = getAllNotes();
-    const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
     
     let totalChapters = 0;
     let totalQuizzes = 0;
     let totalScore = 0;
     
     Object.values(users).forEach(user => {
-        const progress = getProgress(user.id);
-        totalChapters += Object.keys(progress).length;
+        const completedChapters = getCompletedChapters(user.id);
+        totalChapters += completedChapters.length;
         
-        const scores = Object.values(user.quiz_scores);
+        const scores = Object.values(user.quiz_scores || {});
         totalQuizzes += scores.length;
         totalScore += scores.reduce((a, b) => a + b, 0);
     });
