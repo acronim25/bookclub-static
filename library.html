@@ -139,6 +139,18 @@
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
     <script>
+        // Mobile Navigation Toggle
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+        
         // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
         if (!BookClub.getCompletedChapters) {
             BookClub.getCompletedChapters = function(userId) {

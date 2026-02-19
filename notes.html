@@ -167,6 +167,18 @@
     <script src="js/app.js"></script>
     <script src="js/sync.js"></script>
     <script>
+        // Mobile Navigation Toggle
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+        
         // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
         if (!BookClub.getCompletedChapters) {
             BookClub.getCompletedChapters = function(userId) {
@@ -291,6 +303,7 @@
             
             const chapterId = parseInt(document.getElementById('chapter-select').value);
             const noteText = document.getElementById('note-text').value.trim();
+            const submitBtn = document.querySelector('#note-form button[type="submit"]');
             
             if (!chapterId) {
                 BookClub.showNotification('Please select a chapter', 'warning');
@@ -302,24 +315,43 @@
                 return;
             }
             
-            // Save to API
-            const result = await SyncAPI.addNote(
-                user.discord_id || user.id, 
-                chapterId, 
-                noteText, 
-                user.name
-            );
+            // Show loading state
+            submitBtn.classList.add('btn-loading');
+            submitBtn.disabled = true;
             
-            if (result.success) {
-                document.getElementById('note-form').reset();
-                BookClub.showNotification('Note posted successfully!', 'success');
-                await loadNotes(); // Reload notes to show the new one
-            } else {
-                // Fallback to localStorage
+            try {
+                // Save to API
+                const result = await SyncAPI.addNote(
+                    user.discord_id || user.id, 
+                    chapterId, 
+                    noteText, 
+                    user.name
+                );
+                
+                if (result.success) {
+                    document.getElementById('note-form').reset();
+                    BookClub.showNotification('Note posted successfully!', 'success');
+                    await loadNotes(); // Reload notes to show the new one
+                } else if (result.offline) {
+                    // Fallback to localStorage
+                    if (BookClub.addNote(chapterId, noteText)) {
+                        document.getElementById('note-form').reset();
+                        BookClub.showNotification('Note saved locally (API offline)', 'warning');
+                        await loadNotes();
+                    }
+                } else {
+                    BookClub.showNotification('Error: ' + (result.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                // Fallback to localStorage on error
                 if (BookClub.addNote(chapterId, noteText)) {
                     document.getElementById('note-form').reset();
+                    BookClub.showNotification('Note saved locally', 'warning');
                     await loadNotes();
                 }
+            } finally {
+                submitBtn.classList.remove('btn-loading');
+                submitBtn.disabled = false;
             }
         }
     </script>

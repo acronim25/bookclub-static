@@ -4,25 +4,101 @@
  */
 
 // Auto-detect API URL based on hostname and protocol
-// For local development: use localhost
-// For production (VPS): use the same hostname with port 5000
 const API_BASE_URL = (() => {
     const hostname = window.location.hostname;
     const protocol = window.location.protocol === 'https:' ? 'https' : 'http';
     
-    // If running locally (file:// or localhost), use localhost:5000
     if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
         return 'http://localhost:5000/api';
     }
-    // For VPS/production - use the same hostname with port 5000
-    // Note: If frontend is on HTTPS, API must also be HTTPS (or use same origin)
     return `${protocol}://${hostname}:5000/api`;
 })();
 
+// API Health Check
+let apiAvailable = null;
+let lastApiCheck = 0;
+const API_CHECK_INTERVAL = 30000; // 30 seconds
+
+async function checkApiHealth() {
+    const now = Date.now();
+    if (apiAvailable !== null && (now - lastApiCheck) < API_CHECK_INTERVAL) {
+        return apiAvailable;
+    }
+    
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        const response = await fetch(`${API_BASE_URL}/health`, {
+            method: 'HEAD',
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        apiAvailable = response.ok;
+    } catch (error) {
+        apiAvailable = false;
+    }
+    
+    lastApiCheck = now;
+    return apiAvailable;
+}
+
+// Show loading indicator
+function showLoading(element, text = 'Loading...') {
+    if (typeof element === 'string') {
+        element = document.getElementById(element);
+    }
+    if (!element) return;
+    
+    element.dataset.originalContent = element.innerHTML;
+    element.innerHTML = `<span class="loading-spinner"></span> ${text}`;
+    element.disabled = true;
+    element.classList.add('btn-loading');
+}
+
+// Hide loading indicator
+function hideLoading(element) {
+    if (typeof element === 'string') {
+        element = document.getElementById(element);
+    }
+    if (!element || !element.dataset.originalContent) return;
+    
+    element.innerHTML = element.dataset.originalContent;
+    element.disabled = false;
+    element.classList.remove('btn-loading');
+}
+
+// Error handler with fallback
+function handleApiError(error, fallbackFn, context = '') {
+    console.warn(`API Error${context ? ` (${context})` : ''}:`, error);
+    if (fallbackFn) {
+        return fallbackFn();
+    }
+    return null;
+}
+
 const SyncAPI = {
+    // Check if API is available
+    async isAvailable() {
+        return await checkApiHealth();
+    },
+
     // Sync all data to backend
     async syncToBackend(userId, userData) {
+        const isAvailable = await checkApiHealth();
+        if (!isAvailable) {
+            return { 
+                success: false, 
+                error: 'API unavailable - data saved locally only',
+                offline: true 
+            };
+        }
+        
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+            
             const response = await fetch(`${API_BASE_URL}/sync`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -32,31 +108,54 @@ const SyncAPI = {
                     progress: userData.progress || {},
                     quiz_scores: userData.quiz_scores || {},
                     notes: userData.notes || []
-                })
+                }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             return await response.json();
         } catch (error) {
-            console.error('Sync error:', error);
-            return { success: false, error: error.message };
+            return handleApiError(error, () => ({ 
+                success: false, 
+                error: error.message,
+                offline: true 
+            }), 'syncToBackend');
         }
     },
 
     // Get user data from backend
     async getUserFromBackend(discordId) {
+        const isAvailable = await checkApiHealth();
+        if (!isAvailable) return null;
+        
         try {
-            const response = await fetch(`${API_BASE_URL}/user/${discordId}`);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
+            const response = await fetch(`${API_BASE_URL}/user/${discordId}`, {
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
             if (response.status === 404) return null;
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
             return await response.json();
         } catch (error) {
-            console.error('Get user error:', error);
-            return null;
+            return handleApiError(error, () => null, 'getUserFromBackend');
         }
     },
 
-    // Get all users (for transparency) - FAST VERSION: use localStorage first, API in background
+    // Get all users - with better fallback
     async getAllUsers() {
         // First, return localStorage data immediately
-        const localUsers = BookClub.getAllUsers();
+        const localUsers = BookClub.getAllUsers ? BookClub.getAllUsers() : {};
         const localData = Object.values(localUsers).map(u => ({
             id: u.id,
             discord_id: u.discord_id || u.id,
@@ -65,13 +164,19 @@ const SyncAPI = {
             longest_streak: u.longest_streak || 0,
             total_chapters_read: u.chapters_read || 0,
             badges: u.badges || [],
-            chapters_completed: BookClub.getCompletedChapters(u.id).length
+            chapters_completed: BookClub.getCompletedChapters ? BookClub.getCompletedChapters(u.id).length : 0
         }));
 
-        // Try to fetch from API in background (but don't wait for it)
+        // Try to fetch from API in background
+        const isAvailable = await checkApiHealth();
+        if (!isAvailable) {
+            console.log('API unavailable, using localStorage data');
+            return localData;
+        }
+        
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
             
             const response = await fetch(`${API_BASE_URL}/users`, { 
                 mode: 'cors',
@@ -83,13 +188,10 @@ const SyncAPI = {
             
             if (response.ok) {
                 const apiUsers = await response.json();
-                // If API returns data, we could update the UI here if needed
-                // But for now, we already showed localStorage data
-                return apiUsers;
+                return apiUsers.length > 0 ? apiUsers : localData;
             }
         } catch (error) {
-            // API unavailable or timeout - localStorage data already returned
-            console.log('API unavailable, using localStorage data');
+            console.log('API error, using localStorage data');
         }
         
         return localData;
@@ -97,16 +199,32 @@ const SyncAPI = {
 
     // Save chapter progress to backend
     async saveProgressToBackend(discordId, chapterId, completed = true, notes = '') {
+        const isAvailable = await checkApiHealth();
+        if (!isAvailable) {
+            return { success: false, offline: true, error: 'API unavailable' };
+        }
+        
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+            
             const response = await fetch(`${API_BASE_URL}/user/${discordId}/progress`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chapter_id: chapterId, completed, notes })
+                body: JSON.stringify({ chapter_id: chapterId, completed, notes }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } catch (error) {
-            console.error('Save progress error:', error);
-            return { success: false };
+            return handleApiError(error, () => ({ 
+                success: false, 
+                error: error.message,
+                offline: true 
+            }), 'saveProgressToBackend');
         }
     },
 
@@ -115,7 +233,6 @@ const SyncAPI = {
         const userData = await this.getUserFromBackend(discordId);
         if (!userData) return null;
 
-        // Convert backend data to frontend format
         const progress = {};
         Object.entries(userData.progress).forEach(([chapterId, data]) => {
             progress[chapterId] = data.completed;
@@ -129,7 +246,7 @@ const SyncAPI = {
             chapters_read: userData.total_chapters_read,
             badges: userData.badges,
             progress: progress,
-            quiz_scores: {}, // Will be populated from quiz_results
+            quiz_scores: {},
             notes: []
         };
     },
@@ -142,7 +259,6 @@ const SyncAPI = {
             return null;
         }
 
-        // Save to localStorage
         const users = JSON.parse(localStorage.getItem('bookclub_user_data') || '{}');
         const userKey = discordId === 'acro16hunna' ? 'alex' : 
                         discordId === 'Dhianna369' ? 'dhianna' : discordId;
@@ -155,13 +271,11 @@ const SyncAPI = {
             };
         }
 
-        // Update user data
         users[userKey].current_streak = backendData.current_streak;
         users[userKey].longest_streak = backendData.longest_streak;
         users[userKey].chapters_read = backendData.total_chapters_read;
         users[userKey].badges = backendData.badges;
 
-        // Save progress
         const progress = {};
         Object.entries(backendData.progress).forEach(([chapterId, data]) => {
             progress[chapterId] = data.completed;
@@ -176,22 +290,39 @@ const SyncAPI = {
         return backendData;
     },
 
-    // Get all notes (shared between users) - fallback to localStorage if API unavailable
+    // Get all notes with better error handling
     async getAllNotes() {
+        const isAvailable = await checkApiHealth();
+        if (!isAvailable) {
+            console.log('API unavailable, using localStorage fallback for notes');
+            return this.getLocalNotes();
+        }
+        
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
             const response = await fetch(`${API_BASE_URL}/notes`, {
                 mode: 'cors',
-                headers: { 'Accept': 'application/json' }
+                headers: { 'Accept': 'application/json' },
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
+            
             if (response.ok) {
                 return await response.json();
             }
+            throw new Error(`HTTP ${response.status}`);
         } catch (error) {
-            console.log('API unavailable, using localStorage fallback for notes');
+            return handleApiError(error, () => this.getLocalNotes(), 'getAllNotes');
         }
-        
-        // Fallback: return notes from localStorage
-        const notes = BookClub.getNotes ? BookClub.getNotes() : [];
+    },
+    
+    // Get notes from localStorage
+    getLocalNotes() {
+        const notes = BookClub.getNotes ? BookClub.getNotes() : 
+                      JSON.parse(localStorage.getItem('bookclub_notes') || '[]').reverse();
         return notes.map(n => ({
             id: n.id,
             user_name: n.user_name || n.userName || 'Unknown',
@@ -203,9 +334,18 @@ const SyncAPI = {
         }));
     },
 
-    // Add a new note
+    // Add a new note with better error handling
     async addNote(discordId, chapterId, noteText, userName = 'Unknown') {
+        const isAvailable = await checkApiHealth();
+        if (!isAvailable) {
+            console.log('API unavailable, saving note locally');
+            return { success: false, offline: true, error: 'API unavailable - saved locally' };
+        }
+        
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+            
             const response = await fetch(`${API_BASE_URL}/notes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -214,27 +354,50 @@ const SyncAPI = {
                     chapter_id: chapterId,
                     note: noteText,
                     name: userName
-                })
+                }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } catch (error) {
-            console.error('Add note error:', error);
-            return { success: false, error: error.message };
+            return handleApiError(error, () => ({ 
+                success: false, 
+                error: error.message,
+                offline: true 
+            }), 'addNote');
         }
     },
 
     // Delete a note
     async deleteNote(noteId, discordId) {
+        const isAvailable = await checkApiHealth();
+        if (!isAvailable) {
+            return { success: false, offline: true, error: 'API unavailable' };
+        }
+        
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
             const response = await fetch(`${API_BASE_URL}/notes/${noteId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ discord_id: discordId })
+                body: JSON.stringify({ discord_id: discordId }),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } catch (error) {
-            console.error('Delete note error:', error);
-            return { success: false, error: error.message };
+            return handleApiError(error, () => ({ 
+                success: false, 
+                error: error.message 
+            }), 'deleteNote');
         }
     }
 };

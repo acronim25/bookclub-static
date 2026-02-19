@@ -191,6 +191,18 @@
     <script src="js/app.js"></script>
     <script src="js/sync.js"></script>
     <script>
+        // Mobile Navigation Toggle
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+        
         // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
         if (!BookClub.getCompletedChapters) {
             BookClub.getCompletedChapters = function(userId) {
@@ -408,31 +420,45 @@
             }
 
             const statusEl = document.getElementById('sync-status');
-            statusEl.textContent = '⏳ Syncing to cloud...';
+            const btn = event.target;
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            statusEl.innerHTML = '<span class="loading-spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Syncing to cloud...';
             statusEl.style.color = 'var(--accent-primary)';
 
-            const users = BookClub.getAllUsers();
-            const userData = users[user.id];
-            const progress = BookClub.getCompletedChapters(user.id);
-            
-            // Convert to progress object
-            const progressObj = {};
-            progress.forEach(chId => {
-                progressObj[chId] = { completed: true, notes: '' };
-            });
+            try {
+                const users = BookClub.getAllUsers();
+                const userData = users[user.id];
+                const progress = BookClub.getCompletedChapters(user.id);
+                
+                const progressObj = {};
+                progress.forEach(chId => {
+                    progressObj[chId] = { completed: true, notes: '' };
+                });
 
-            const result = await SyncAPI.syncToBackend(user.discord_id || user.id, {
-                name: user.name,
-                progress: progressObj
-            });
+                const result = await SyncAPI.syncToBackend(user.discord_id || user.id, {
+                    name: user.name,
+                    progress: progressObj
+                });
 
-            if (result.success) {
-                statusEl.textContent = '✅ Saved to cloud successfully!';
-                statusEl.style.color = 'var(--accent-success)';
-                setTimeout(() => statusEl.textContent = '', 3000);
-            } else {
-                statusEl.textContent = '❌ Sync failed: ' + (result.error || 'Unknown error');
+                if (result.success) {
+                    statusEl.innerHTML = '✅ Saved to cloud successfully!';
+                    statusEl.style.color = 'var(--accent-success)';
+                } else if (result.offline) {
+                    statusEl.innerHTML = '⚠️ API offline - data saved locally only';
+                    statusEl.style.color = 'var(--accent-gold)';
+                } else {
+                    statusEl.innerHTML = '❌ Sync failed: ' + (result.error || 'Unknown error');
+                    statusEl.style.color = 'var(--accent-danger)';
+                }
+            } catch (error) {
+                statusEl.innerHTML = '❌ Error: ' + error.message;
                 statusEl.style.color = 'var(--accent-danger)';
+            } finally {
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+                setTimeout(() => statusEl.textContent = '', 5000);
             }
         }
 
@@ -444,67 +470,102 @@
             }
 
             const statusEl = document.getElementById('sync-status');
-            statusEl.textContent = '⏳ Loading from cloud...';
+            const btn = event.target;
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            statusEl.innerHTML = '<span class="loading-spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Loading from cloud...';
             statusEl.style.color = 'var(--accent-primary)';
 
-            const discordId = user.discord_id || user.id;
-            const result = await SyncAPI.fullSync(discordId);
+            try {
+                const discordId = user.discord_id || user.id;
+                const result = await SyncAPI.fullSync(discordId);
 
-            if (result) {
-                statusEl.textContent = '✅ Loaded from cloud! Reloading...';
-                statusEl.style.color = 'var(--accent-success)';
-                setTimeout(() => location.reload(), 1500);
-            } else {
-                statusEl.textContent = '❌ No cloud data found for this user';
+                if (result) {
+                    statusEl.innerHTML = '✅ Loaded from cloud! Reloading...';
+                    statusEl.style.color = 'var(--accent-success)';
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    statusEl.innerHTML = '⚠️ No cloud data found for this user';
+                    statusEl.style.color = 'var(--accent-gold)';
+                }
+            } catch (error) {
+                statusEl.innerHTML = '❌ Error: ' + error.message;
                 statusEl.style.color = 'var(--accent-danger)';
+            } finally {
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+                if (!statusEl.textContent.includes('Reloading')) {
+                    setTimeout(() => statusEl.textContent = '', 5000);
+                }
             }
         }
 
         async function viewAllProgress() {
             const statusEl = document.getElementById('sync-status');
-            statusEl.textContent = '⏳ Loading all users...';
+            const btn = event.target;
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            statusEl.innerHTML = '<span class="loading-spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Loading users...';
             statusEl.style.color = 'var(--accent-primary)';
 
-            const users = await SyncAPI.getAllUsers();
-            
-            if (users.length === 0) {
-                statusEl.textContent = '❌ No users found in cloud';
-                statusEl.style.color = 'var(--accent-danger)';
-                return;
-            }
+            try {
+                const users = await SyncAPI.getAllUsers();
+                
+                if (users.length === 0) {
+                    statusEl.innerHTML = '⚠️ No users found';
+                    statusEl.style.color = 'var(--accent-gold)';
+                    return;
+                }
 
-            // Create a nice display
-            let html = '<h3>👥 Everyone\'s Progress</h3><div style="margin-top: 1rem;">';
-            users.forEach(u => {
-                const pct = Math.round((u.chapters_completed / 22) * 100);
-                html += `
-                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,212,255,0.1); border-radius: 8px;">
-                        <strong>${u.name}</strong> (${u.discord_id})<br>
-                        📚 ${u.chapters_completed} chapters | 🔥 ${u.current_streak} streak | 🏅 ${u.badges.length} badges<br>
-                        <div style="margin-top: 0.5rem; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
-                            <div style="height: 8px; background: var(--accent-primary); width: ${pct}%;"></div>
+                // Create a nice display
+                let html = `
+                    <html>
+                    <head>
+                        <style>
+                            body { background: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 20px; line-height: 1.6; }
+                            h3 { color: #00d4ff; margin-bottom: 20px; font-size: 1.5rem; }
+                            .user-card { margin-bottom: 1rem; padding: 1rem; background: rgba(0,212,255,0.1); border-radius: 8px; border: 1px solid rgba(0,212,255,0.2); }
+                            .user-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; }
+                            .user-meta { color: #8b949e; font-size: 0.9rem; margin-bottom: 0.5rem; }
+                            .progress-bar { background: #21262d; border-radius: 4px; overflow: hidden; height: 8px; margin-top: 0.5rem; }
+                            .progress-fill { background: linear-gradient(90deg, #00d4ff, #7c3aed); height: 100%; border-radius: 4px; transition: width 0.3s; }
+                            .progress-text { color: #8b949e; font-size: 0.85rem; margin-top: 0.25rem; }
+                            .badge { display: inline-block; margin-right: 4px; }
+                        </style>
+                    </head>
+                    <body>
+                        <h3>👥 Everyone's Progress</h3>
+                        <div>`;
+                        
+                users.forEach(u => {
+                    const pct = Math.min(100, Math.round((u.chapters_completed / 32) * 100)); // 32 total chapters
+                    html += `
+                        <div class="user-card">
+                            <div class="user-name">${u.name}</div>
+                            <div class="user-meta">📚 ${u.chapters_completed} chapters | 🔥 ${u.current_streak} streak | 🏅 ${u.badges?.length || 0} badges</div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${pct}%"></div></div>
+                            <div class="progress-text">${pct}% complete</div>
                         </div>
-                        <small>${pct}% complete</small>
-                    </div>
-                `;
-            });
-            html += '</div>';
+                    `;
+                });
+                
+                html += `</div></body></html>`;
 
-            // Show in a modal or alert (simpler for now)
-            const win = window.open('', 'Progress', 'width=500,height=600');
-            win.document.write(`
-                <html>
-                <head>
-                    <style>
-                        body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 20px; }
-                        h3 { color: #00d4ff; }
-                    </style>
-                </head>
-                <body>${html}</body>
-                </html>
-            `);
-
-            statusEl.textContent = '';
+                const win = window.open('', 'Progress', 'width=500,height=600,scrollbars=yes');
+                win.document.write(html);
+                statusEl.textContent = '';
+            } catch (error) {
+                statusEl.innerHTML = '❌ Error: ' + error.message;
+                statusEl.style.color = 'var(--accent-danger)';
+            } finally {
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+                setTimeout(() => {
+                    if (!statusEl.textContent.includes('Error')) statusEl.textContent = '';
+                }, 3000);
+            }
         }
 
         // Auto-sync when page loads
