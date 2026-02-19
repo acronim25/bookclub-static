@@ -228,7 +228,12 @@ function formatRelativeTime(dateString) {
 // Check if chapter is completed
 function isChapterCompleted(userId, chapterId) {
     const progress = getProgress(userId);
-    return progress[chapterId] === true;
+    const data = progress[chapterId];
+    if (!data) return false;
+    // New format: object with completed property
+    if (typeof data === 'object') return data.completed === true;
+    // Old format: boolean
+    return data === true;
 }
 
 // Get progress

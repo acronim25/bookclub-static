@@ -145,17 +145,30 @@
 
         function loadBooks() {
             const container = document.getElementById('books-grid');
-            const user = BookClub.getCurrentUser();
+            const currentUser = BookClub.getCurrentUser();
             
             container.innerHTML = BOOKCLUB_DATA.books.map(book => {
                 const chapters = BookClub.getChaptersByBook(book.id);
                 let completedCount = 0;
+                let progress = 0;
                 
-                if (user) {
-                    completedCount = chapters.filter(ch => BookClub.isChapterCompleted(user.id, ch.id)).length;
+                if (currentUser) {
+                    // Use getBookProgress for consistent calculation
+                    const bookProgress = BookClub.getBookProgress(currentUser.id, book.id);
+                    completedCount = bookProgress.completed;
+                    progress = bookProgress.percentage;
+                } else {
+                    // Check if any user has progress for this book
+                    const allUsers = BookClub.getAllUsers();
+                    const userIds = Object.keys(allUsers);
+                    if (userIds.length > 0) {
+                        // Use first user found
+                        const firstUserId = userIds[0];
+                        const bookProgress = BookClub.getBookProgress(firstUserId, book.id);
+                        completedCount = bookProgress.completed;
+                        progress = bookProgress.percentage;
+                    }
                 }
-                
-                const progress = chapters.length > 0 ? Math.round((completedCount / chapters.length) * 100) : 0;
                 
                 return `
                     <a href="book.html?id=${book.id}" class="book-card-link">
