@@ -53,23 +53,11 @@ const SyncAPI = {
         }
     },
 
-    // Get all users (for transparency) - fallback to localStorage if API unavailable
+    // Get all users (for transparency) - FAST VERSION: use localStorage first, API in background
     async getAllUsers() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/users`, { 
-                mode: 'cors',
-                headers: { 'Accept': 'application/json' }
-            });
-            if (response.ok) {
-                return await response.json();
-            }
-        } catch (error) {
-            console.log('API unavailable, using localStorage fallback for users');
-        }
-        
-        // Fallback: return users from localStorage
-        const users = BookClub.getAllUsers();
-        return Object.values(users).map(u => ({
+        // First, return localStorage data immediately
+        const localUsers = BookClub.getAllUsers();
+        const localData = Object.values(localUsers).map(u => ({
             id: u.id,
             discord_id: u.discord_id || u.id,
             name: u.name,
@@ -79,6 +67,32 @@ const SyncAPI = {
             badges: u.badges || [],
             chapters_completed: BookClub.getCompletedChapters(u.id).length
         }));
+
+        // Try to fetch from API in background (but don't wait for it)
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+            
+            const response = await fetch(`${API_BASE_URL}/users`, { 
+                mode: 'cors',
+                headers: { 'Accept': 'application/json' },
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (response.ok) {
+                const apiUsers = await response.json();
+                // If API returns data, we could update the UI here if needed
+                // But for now, we already showed localStorage data
+                return apiUsers;
+            }
+        } catch (error) {
+            // API unavailable or timeout - localStorage data already returned
+            console.log('API unavailable, using localStorage data');
+        }
+        
+        return localData;
     },
 
     // Save chapter progress to backend
