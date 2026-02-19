@@ -14,19 +14,47 @@ const STORAGE_KEYS = {
 
 // Initialize data from seed
 function initializeData() {
-    // Check if already initialized
-    if (!localStorage.getItem(STORAGE_KEYS.USER_DATA)) {
-        // Create initial user data structure
+    console.log('Initializing BookClub data...');
+    
+    // Always ensure users exist (create if missing)
+    const existingUsers = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+    if (!existingUsers) {
+        console.log('Creating initial users...');
         const initialData = {};
         BOOKCLUB_DATA.users.forEach(user => {
             initialData[user.id] = { ...user };
         });
         localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(initialData));
+    } else {
+        // Check if users object is empty
+        const users = JSON.parse(existingUsers);
+        if (Object.keys(users).length === 0) {
+            console.log('Users object empty, recreating...');
+            const initialData = {};
+            BOOKCLUB_DATA.users.forEach(user => {
+                initialData[user.id] = { ...user };
+            });
+            localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(initialData));
+        }
     }
     
     if (!localStorage.getItem(STORAGE_KEYS.NOTES)) {
         localStorage.setItem(STORAGE_KEYS.NOTES, JSON.stringify([]));
     }
+    
+    if (!localStorage.getItem(STORAGE_KEYS.PROGRESS)) {
+        localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify({}));
+    }
+    
+    if (!localStorage.getItem(STORAGE_KEYS.ACTIVITIES)) {
+        localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify([]));
+    }
+    
+    // Migrate old format progress to new format
+    migrateProgressData();
+    
+    console.log('BookClub data initialized');
+}
     
     if (!localStorage.getItem(STORAGE_KEYS.PROGRESS)) {
         localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify({}));

@@ -147,6 +147,16 @@
             </div>
         </div>
 
+        <!-- Debug / Reset Section -->
+        <div style="text-align: center; margin: 1rem 0;">
+            <button class="btn btn-sm btn-secondary" onclick="resetAllData()" style="background: var(--accent-danger); color: white;">
+                🔄 Reset All Data
+            </button>
+            <button class="btn btn-sm btn-secondary" onclick="location.reload()" style="margin-left: 0.5rem;">
+                🔄 Refresh Page
+            </button>
+        </div>
+
         <!-- Leaderboard Table -->
         <div class="leaderboard-table-container">
             <table class="leaderboard-table">
@@ -244,6 +254,27 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        // Reset all data to initial state
+        function resetAllData() {
+            if (!confirm('⚠️ This will DELETE all your progress and reset to initial state. Are you sure?')) {
+                return;
+            }
+            
+            // Clear all localStorage data
+            localStorage.removeItem('bookclub_current_user');
+            localStorage.removeItem('bookclub_user_data');
+            localStorage.removeItem('bookclub_progress');
+            localStorage.removeItem('bookclub_notes');
+            localStorage.removeItem('bookclub_activities');
+            localStorage.removeItem('bookclub_quiz_results');
+            
+            // Re-initialize
+            BookClub.initializeData();
+            
+            alert('✅ Data reset! Page will reload now.');
+            location.reload();
         }
     </script>
 </body>
