@@ -590,6 +590,48 @@
                 completed_at: new Date().toISOString()
             };
             
+            // Save to NEW format: bookclub_quiz_results array (used by chapter.html)
+            try {
+                const STORAGE_KEYS_QUIZ_RESULTS = 'bookclub_quiz_results';
+                let quizResults = JSON.parse(localStorage.getItem(STORAGE_KEYS_QUIZ_RESULTS) || '[]');
+                
+                // Get discord_id for the user
+                const discordId = user.discord_id || (actualUserId === 'alex' ? 'acro16hunna' : 'Dhianna369');
+                
+                // Check if result already exists for this user+chapter
+                const existingIndex = quizResults.findIndex(r => 
+                    r.chapterId == chapterId && r.userId === discordId
+                );
+                
+                const newResult = {
+                    chapterId: chapterId,
+                    userId: discordId,
+                    userName: user.name || actualUserId,
+                    score: rawScore,
+                    total: totalQuestions,
+                    percentage: score,
+                    answers: answers,
+                    completedAt: new Date().toISOString()
+                };
+                
+                if (existingIndex >= 0) {
+                    // Update existing result if new score is better
+                    if (rawScore > quizResults[existingIndex].score) {
+                        quizResults[existingIndex] = newResult;
+                        console.log('Updated existing quiz result (better score)');
+                    }
+                } else {
+                    // Add new result
+                    quizResults.push(newResult);
+                    console.log('Added new quiz result');
+                }
+                
+                localStorage.setItem(STORAGE_KEYS_QUIZ_RESULTS, JSON.stringify(quizResults));
+                console.log('✓ Saved to bookclub_quiz_results');
+            } catch (e) {
+                console.error('Error saving to bookclub_quiz_results:', e);
+            }
+            
             // Save back to localStorage
             localStorage.setItem(STORAGE_KEYS_USER_DATA, JSON.stringify(users));
             console.log('User data saved to localStorage');

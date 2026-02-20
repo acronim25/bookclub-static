@@ -633,16 +633,17 @@
             });
         }
 
-        // Check if chapter is completed for a user (from API or localStorage)
+        // Check if chapter is completed for a user (from API, localStorage, OR quiz results)
         function isChapterCompletedForUser(discordId, chapterId) {
+            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
+            
             // 1. First check API data
             const userData = usersData[discordId];
             if (userData?.progress?.[chapterId]?.completed === 1 || userData?.progress?.[chapterId]?.completed === true) {
                 return true;
             }
             
-            // 2. Fallback to localStorage (synced by quiz.html)
-            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
+            // 2. Check localStorage progress
             const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
             const userProgress = allProgress[userKey];
             if (userProgress?.[chapterId]) {
@@ -651,7 +652,42 @@
                 if (typeof data === 'object' && data.completed === true) return true;
             }
             
+            // 3. Check quiz results (chapter is only complete if quiz was taken)
+            const quizResults = JSON.parse(localStorage.getItem('bookclub_quiz_results') || '[]');
+            const quizCompleted = quizResults.find(r => r.chapterId == chapterId && r.userId == discordId);
+            if (quizCompleted) return true;
+            
+            // 4. Check old format in bookclub_user_data
+            const allUserData = JSON.parse(localStorage.getItem('bookclub_user_data') || '{}');
+            const userDataLegacy = allUserData[userKey];
+            if (userDataLegacy?.quiz_results?.[chapterId]) {
+                return true;
+            }
+            
             return false;
+        }
+        
+        // Get quiz score for display
+        function getQuizScore(discordId, chapterId) {
+            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
+            
+            // Check new format
+            const quizResults = JSON.parse(localStorage.getItem('bookclub_quiz_results') || '[]');
+            const result = quizResults.find(r => r.chapterId == chapterId && r.userId == discordId);
+            if (result) {
+                return `${result.score}/${result.total || 10}`;
+            }
+            
+            // Check old format
+            const allUserData = JSON.parse(localStorage.getItem('bookclub_user_data') || '{}');
+            const userData = allUserData[userKey];
+            if (userData?.quiz_results?.[chapterId]) {
+                const qr = userData.quiz_results[chapterId];
+                const total = qr.answers?.length || 10;
+                return `${qr.score}/${total}`;
+            }
+            
+            return null;
         }
 
         function renderBooks() {
@@ -664,19 +700,24 @@
                 
                 let chaptersHTML = '';
                 book.chapters.forEach(chapter => {
-                    // Check progress from API or localStorage
+                    // Check progress from API, localStorage, or quiz results
                     const alexCompleted = isChapterCompletedForUser('acro16hunna', chapter.id);
                     const dhiannaCompleted = isChapterCompletedForUser('Dhianna369', chapter.id);
                     
+                    // Get quiz scores if available
+                    const alexScore = alexCompleted ? getQuizScore('acro16hunna', chapter.id) : null;
+                    const dhiannaScore = dhiannaCompleted ? getQuizScore('Dhianna369', chapter.id) : null;
+                    
                     let statusHTML = '';
                     if (alexCompleted && dhiannaCompleted) {
-                        statusHTML = '<span class="status-badge alex">✓ Both</span>';
+                        const scoreText = (alexScore || dhiannaScore) ? ` (${alexScore || ''}${alexScore && dhiannaScore ? '/' : ''}${dhiannaScore || ''})` : '';
+                        statusHTML = `<span class="status-badge alex">✓ Both${scoreText}</span>`;
                     } else if (alexCompleted) {
-                        statusHTML = '<span class="status-badge alex">✓ Alex</span>';
+                        statusHTML = `<span class="status-badge alex">✓ Alex${alexScore ? ' ' + alexScore : ''}</span>`;
                     } else if (dhiannaCompleted) {
-                        statusHTML = '<span class="status-badge dhianna">✓ Dhianna</span>';
+                        statusHTML = `<span class="status-badge dhianna">✓ Dhianna${dhiannaScore ? ' ' + dhiannaScore : ''}</span>`;
                     } else {
-                        statusHTML = '<span class="status-badge none">○ None</span>';
+                        statusHTML = `<span class="status-badge none">○ Not completed</span>`;
                     }
 
                     chaptersHTML += `
