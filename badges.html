@@ -3,103 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Badges | Trading Book Club</title>
+    <title>Badges | BookClub Transparent</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Who Am I Bar */
+        .whoami-bar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .whoami-title {
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .whoami-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .whoami-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .whoami-btn.alex {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+        }
+        .whoami-btn.alex:hover, .whoami-btn.alex.active {
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        .whoami-btn.dhianna {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+        }
+        .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Sync Bar */
+        .sync-bar {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4aa;
+            font-size: 14px;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-        <!-- Chart Bars Left -->
+    <!-- Chart Bars -->
     <div class="chart-bars chart-bars-left">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
-
-    <!-- Chart Bars Right -->
     <div class="chart-bars chart-bars-right">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
 
     <nav class="navbar">
@@ -108,9 +123,7 @@
                 <span>📚</span>
                 <span>BookClub</span>
             </a>
-            
             <button class="nav-toggle" id="navToggle">☰</button>
-            
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
                 <li><a href="library.html" class="nav-link">📚 Library</a></li>
@@ -122,28 +135,52 @@
     </nav>
 
     <main class="main-content">
+        <!-- Who Am I Bar -->
+        <div class="whoami-bar">
+            <div>
+                <div class="whoami-title">Who are you?</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to see your badges</div>
+            </div>
+            <div class="whoami-buttons">
+                <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+            </div>
+        </div>
+
         <header class="page-header">
             <h1>🏅 Badges</h1>
             <p class="subtitle">Earn achievements as you progress through your reading journey</p>
         </header>
 
+        <div id="loading-state" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading badges...</p>
+        </div>
+
         <!-- Badges Grid -->
-        <div class="badges-grid" id="badges-grid">
+        <div class="badges-grid" id="badges-grid" style="display: none;">
             <!-- Populated by JS -->
         </div>
 
         <!-- Your Progress -->
-        <div class="your-progress" id="your-progress">
+        <div class="your-progress" id="your-progress" style="display: none;">
             <h2>Your Progress</h2>
-            
             <div class="progress-summary">
                 <div class="progress-circle">
                     <span class="progress-number" id="progress-earned">0</span>
                     <span class="progress-total">/ <span id="progress-total">0</span></span>
                 </div>
-                
                 <p id="progress-message">Select a user to see your progress</p>
             </div>
+        </div>
+
+        <!-- Sync Bar -->
+        <div class="sync-bar">
+            <div class="sync-status">
+                <span>☁️</span>
+                <span>Cloud sync active</span>
+            </div>
+            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
         </div>
     </main>
 
@@ -152,59 +189,73 @@
     </footer>
 
     <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
     <script>
-        // Mobile Navigation Toggle
-        document.getElementById('navToggle')?.addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
-            });
-        });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            loadBadges();
-            loadProgress();
-        });
+        const API_URL = 'https://5-189-142-233.nip.io/api';
+        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        let usersData = {};
+
+        function setWhoAmI(name) {
+            currentUser = name;
+            localStorage.setItem('bookclub_whoami', name);
+            updateWhoAmIUI();
+            loadData();
+        }
+
+        function updateWhoAmIUI() {
+            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentUser === 'Alex') {
+                document.getElementById('btn-alex').classList.add('active');
+            } else if (currentUser === 'Dhianna') {
+                document.getElementById('btn-dhianna').classList.add('active');
+            }
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const users = await response.json();
+                
+                users.forEach(user => {
+                    usersData[user.discord_id] = user;
+                });
+
+                loadBadges();
+                loadProgress();
+
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('badges-grid').style.display = 'grid';
+                document.getElementById('your-progress').style.display = 'block';
+            } catch (e) {
+                console.error('Error loading data:', e);
+            }
+        }
 
         function loadBadges() {
             const container = document.getElementById('badges-grid');
-            const user = BookClub.getCurrentUser();
             
-            let progress = {};
-            if (user) {
-                progress = BookClub.getBadgeProgress(user.id);
-            }
+            const user = currentUser === 'Alex' ? usersData['acro16hunna'] : 
+                        currentUser === 'Dhianna' ? usersData['Dhianna369'] : null;
+            
+            const userBadges = user?.badges || [];
             
             container.innerHTML = BOOKCLUB_DATA.badges.map(badge => {
-                const badgeProgress = progress[badge.id] || { 
-                    earned: false, 
-                    current: 0, 
-                    target: badge.target, 
-                    percentage: 0 
-                };
+                const hasBadge = userBadges.includes(badge.id);
                 
                 return `
-                    <div class="badge-card ${badgeProgress.earned ? 'earned' : 'locked'}">
+                    <div class="badge-card ${hasBadge ? 'earned' : 'locked'}">
                         <div class="badge-icon">
                             <span class="emoji">${badge.emoji}</span>
-                            ${badgeProgress.earned ? '<span class="earned-check">✓</span>' : ''}
-                        </div>
-                        
+                            ${hasBadge ? '<span class="earned-check">✓</span>' : ''}
+                        </div>                        
                         <div class="badge-info">
                             <h3>${badge.name}</h3>
                             <p>${badge.description}</p>
-                            
-                            ${!badgeProgress.earned ? `
+                            ${!hasBadge ? `
                                 <div class="progress-section">
                                     <div class="progress-bar small">
-                                        <div class="progress-fill" style="width: ${badgeProgress.percentage}%"></div>
+                                        <div class="progress-fill" style="width: 0%"></div>
                                     </div>
-                                    <span class="progress-text">${badgeProgress.current} / ${badgeProgress.target}</span>
+                                    <span class="progress-text">Target: ${badge.target}</span>
                                 </div>
                             ` : '<span class="earned-date">✓ Earned</span>'}
                         </div>
@@ -214,7 +265,9 @@
         }
 
         function loadProgress() {
-            const user = BookClub.getCurrentUser();
+            const user = currentUser === 'Alex' ? usersData['acro16hunna'] : 
+                        currentUser === 'Dhianna' ? usersData['Dhianna369'] : null;
+            
             const earnedEl = document.getElementById('progress-earned');
             const totalEl = document.getElementById('progress-total');
             const messageEl = document.getElementById('progress-message');
@@ -224,20 +277,32 @@
             
             if (!user) {
                 earnedEl.textContent = '0';
-                messageEl.textContent = 'Select a user on the Dashboard to see your progress';
+                messageEl.textContent = 'Select a user to see your progress';
                 return;
             }
             
-            const progress = BookClub.getBadgeProgress(user.id);
-            let earnedCount = 0;
-            
-            for (const id in progress) {
-                if (progress[id].earned) earnedCount++;
-            }
-            
+            const earnedCount = (user.badges || []).length;
             earnedEl.textContent = earnedCount;
             messageEl.textContent = `You've earned ${earnedCount} out of ${totalBadges} badges. Keep reading!`;
         }
+
+        // Mobile Navigation
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+
+        // Init
+        updateWhoAmIUI();
+        loadData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>

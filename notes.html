@@ -3,103 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes | Trading Book Club</title>
+    <title>Notes | BookClub Transparent</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Who Am I Bar */
+        .whoami-bar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .whoami-title {
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .whoami-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .whoami-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .whoami-btn.alex {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+        }
+        .whoami-btn.alex:hover, .whoami-btn.alex.active {
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        .whoami-btn.dhianna {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+        }
+        .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Sync Bar */
+        .sync-bar {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4aa;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-        <!-- Chart Bars Left -->
+    <!-- Chart Bars -->
     <div class="chart-bars chart-bars-left">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
-
-    <!-- Chart Bars Right -->
     <div class="chart-bars chart-bars-right">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
 
     <nav class="navbar">
@@ -108,9 +103,7 @@
                 <span>📚</span>
                 <span>BookClub</span>
             </a>
-            
             <button class="nav-toggle" id="navToggle">☰</button>
-            
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
                 <li><a href="library.html" class="nav-link">📚 Library</a></li>
@@ -122,238 +115,81 @@
     </nav>
 
     <main class="main-content">
+        <!-- Who Am I Bar -->
+        <div class="whoami-bar">
+            <div>
+                <div class="whoami-title">Who are you?</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+            </div>
+            <div class="whoami-buttons">
+                <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+            </div>
+        </div>
+
         <header class="page-header">
-            <h1>💬 Shared Notes</h1>
-            <p class="subtitle">Insights and reflections from your reading journey</p>
+            <h1>📝 Notes</h1>
+            <p class="subtitle">Shared insights from your reading journey</p>
         </header>
 
-        <!-- Add Note Section -->
-        <section class="add-note-section" id="add-note-section">
-            <h2>Add a Note</h2>
-            
-            <form class="note-form" id="note-form" onsubmit="handleSubmit(event)">
-                <div class="form-group">
-                    <label>Chapter</label>
-                    <select id="chapter-select" required>
-                        <option value="">Select a chapter...</option>
-                        <!-- Populated by JS -->
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Your Note</label>
-                    <textarea id="note-text" rows="4" placeholder="Share your insights..." required></textarea>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">📝 Post Note</button>
-            </form>
-        </section>
-
-        <!-- All Notes Section -->
-        <section class="all-notes">
-            <h2>All Notes</h2>
-            
-            <div class="notes-timeline" id="notes-timeline">
-                <!-- Populated by JS -->
+        <div class="card">
+            <div class="card-header">
+                <h2>💬 Shared Notes</h2>
             </div>
-        </section>
+            <div class="card-body">
+                <p class="empty-state" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                    📝 <br><br>
+                    Notes feature coming soon with cloud sync!<br><br>
+                    <span style="font-size: 14px;">This will allow Alex and Dhianna to share insights on chapters.</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Sync Bar -->
+        <div class="sync-bar">
+            <div class="sync-status">
+                <span>☁️</span>
+                <span>Cloud sync active</span>
+            </div>
+            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
+        </div>
     </main>
 
     <footer class="footer">
         <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
     </footer>
 
-    <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/sync.js"></script>
     <script>
-        // Mobile Navigation Toggle
+        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+
+        function setWhoAmI(name) {
+            currentUser = name;
+            localStorage.setItem('bookclub_whoami', name);
+            updateWhoAmIUI();
+        }
+
+        function updateWhoAmIUI() {
+            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentUser === 'Alex') {
+                document.getElementById('btn-alex').classList.add('active');
+            } else if (currentUser === 'Dhianna') {
+                document.getElementById('btn-dhianna').classList.add('active');
+            }
+        }
+
+        // Mobile Navigation
         document.getElementById('navToggle')?.addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
         });
         
-        // Close mobile menu when clicking a link
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 document.getElementById('navMenu').classList.remove('active');
             });
         });
-        
-        // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
-        if (!BookClub.getCompletedChapters) {
-            BookClub.getCompletedChapters = function(userId) {
-                const progress = BookClub.getProgress(userId);
-                return Object.keys(progress).filter(key => {
-                    const val = progress[key];
-                    return val === true || (val && val.completed === true);
-                }).map(Number);
-            };
-        }
-        
-        // Initialize data first
-        BookClub.initializeData();
-        
-        document.addEventListener('DOMContentLoaded', async function() {
-            const user = BookClub.getCurrentUser();
-            
-            if (!user) {
-                document.getElementById('add-note-section').style.display = 'none';
-            } else {
-                populateChapterSelect();
-            }
-            
-            await loadNotes();
-        });
 
-        function populateChapterSelect() {
-            const select = document.getElementById('chapter-select');
-            
-            BOOKCLUB_DATA.books.forEach(book => {
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = book.title;
-                
-                const chapters = BookClub.getChaptersByBook(book.id);
-                chapters.forEach(chapter => {
-                    const option = document.createElement('option');
-                    option.value = chapter.id;
-                    option.textContent = `Chapter ${chapter.number}: ${chapter.title}`;
-                    optgroup.appendChild(option);
-                });
-                
-                select.appendChild(optgroup);
-            });
-        }
-
-        async function loadNotes() {
-            const container = document.getElementById('notes-timeline');
-            container.innerHTML = '<p class="empty-state">Loading notes...</p>';
-            
-            // Try to get notes from API first
-            const apiNotes = await SyncAPI.getAllNotes();
-            
-            let notes = [];
-            if (apiNotes && apiNotes.length > 0) {
-                notes = apiNotes;
-            } else {
-                // Fallback to localStorage
-                notes = BookClub.getNotes();
-            }
-            
-            if (notes.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <span class="empty-state-icon">📝</span>
-                        <h3>No notes yet</h3>
-                        <p>Be the first to share your thoughts on a chapter!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = notes.map(note => {
-                const chapterNum = note.chapter_number || (note.chapter_title ? note.chapter_title.match(/\d+/) : null);
-                const chapterDisplay = chapterNum || note.chapter_title || 'Unknown';
-                const userName = note.user_name || note.userName || 'Unknown';
-                const bookTitle = note.book_title || note.bookTitle || 'Unknown Book';
-                const createdAt = note.created_at || note.createdAt;
-                
-                return `
-                    <div class="note-timeline-item" style="border-left: 3px solid var(--accent-primary); padding-left: 1rem; margin-bottom: 1.5rem;">
-                        <div class="note-timeline-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <div class="note-author-info">
-                                <span class="author-name" style="font-weight: 600; color: var(--accent-primary);">${userName}</span>
-                                <span class="note-chapter-link" style="color: var(--text-secondary); font-size: 0.9rem;"> • ${bookTitle} - Ch. ${chapterDisplay}</span>
-                            </div>
-                            <time class="note-time" style="color: var(--text-muted); font-size: 0.85rem;">${formatDate(createdAt)}</time>
-                        </div>
-                        
-                        <div class="note-content" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px;">
-                            <p style="margin: 0; line-height: 1.6;">${note.note || note.text || ''}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return 'Unknown date';
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffMs = now - date;
-            const diffSec = Math.floor(diffMs / 1000);
-            const diffMin = Math.floor(diffSec / 60);
-            const diffHour = Math.floor(diffMin / 60);
-            const diffDay = Math.floor(diffHour / 24);
-            
-            if (diffSec < 60) return 'just now';
-            if (diffMin < 60) return `${diffMin}m ago`;
-            if (diffHour < 24) return `${diffHour}h ago`;
-            if (diffDay < 7) return `${diffDay}d ago`;
-            return date.toLocaleDateString();
-        }
-
-        async function handleSubmit(event) {
-            event.preventDefault();
-            
-            const user = BookClub.getCurrentUser();
-            if (!user) {
-                alert('Please select a user first');
-                return;
-            }
-            
-            const chapterId = parseInt(document.getElementById('chapter-select').value);
-            const noteText = document.getElementById('note-text').value.trim();
-            const submitBtn = document.querySelector('#note-form button[type="submit"]');
-            
-            if (!chapterId) {
-                BookClub.showNotification('Please select a chapter', 'warning');
-                return;
-            }
-            
-            if (!noteText) {
-                BookClub.showNotification('Please enter a note', 'warning');
-                return;
-            }
-            
-            // Show loading state
-            submitBtn.classList.add('btn-loading');
-            submitBtn.disabled = true;
-            
-            try {
-                // Save to API
-                const result = await SyncAPI.addNote(
-                    user.discord_id || user.id, 
-                    chapterId, 
-                    noteText, 
-                    user.name
-                );
-                
-                if (result.success) {
-                    document.getElementById('note-form').reset();
-                    BookClub.showNotification('Note posted successfully!', 'success');
-                    await loadNotes(); // Reload notes to show the new one
-                } else if (result.offline) {
-                    // Fallback to localStorage
-                    if (BookClub.addNote(chapterId, noteText)) {
-                        document.getElementById('note-form').reset();
-                        BookClub.showNotification('Note saved locally (API offline)', 'warning');
-                        await loadNotes();
-                    }
-                } else {
-                    BookClub.showNotification('Error: ' + (result.error || 'Unknown error'), 'error');
-                }
-            } catch (error) {
-                // Fallback to localStorage on error
-                if (BookClub.addNote(chapterId, noteText)) {
-                    document.getElementById('note-form').reset();
-                    BookClub.showNotification('Note saved locally', 'warning');
-                    await loadNotes();
-                }
-            } finally {
-                submitBtn.classList.remove('btn-loading');
-                submitBtn.disabled = false;
-            }
-        }
+        // Init
+        updateWhoAmIUI();
     </script>
 </body>
 </html>

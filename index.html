@@ -10,30 +10,62 @@
     <style>
         .whoami-bar {
             background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
-            padding: 15px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 16px;
             margin-bottom: 20px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 15px;
+        }
+        .whoami-header {
+            text-align: center;
         }
         .whoami-title {
             color: #8b9bb4;
             font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .whoami-subtitle {
+            font-size: 13px;
+            color: #6b7a94;
+            margin-top: 4px;
         }
         .whoami-buttons {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+        .whoami-btn.clear {
+            background: rgba(139, 155, 180, 0.2);
+            color: #8b9bb4;
+            font-size: 14px;
+            padding: 12px 20px;
+            min-height: 44px;
+        }
+        .whoami-btn.clear:hover {
+            background: rgba(139, 155, 180, 0.3);
         }
         .whoami-btn {
-            padding: 10px 20px;
+            padding: 16px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 16px;
             transition: all 0.3s;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .whoami-btn:active {
+            transform: scale(0.98);
         }
         .whoami-btn.alex {
             background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
@@ -41,6 +73,7 @@
         }
         .whoami-btn.alex:hover, .whoami-btn.alex.active {
             box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+            transform: translateY(-2px);
         }
         .whoami-btn.dhianna {
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
@@ -48,6 +81,7 @@
         }
         .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
             box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
         }
         .leaderboard-section {
             background: rgba(26, 31, 46, 0.8);
@@ -146,38 +180,67 @@
         }
         .chapters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 10px;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
+        
+        @media (min-width: 768px) {
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 10px;
+            }
+        }
+        
         .chapter-item {
             background: #252b3d;
-            border-radius: 8px;
-            padding: 12px 15px;
+            border-radius: 12px;
+            padding: 16px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 12px;
             border: 1px solid transparent;
             transition: all 0.3s;
         }
+        
+        @media (min-width: 480px) {
+            .chapter-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 16px;
+            }
+        }
+        
         .chapter-item:hover {
             border-color: rgba(255,255,255,0.1);
         }
         .chapter-info {
             flex: 1;
+            min-width: 0;
         }
         .chapter-number {
             font-size: 12px;
             color: #8b9bb4;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         .chapter-title {
             font-weight: 500;
-            font-size: 14px;
+            font-size: 15px;
+            line-height: 1.4;
         }
         .chapter-status {
             display: flex;
-            gap: 8px;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        
+        @media (min-width: 480px) {
+            .chapter-status {
+                flex-direction: row;
+                align-items: center;
+                gap: 12px;
+            }
         }
         .status-badge {
             padding: 4px 10px;
@@ -210,11 +273,15 @@
             font-weight: 600;
             transition: all 0.2s;
         }
+                .mark-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
         .mark-btn.alex {
             background: rgba(0, 212, 170, 0.2);
             color: #00d4aa;
         }
-        .mark-btn.alex:hover {
+        .mark-btn.alex:hover:not(:disabled) {
             background: #00d4aa;
             color: white;
         }
@@ -222,7 +289,7 @@
             background: rgba(255, 107, 107, 0.2);
             color: #ff6b6b;
         }
-        .mark-btn.dhianna:hover {
+        .mark-btn.dhianna:hover:not(:disabled) {
             background: #ff6b6b;
             color: white;
         }
@@ -255,6 +322,62 @@
         }
         .sync-btn:hover {
             opacity: 0.9;
+        }
+
+        /* Responsive Who Am I - Mobile First */
+        @media (min-width: 480px) {
+            .whoami-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+            .whoami-btn {
+                flex: 1;
+                max-width: 200px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .whoami-bar {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px 25px;
+            }
+            .whoami-header {
+                text-align: left;
+            }
+            .whoami-buttons {
+                width: auto;
+                flex-direction: row;
+                gap: 15px;
+            }
+            .whoami-btn {
+                padding: 14px 28px;
+                font-size: 15px;
+                min-height: 52px;
+            }
+        }
+
+        /* Touch-friendly chapter buttons */
+        .mark-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .mark-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            min-height: 40px;
+            min-width: 80px;
+            touch-action: manipulation;
+        }
+        .mark-btn:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -298,13 +421,14 @@
     <main class="main-content">
         <!-- Who Am I Bar -->
         <div class="whoami-bar">
-            <div>
+            <div class="whoami-header">
                 <div class="whoami-title">Who are you?</div>
-                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+                <div class="whoami-subtitle">Select to mark chapters as completed</div>
             </div>
             <div class="whoami-buttons">
                 <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
                 <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+                <button class="whoami-btn clear" id="btn-clear" onclick="clearWhoAmI()" style="display: none;">✕ Clear Selection</button>
             </div>
         </div>
 
@@ -342,10 +466,21 @@
             currentUser = name;
             localStorage.setItem('bookclub_whoami', name);
             updateWhoAmIUI();
+            renderBooks(); // Re-render to enable buttons
+        }
+
+        function clearWhoAmI() {
+            currentUser = null;
+            localStorage.removeItem('bookclub_whoami');
+            updateWhoAmIUI();
+            renderBooks(); // Re-render to disable buttons
+            document.getElementById('sync-text').textContent = 'Selection cleared - simulating new device';
         }
 
         function updateWhoAmIUI() {
             document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-clear').style.display = currentUser ? 'block' : 'none';
+            
             if (currentUser === 'Alex') {
                 document.getElementById('btn-alex').classList.add('active');
             } else if (currentUser === 'Dhianna') {
@@ -355,23 +490,35 @@
 
         async function loadData() {
             try {
-                // Load users
-                const usersRes = await fetch(`${API_URL}/users`);
-                const users = await usersRes.json();
+                document.getElementById('sync-text').textContent = 'Loading...';
                 
                 // Load books
                 const booksRes = await fetch(`${API_URL}/books`);
                 booksData = await booksRes.json();
 
-                // Process user data
-                users.forEach(user => {
-                    usersData[user.discord_id] = user;
-                });
+                // Load detailed user data with progress for cross-device sync
+                // Fetch each user's individual data to get real progress from cloud
+                const [alexData, dhiannaData] = await Promise.all([
+                    fetch(`${API_URL}/user/acro16hunna`).then(r => r.json()).catch(() => null),
+                    fetch(`${API_URL}/user/Dhianna369`).then(r => r.json()).catch(() => null)
+                ]);
+
+                // Store user data with their progress
+                usersData = {};
+                if (alexData) {
+                    usersData['acro16hunna'] = alexData;
+                }
+                if (dhiannaData) {
+                    usersData['Dhianna369'] = dhiannaData;
+                }
 
                 renderLeaderboard();
                 renderBooks();
+                
+                document.getElementById('sync-text').textContent = 'Cloud sync active - ' + new Date().toLocaleTimeString();
             } catch (e) {
                 console.error('Error loading data:', e);
+                document.getElementById('sync-text').textContent = 'Sync error - retrying...';
             }
         }
 
@@ -380,7 +527,7 @@
             container.innerHTML = '';
 
             const users = Object.values(usersData).sort((a, b) => 
-                (b.total_chapters_read || 0) - (a.total_chapters_read || 0)
+                (b.chapters_completed || 0) - (a.chapters_completed || 0)
             );
 
             users.forEach((user, index) => {
@@ -396,7 +543,7 @@
                         </div>
                     </div>
                     <div class="user-stats">
-                        <div class="user-stat">📖 ${user.total_chapters_read || 0} chapters</div>
+                        <div class="user-stat">📖 ${user.chapters_completed || 0} chapters</div>
                         <div class="user-stat">🔥 ${user.current_streak || 0} streak</div>
                     </div>
                 `;
@@ -414,8 +561,12 @@
                 
                 let chaptersHTML = '';
                 book.chapters.forEach(chapter => {
-                    const alexCompleted = usersData['acro16hunna']?.progress?.[chapter.id]?.completed;
-                    const dhiannaCompleted = usersData['Dhianna369']?.progress?.[chapter.id]?.completed;
+                    // Check progress from the detailed user data fetched from API
+                    const alexProgress = usersData['acro16hunna']?.progress?.[chapter.id];
+                    const dhiannaProgress = usersData['Dhianna369']?.progress?.[chapter.id];
+                    
+                    const alexCompleted = alexProgress?.completed === 1 || alexProgress?.completed === true;
+                    const dhiannaCompleted = dhiannaProgress?.completed === 1 || dhiannaProgress?.completed === true;
                     
                     let statusHTML = '';
                     if (alexCompleted && dhiannaCompleted) {
@@ -465,8 +616,12 @@
         async function markChapter(chapterId, who) {
             const discordId = who === 'Alex' ? 'acro16hunna' : 'Dhianna369';
             
+            // Disable buttons during request
+            const buttons = document.querySelectorAll('.mark-btn');
+            buttons.forEach(btn => btn.disabled = true);
+            
             try {
-                await fetch(`${API_URL}/user/${discordId}/progress`, {
+                const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -477,10 +632,24 @@
                     })
                 });
                 
-                // Reload data
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                // Show success feedback
+                document.getElementById('sync-text').textContent = `✓ Marked Chapter ${chapterId} for ${who}`;
+                
+                // Reload data from cloud to reflect changes
                 await loadData();
+                
             } catch (e) {
                 console.error('Error marking chapter:', e);
+                document.getElementById('sync-text').textContent = 'Error marking chapter - retry';
+            } finally {
+                // Re-enable buttons
+                buttons.forEach(btn => {
+                    if (currentUser) btn.disabled = false;
+                });
             }
         }
 

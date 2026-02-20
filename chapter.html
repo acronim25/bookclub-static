@@ -3,103 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter | Trading Book Club</title>
+    <title>Chapter | BookClub Transparent</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Who Am I Bar */
+        .whoami-bar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .whoami-title {
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .whoami-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .whoami-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .whoami-btn.alex {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+        }
+        .whoami-btn.alex:hover, .whoami-btn.alex.active {
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        .whoami-btn.dhianna {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+        }
+        .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Chapter Content Grid */
+        .chapter-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .chapter-content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Transparent Status Section */
+        .transparent-status-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .status-card-title {
+            font-size: 14px;
+            color: #8b9bb4;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .status-row:last-child {
+            border-bottom: none;
+        }
+        .status-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .status-avatar.alex { background: rgba(0, 212, 170, 0.2); }
+        .status-avatar.dhianna { background: rgba(255, 107, 107, 0.2); }
+        .status-name {
+            font-size: 14px;
+        }
+        .status-indicator {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-indicator.completed {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--accent-success);
+        }
+        .status-indicator.pending {
+            background: rgba(139, 155, 180, 0.2);
+            color: #8b9bb4;
+        }
+
+        /* Mark Buttons */
+        .mark-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .mark-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .mark-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .mark-btn.alex {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00d4aa;
+        }
+        .mark-btn.alex:hover:not(:disabled) {
+            background: #00d4aa;
+            color: white;
+        }
+        .mark-btn.dhianna {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+        .mark-btn.dhianna:hover:not(:disabled) {
+            background: #ff6b6b;
+            color: white;
+        }
+        .mark-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .mark-btn.completed {
+            background: var(--accent-success) !important;
+            color: white !important;
+            opacity: 1;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Sync Bar */
+        .sync-bar {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4aa;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-        <!-- Chart Bars Left -->
+    <!-- Chart Bars -->
     <div class="chart-bars chart-bars-left">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
-
-    <!-- Chart Bars Right -->
     <div class="chart-bars chart-bars-right">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
 
     <nav class="navbar">
@@ -108,9 +242,7 @@
                 <span>📚</span>
                 <span>BookClub</span>
             </a>
-            
             <button class="nav-toggle" id="navToggle">☰</button>
-            
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
                 <li><a href="library.html" class="nav-link">📚 Library</a></li>
@@ -122,8 +254,34 @@
     </nav>
 
     <main class="main-content">
-        <div id="chapter-content">
+        <!-- Who Am I Bar -->
+        <div class="whoami-bar">
+            <div>
+                <div class="whoami-title">Who are you?</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+            </div>
+            <div class="whoami-buttons">
+                <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+            </div>
+        </div>
+
+        <div id="loading-state" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading chapter...</p>
+        </div>
+
+        <div id="chapter-content" style="display: none;">
             <!-- Populated by JS -->
+        </div>
+
+        <!-- Sync Bar -->
+        <div class="sync-bar">
+            <div class="sync-status">
+                <span>☁️</span>
+                <span id="sync-text">Cloud sync active</span>
+            </div>
+            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
         </div>
     </main>
 
@@ -132,49 +290,70 @@
     </footer>
 
     <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
     <script>
-        // Mobile Navigation Toggle
-        document.getElementById('navToggle')?.addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
-            });
-        });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const chapterId = parseInt(urlParams.get('id')) || 1;
-            
-            loadChapter(chapterId);
-        });
+        const API_URL = 'https://5-189-142-233.nip.io/api';
+        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        let usersData = {};
+        let currentChapterId = null;
 
-        function loadChapter(chapterId) {
-            const chapter = BookClub.getChapterById(chapterId);
+        function setWhoAmI(name) {
+            currentUser = name;
+            localStorage.setItem('bookclub_whoami', name);
+            updateWhoAmIUI();
+            if (currentChapterId) {
+                loadChapter(currentChapterId);
+            }
+        }
+
+        function updateWhoAmIUI() {
+            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentUser === 'Alex') {
+                document.getElementById('btn-alex').classList.add('active');
+            } else if (currentUser === 'Dhianna') {
+                document.getElementById('btn-dhianna').classList.add('active');
+            }
+        }
+
+        async function loadData() {
+            try {
+                const usersRes = await fetch(`${API_URL}/users`);
+                const users = await usersRes.json();
+                
+                users.forEach(user => {
+                    usersData[user.discord_id] = user;
+                });
+
+                const urlParams = new URLSearchParams(window.location.search);
+                currentChapterId = parseInt(urlParams.get('id')) || 1;
+                
+                await loadChapter(currentChapterId);
+            } catch (e) {
+                console.error('Error loading data:', e);
+                document.getElementById('loading-state').innerHTML = '<p>Error loading data. Please refresh.</p>';
+            }
+        }
+
+        async function loadChapter(chapterId) {
+            const chapter = BOOKCLUB_DATA.chapters.find(c => c.id === chapterId);
             const container = document.getElementById('chapter-content');
             
             if (!chapter) {
                 container.innerHTML = '<div class="empty-state"><h2>Chapter not found</h2></div>';
                 return;
             }
-            
-            const book = BookClub.getBookById(chapter.book_id);
-            const user = BookClub.getCurrentUser();
-            const isCompleted = user && BookClub.isChapterCompleted(user.id, chapter.id);
-            const quiz = BookClub.getQuizByChapter(chapter.id);
-            const quizResult = user ? BookClub.getQuizResult(user.id, chapter.id) : null;
-            
-            const allChapters = BookClub.getChaptersByBook(chapter.book_id);
+
+            const book = BOOKCLUB_DATA.books.find(b => b.id === chapter.book_id);
+            const allChapters = BOOKCLUB_DATA.chapters.filter(c => c.book_id === chapter.book_id);
             const currentIndex = allChapters.findIndex(c => c.id === chapterId);
             const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
             const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
-            
-            const notes = BookClub.getNotesForChapter(chapterId);
-            
+
+            const alexCompleted = isChapterCompleted('acro16hunna', chapter.id);
+            const dhiannaCompleted = isChapterCompleted('Dhianna369', chapter.id);
+
+            document.getElementById('loading-state').style.display = 'none';
+            container.style.display = 'block';
+
             container.innerHTML = `
                 <div class="breadcrumb">
                     <a href="library.html">Library</a>
@@ -184,45 +363,42 @@
                     <span>Chapter ${chapter.number}</span>
                 </div>
 
-                <div class="chapter-navigation">
+                <div class="chapter-navigation" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
                     ${prevChapter ? `
                         <a href="chapter.html?id=${prevChapter.id}" class="btn btn-sm btn-secondary">← Previous</a>
                     ` : '<span class="btn btn-sm btn-disabled">← Previous</span>'}
                     
-                    <span class="chapter-indicator">Chapter ${chapter.number} of ${allChapters.length}</span>
+                    <span class="chapter-indicator" style="color: var(--text-secondary);">Chapter ${chapter.number} of ${allChapters.length}</span>
                     
                     ${nextChapter ? `
                         <a href="chapter.html?id=${nextChapter.id}" class="btn btn-sm btn-secondary">Next →</a>
                     ` : '<span class="btn btn-sm btn-disabled">Next →</span>'}
                 </div>
 
-                <div class="chapter-header">
+                <div class="chapter-header" style="margin-bottom: 2rem;">
+                    <div class="chapter-label" style="display: inline-block; background: rgba(0, 212, 255, 0.1); color: var(--accent-primary); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.75rem; border: 1px solid rgba(0, 212, 255, 0.3);">
+                        Chapter ${chapter.number}
+                    </div>
                     <h1>${chapter.title}</h1>
-                    
-                    ${isCompleted ? `
-                        <div class="completion-badge">
-                            ✓ Completed
-                        </div>
-                    ` : ''}
                 </div>
 
                 <div class="chapter-content-grid">
                     <!-- Main Content -->
-                    <div class="card chapter-content-card">
+                    <div class="card">
                         <div class="card-header">
                             <h2>📝 Summary</h2>
                         </div>
                         <div class="card-body">
-                            <div class="chapter-summary">
+                            <div style="color: var(--text-secondary); line-height: 1.7;">
                                 ${chapter.summary || '<p class="empty-state">No summary available.</p>'}
                             </div>
                             
                             ${chapter.key_concepts ? `
-                                <div class="key-concepts-section">
-                                    <h4>Key Concepts</h4>
-                                    <div class="key-concepts">
+                                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                                    <h4 style="color: var(--accent-primary); margin-bottom: 0.75rem;">Key Concepts</h4>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                                         ${chapter.key_concepts.map(concept => `
-                                            <span class="concept-tag">${concept}</span>
+                                            <span style="background: rgba(0, 212, 255, 0.1); color: var(--accent-primary); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.85rem; border: 1px solid rgba(0, 212, 255, 0.2);">${concept}</span>
                                         `).join('')}
                                     </div>
                                 </div>
@@ -231,43 +407,58 @@
                     </div>
 
                     <!-- Sidebar -->
-                    <div class="chapter-sidebar">
-                        <!-- Quiz Card -->
-                        ${quiz ? `
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3>❓ Quiz</h3>
+                    <div class="chapter-sidebar" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Transparent Status Card -->
+                        <div class="transparent-status-card">
+                            <div class="status-card-title">👥 Who's Completed This?</div>
+                            
+                            <div class="status-row">
+                                <div class="status-user">
+                                    <div class="status-avatar alex">👨</div>
+                                    <span class="status-name">Alex</span>
                                 </div>
-                                <div class="card-body">
-                                    ${quizResult ? `
-                                        <div class="quiz-status">
-                                            <div class="quiz-score ${quizResult.score >= 8 ? 'excellent' : quizResult.score >= 6 ? 'good' : 'needs-work'}">
-                                                <span class="score-value">${quizResult.score}</span>
-                                                <span class="score-total">/${quiz.questions.length}</span>
-                                            </div>
-                                            <p>${quizResult.score >= 8 ? 'Excellent!' : quizResult.score >= 6 ? 'Good job!' : 'Keep learning!'}</p>
-                                        </div>
-                                    ` : `
-                                        <p>Test your knowledge with ${quiz.questions.length} questions.</p>
-                                        <a href="quiz.html?chapter=${chapter.id}" class="btn btn-primary btn-block">🎯 Start Quiz</a>
-                                    `}
-                                </div>
+                                <span class="status-indicator ${alexCompleted ? 'completed' : 'pending'}">
+                                    ${alexCompleted ? '✓ Completed' : '○ Not yet'}
+                                </span>
                             </div>
-                        ` : ''}
-
-                        <!-- Mark Complete Card -->
-                        ${user && !isCompleted ? `
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3>✓ Progress</h3>
+                            
+                            <div class="status-row">
+                                <div class="status-user">
+                                    <div class="status-avatar dhianna">👩</div>
+                                    <span class="status-name">Dhianna</span>
                                 </div>
-                                <div class="card-body">
-                                    <button class="btn btn-success btn-block" onclick="handleComplete(${chapter.id})">
-                                        Mark as Complete
+                                <span class="status-indicator ${dhiannaCompleted ? 'completed' : 'pending'}">
+                                    ${dhiannaCompleted ? '✓ Completed' : '○ Not yet'}
+                                </span>
+                            </div>
+
+                            <div class="mark-section">
+                                <div class="status-card-title">✏️ Mark as Complete</div>
+                                <div class="mark-buttons">
+                                    <button class="mark-btn alex ${alexCompleted ? 'completed' : ''}" 
+                                            onclick="markChapter(${chapter.id}, 'Alex')" 
+                                            ${!currentUser || alexCompleted ? 'disabled' : ''}>
+                                        ${alexCompleted ? '✓ Alex Done' : 'I am Alex'}
+                                    </button>
+                                    <button class="mark-btn dhianna ${dhiannaCompleted ? 'completed' : ''}" 
+                                            onclick="markChapter(${chapter.id}, 'Dhianna')" 
+                                            ${!currentUser || dhiannaCompleted ? 'disabled' : ''}>
+                                        ${dhiannaCompleted ? '✓ Dhianna Done' : 'I am Dhianna'}
                                     </button>
                                 </div>
                             </div>
-                        ` : ''}
+                        </div>
+
+                        <!-- Quiz Card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>❓ Quiz</h3>
+                            </div>
+                            <div class="card-body">
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Test your knowledge!</p>
+                                <a href="quiz.html?chapter=${chapter.id}" class="btn btn-primary btn-block">🎯 Take Quiz</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -277,76 +468,65 @@
                         <h2>💬 Shared Notes</h2>
                     </div>
                     <div class="card-body">
-                        ${user ? `
-                            <div class="add-note-form">
-                                <textarea id="note-input" data-chapter-id="${chapter.id}" placeholder="Share your insights, key takeaways, or questions about this chapter..." rows="3"></textarea>
-                                <div class="draft-indicator" id="draft-indicator">💾 Draft saved</div>
-                                <button class="btn btn-primary" onclick="handleAddNote(${chapter.id})">
-                                    📝 Share Note
-                                </button>
-                            </div>
-                        ` : '<p class="empty-state"><a href="index.html">Select a user</a> to add notes.</p>'}
-                        
-                        <div id="notes-list" class="notes-list">
-                            ${notes.length > 0 ? notes.map(note => `
-                                <div class="note-item">
-                                    <div class="note-header">
-                                        <span class="note-author">👤 ${note.user_name}</span>
-                                        <span class="note-time">${BookClub.formatDate(note.created_at)}</span>
-                                    </div>
-                                    <div class="note-content">${note.note}</div>
-                                </div>
-                            `).join('') : '<p class="empty-state" id="no-notes-msg">No notes yet. Be the first to share your thoughts!</p>'}
-                        </div>
+                        <p class="empty-state" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                            📝 Notes feature coming soon with cloud sync!
+                        </p>
                     </div>
                 </div>
             `;
         }
 
-        function handleComplete(chapterId) {
-            if (confirm('Mark this chapter as complete? This action cannot be undone.')) {
-                BookClub.markChapterComplete(chapterId);
-                BookClub.showNotification('✓ Chapter completed successfully!', 'success');
-                setTimeout(() => location.reload(), 1500);
+        function isChapterCompleted(discordId, chapterId) {
+            const user = usersData[discordId];
+            if (!user || !user.progress) return false;
+            return user.progress[chapterId] && user.progress[chapterId].completed;
+        }
+
+        async function markChapter(chapterId, who) {
+            const discordId = who === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+            
+            try {
+                const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: who,
+                        chapter_id: chapterId,
+                        completed: true,
+                        notes: ''
+                    })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('sync-text').textContent = `✓ Marked for ${who}`;
+                    await loadData();
+                    setTimeout(() => {
+                        document.getElementById('sync-text').textContent = 'Cloud sync active';
+                    }, 2000);
+                }
+            } catch (e) {
+                console.error('Error marking chapter:', e);
+                alert('Error saving progress. Please try again.');
             }
         }
 
-        function handleAddNote(chapterId) {
-            const noteInput = document.getElementById('note-input');
-            const noteText = noteInput.value.trim();
-            
-            if (!noteText) {
-                BookClub.showNotification('Please enter a note!', 'warning');
-                return;
-            }
-            
-            if (BookClub.addNote(chapterId, noteText)) {
-                BookClub.clearDraft(chapterId);
-                BookClub.showNotification('✓ Note shared successfully!', 'success');
-                setTimeout(() => location.reload(), 1500);
-            }
-        }
-        // Setup auto-save after page load
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                const textarea = document.getElementById('note-input');
-                if (textarea) {
-                    const chapterId = textarea.dataset.chapterId;
-                    if (chapterId) {
-                        BookClub.setupAutoSave('note-input', parseInt(chapterId));
-                        
-                        // Show draft indicator when typing
-                        const indicator = document.getElementById('draft-indicator');
-                        if (indicator) {
-                            textarea.addEventListener('input', () => {
-                                indicator.classList.add('visible');
-                                setTimeout(() => indicator.classList.remove('visible'), 2000);
-                            });
-                        }
-                    }
-                }
-            }, 100);
+        // Mobile Navigation
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
         });
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+
+        // Init
+        updateWhoAmIUI();
+        loadData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>

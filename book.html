@@ -3,516 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thinking in Bets | Trading Book Club</title>
+    <title>Book | BookClub Transparent</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Book Detail Header with Cover */
+        /* Who Am I Bar */
+        .whoami-bar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .whoami-title {
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .whoami-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .whoami-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .whoami-btn.alex {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+        }
+        .whoami-btn.alex:hover, .whoami-btn.alex.active {
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        .whoami-btn.dhianna {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+        }
+        .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Book Detail Header */
         .book-detail-header {
             display: grid;
-            grid-template-columns: 220px 1fr;
+            grid-template-columns: 200px 1fr;
             gap: 2rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(0, 212, 255, 0.05));
             border: 1px solid rgba(255, 107, 53, 0.2);
-            border-radius: var(--radius-lg);
-            padding: 1.75rem;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .book-detail-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ff6b35, #ff8c42, #ff6b35);
-        }
-
-        /* Book Cover Container */
-        .book-detail-cover {
-            position: relative;
-            flex-shrink: 0;
+            border-radius: 16px;
+            padding: 1.5rem;
         }
 
         .book-cover-image {
             width: 100%;
-            max-width: 200px;
-            border-radius: var(--radius-md);
-            box-shadow: 
-                0 15px 45px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(255, 107, 53, 0.3),
-                0 0 30px rgba(255, 107, 53, 0.15);
-            transition: all 0.4s ease;
-        }
-
-        .book-cover-image:hover {
-            transform: translateY(-8px) rotateY(-5deg);
-            box-shadow: 
-                0 30px 80px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 107, 53, 0.5),
-                0 0 60px rgba(255, 107, 53, 0.25);
-        }
-
-        /* Cover Badge */
-        .cover-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: linear-gradient(135deg, #ff6b35, #ff8c42);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
-            z-index: 10;
-        }
-
-        /* Book Info Section */
-        .book-detail-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            border-radius: 12px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
         }
 
         .book-detail-info h1 {
-            font-size: 2rem;
-            margin-bottom: 0.25rem;
-            background: linear-gradient(135deg, var(--text-primary) 0%, #ff8c42 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
         }
 
         .book-author-large {
-            color: var(--text-secondary);
+            color: #ff8c42;
             font-size: 1.1rem;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .book-author-large::before {
-            content: '✍️';
-            font-size: 1rem;
         }
 
         .book-full-description {
             color: var(--text-secondary);
             line-height: 1.6;
-            font-size: 0.95rem;
-            margin-bottom: 1.25rem;
-            padding: 1rem;
-            background: rgba(13, 17, 23, 0.5);
-            border-radius: var(--radius-md);
-            border-left: 3px solid #ff6b35;
-        }
-
-        /* Book Meta Stats */
-        .book-meta-stats {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-            flex-wrap: wrap;
-        }
-
-        .meta-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0.75rem 1.25rem;
-            background: rgba(0, 212, 255, 0.05);
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(0, 212, 255, 0.15);
-            min-width: 70px;
-            flex: 1;
-            max-width: 100px;
-        }
-
-        .meta-stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-        }
-
-        .meta-stat-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Progress Section */
-        .book-progress-section {
             margin-bottom: 1.5rem;
         }
 
-        .progress-header-row {
+        /* Dual Progress */
+        .dual-progress-section {
+            background: rgba(26, 31, 46, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 1.5rem;
+        }
+        .dual-progress-title {
+            font-size: 14px;
+            color: #8b9bb4;
+            margin-bottom: 10px;
+        }
+        .dual-progress-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
+            gap: 10px;
+            margin-bottom: 8px;
         }
-
-        .progress-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        .dual-progress-label {
+            font-size: 12px;
+            min-width: 70px;
         }
-
-        .progress-percentage {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-        }
-
-        .progress-bar-book {
-            background: var(--bg-tertiary);
-            height: 12px;
-            border-radius: 6px;
+        .dual-progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
             overflow: hidden;
-            border: 1px solid var(--border-color);
         }
-
-        .progress-fill-book {
-            background: linear-gradient(90deg, #ff6b35, var(--accent-primary), var(--accent-secondary));
+        .dual-progress-fill {
             height: 100%;
-            border-radius: 6px;
-            transition: width 0.6s ease;
-            box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .dual-progress-fill.alex {
+            background: linear-gradient(90deg, #00d4aa, #00a884);
+        }
+        .dual-progress-fill.dhianna {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+        }
+        .dual-progress-value {
+            font-size: 12px;
+            color: #8b9bb4;
+            min-width: 40px;
+            text-align: right;
         }
 
-        .progress-fill-book.complete {
-            background: linear-gradient(90deg, var(--accent-success), #22c55e);
-            box-shadow: 0 0 15px rgba(63, 185, 80, 0.5);
-        }
-
-        .progress-chapters {
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Action Buttons */
-        .book-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .btn-accent {
-            background: linear-gradient(135deg, #ff6b35, #ff8c42);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-        }
-
-        .btn-accent:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
-        }
-
-        /* Chapters Card */
+        /* Chapter Items with Dual Status */
         .chapters-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+            border-radius: 16px;
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
-
         .chapters-card-header {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.05));
-            padding: 1.5rem 2rem;
+            background: rgba(0, 212, 255, 0.05);
+            padding: 1.25rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
-
-        .chapters-card-header h2 {
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .chapter-count-badge {
-            background: rgba(0, 212, 255, 0.15);
-            color: var(--accent-primary);
-            padding: 0.35rem 0.75rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        /* Chapters List Styling */
         .chapters-list-container {
             padding: 1rem;
         }
 
         .chapter-item {
             display: flex;
-            align-items: stretch;
-            gap: 1rem;
-            padding: 1.25rem;
-            margin-bottom: 0.75rem;
+            align-items: center;
+            gap: 12px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            border-radius: 12px;
+            transition: all 0.3s;
         }
-
-        .chapter-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, #ff6b35, #ff8c42);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
         .chapter-item:hover {
-            border-color: rgba(255, 107, 53, 0.4);
-            transform: translateX(8px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateX(5px);
         }
 
-        .chapter-item:hover::before {
-            opacity: 1;
-        }
-
-        .chapter-item.completed {
-            border-color: rgba(63, 185, 80, 0.4);
-            background: rgba(63, 185, 80, 0.05);
-        }
-
-        .chapter-item.completed::before {
-            background: linear-gradient(180deg, var(--accent-success), #22c55e);
-            opacity: 1;
-        }
-
-        /* Chapter Status */
-        .chapter-status-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-            background: rgba(0, 212, 255, 0.1);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            color: var(--text-muted);
-            transition: all 0.3s ease;
-        }
-
-        .chapter-item:hover .chapter-status-icon {
-            background: rgba(255, 107, 53, 0.15);
-            border-color: rgba(255, 107, 53, 0.5);
-            color: #ff6b35;
-            box-shadow: 0 0 15px rgba(255, 107, 53, 0.3);
-        }
-
-        .chapter-item.completed .chapter-status-icon {
-            background: rgba(63, 185, 80, 0.2);
-            border-color: var(--accent-success);
-            color: var(--accent-success);
-            box-shadow: 0 0 15px rgba(63, 185, 80, 0.4);
-        }
-
-        /* Chapter Number */
         .chapter-number-display {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 140, 66, 0.1));
-            border: 1px solid rgba(255, 107, 53, 0.3);
-            border-radius: var(--radius-sm);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.9rem;
-            color: #ff8c42;
-            flex-shrink: 0;
+            font-size: 14px;
+            color: var(--accent-primary);
         }
 
-        .chapter-item.completed .chapter-number-display {
-            background: linear-gradient(135deg, rgba(63, 185, 80, 0.15), rgba(34, 197, 94, 0.1));
-            border-color: rgba(63, 185, 80, 0.3);
-            color: var(--accent-success);
-        }
-
-        /* Chapter Info */
         .chapter-info-content {
             flex: 1;
-            min-width: 0;
         }
-
         .chapter-title-text {
-            font-size: 1.1rem;
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 4px;
         }
-
         .chapter-summary {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 0.75rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 13px;
+            color: #8b9bb4;
+            line-height: 1.4;
         }
 
-        .chapter-key-concepts {
+        /* Status Badges */
+        .chapter-status-badges {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 6px;
+            align-items: center;
+        }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge.alex {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00d4aa;
+        }
+        .status-badge.dhianna {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+        .status-badge.both {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), rgba(255, 107, 107, 0.2));
+            color: #ffd700;
+        }
+        .status-badge.none {
+            background: rgba(139, 155, 180, 0.2);
+            color: #8b9bb4;
         }
 
-        .concept-tag-item {
-            background: rgba(0, 212, 255, 0.08);
-            color: var(--accent-primary);
-            padding: 0.3rem 0.6rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            transition: all 0.2s ease;
+        /* Mark Buttons */
+        .mark-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        .mark-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .mark-btn.alex {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00d4aa;
+        }
+        .mark-btn.alex:hover {
+            background: #00d4aa;
+            color: white;
+        }
+        .mark-btn.dhianna {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+        .mark-btn.dhianna:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+        .mark-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .mark-btn.completed {
+            opacity: 0.5;
+            cursor: default;
         }
 
-        .concept-tag-item:hover {
-            background: rgba(0, 212, 255, 0.15);
-            border-color: rgba(0, 212, 255, 0.4);
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        /* Chapter Action Button */
-        .chapter-action-btn {
+        /* Sync Bar */
+        .sync-bar {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-top: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.25rem;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: var(--radius-md);
-            color: var(--accent-primary);
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-
-        .chapter-action-btn:hover {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
-            transform: translateX(3px);
-        }
-
-        .chapter-item.completed .chapter-action-btn {
-            background: rgba(63, 185, 80, 0.1);
-            border-color: rgba(63, 185, 80, 0.3);
-            color: var(--accent-success);
-        }
-
-        .chapter-item.completed .chapter-action-btn:hover {
-            background: rgba(63, 185, 80, 0.2);
-            border-color: var(--accent-success);
-            box-shadow: 0 0 15px rgba(63, 185, 80, 0.3);
-        }
-
-        /* Override main-content for book page to allow more width */
-        .main-content {
-            max-width: 1100px;
-            padding-left: 100px;
-            padding-right: 100px;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
-                padding-left: 80px;
-                padding-right: 80px;
-            }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4aa;
+            font-size: 14px;
         }
 
         @media (max-width: 768px) {
-            .main-content {
-                padding-left: 70px;
-                padding-right: 70px;
-            }
-
             .book-detail-header {
                 grid-template-columns: 1fr;
                 text-align: center;
-                padding: 1.5rem;
             }
-
-            .book-detail-cover {
-                display: flex;
-                justify-content: center;
-            }
-
             .book-cover-image {
-                max-width: 160px;
+                max-width: 150px;
+                margin: 0 auto;
             }
-
-            .book-meta-stats {
-                justify-content: center;
-            }
-
-            .book-actions {
-                justify-content: center;
-            }
-
             .chapter-item {
                 flex-wrap: wrap;
             }
-
-            .chapter-action-btn {
+            .mark-buttons {
                 width: 100%;
-                margin-top: 0.5rem;
-            }
-
-            .book-detail-info h1 {
-                font-size: 1.75rem;
-            }
-
-            .book-full-description {
-                font-size: 0.9rem;
-            }
-
-            .chapter-status-icon,
-            .chapter-number-display {
-                width: 32px;
-                height: 32px;
-                font-size: 0.8rem;
-            }
-
-            .chapter-title-text {
-                font-size: 1rem;
+                justify-content: flex-end;
             }
         }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Chart Bars Left -->
+    <!-- Chart Bars -->
     <div class="chart-bars chart-bars-left">
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
@@ -521,8 +335,6 @@
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
-
-    <!-- Chart Bars Right -->
     <div class="chart-bars chart-bars-right">
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
@@ -550,12 +362,38 @@
     </nav>
 
     <main class="main-content">
+        <!-- Who Am I Bar -->
+        <div class="whoami-bar">
+            <div>
+                <div class="whoami-title">Who are you?</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+            </div>
+            <div class="whoami-buttons">
+                <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+            </div>
+        </div>
+
         <div class="breadcrumb">
             <a href="library.html">← Back to Library</a>
         </div>
 
-        <div id="book-content">
+        <div id="loading-state" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading book...</p>
+        </div>
+
+        <div id="book-content" style="display: none;">
             <!-- Populated by JS -->
+        </div>
+
+        <!-- Sync Bar -->
+        <div class="sync-bar">
+            <div class="sync-status">
+                <span>☁️</span>
+                <span id="sync-text">Cloud sync active</span>
+            </div>
+            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
         </div>
     </main>
 
@@ -564,124 +402,138 @@
     </footer>
 
     <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
     <script>
-        // Mobile Navigation Toggle
-        document.getElementById('navToggle')?.addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
-            });
-        });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const bookId = parseInt(urlParams.get('id')) || 1;
-            loadBook(bookId);
-        });
+        const API_URL = 'https://5-189-142-233.nip.io/api';
+        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        let usersData = {};
+        let currentBookId = null;
 
-        function loadBook(bookId) {
-            const book = BookClub.getBookById(bookId);
+        function setWhoAmI(name) {
+            currentUser = name;
+            localStorage.setItem('bookclub_whoami', name);
+            updateWhoAmIUI();
+            loadBook(currentBookId);
+        }
+
+        function updateWhoAmIUI() {
+            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentUser === 'Alex') {
+                document.getElementById('btn-alex').classList.add('active');
+            } else if (currentUser === 'Dhianna') {
+                document.getElementById('btn-dhianna').classList.add('active');
+            }
+        }
+
+        async function loadData() {
+            try {
+                const usersRes = await fetch(`${API_URL}/users`);
+                const users = await usersRes.json();
+                
+                users.forEach(user => {
+                    usersData[user.discord_id] = user;
+                });
+
+                const urlParams = new URLSearchParams(window.location.search);
+                currentBookId = parseInt(urlParams.get('id')) || 1;
+                
+                await loadBook(currentBookId);
+            } catch (e) {
+                console.error('Error loading data:', e);
+                document.getElementById('loading-state').innerHTML = '<p>Error loading data. Please refresh.</p>';
+            }
+        }
+
+        async function loadBook(bookId) {
+            const book = BOOKCLUB_DATA.books.find(b => b.id === bookId);
             const container = document.getElementById('book-content');
             
             if (!book) {
                 container.innerHTML = '<div class="empty-state"><h2>Book not found</h2></div>';
                 return;
             }
+
+            const chapters = BOOKCLUB_DATA.chapters.filter(c => c.book_id === book.id);
             
-            const user = BookClub.getCurrentUser();
-            const chapters = BookClub.getChaptersByBook(book.id);
-            
-            let completedCount = 0;
-            if (user) {
-                completedCount = chapters.filter(ch => BookClub.isChapterCompleted(user.id, ch.id)).length;
-            }
-            
-            const progressPercent = chapters.length > 0 ? Math.round((completedCount / chapters.length) * 100) : 0;
-            
+            // Calculate progress for both users
+            const alexProgress = calculateProgress('acro16hunna', chapters);
+            const dhiannaProgress = calculateProgress('Dhianna369', chapters);
+
+            document.getElementById('loading-state').style.display = 'none';
+            container.style.display = 'block';
+
             container.innerHTML = `
                 <div class="book-detail-header">
-                    <div class="book-detail-cover">
-                        <span class="cover-badge">📖 Featured</span>
-                        <img src="${book.id === 1 ? 'images/thinking-in-bets-cover.png' : book.id === 2 ? 'images/hour-between-dog-wolf-cover.png' : book.id === 3 ? 'images/80-80-marriage-cover.png' : 'images/default-book-cover.png'}" alt="${book.title} - Book Cover" class="book-cover-image">
+                    <div>
+                        <img src="${getBookCover(book.id)}" alt="${book.title}" class="book-cover-image">
                     </div>
-                    
                     <div class="book-detail-info">
                         <h1>${book.title}</h1>
                         <p class="book-author-large">${book.author}</p>
-                        
                         <p class="book-full-description">${book.description}</p>
                         
-                        <div class="book-meta-stats">
-                            <div class="meta-stat">
-                                <span class="meta-stat-number">${chapters.length}</span>
-                                <span class="meta-stat-label">Chapters</span>
+                        <div class="dual-progress-section">
+                            <div class="dual-progress-title">📊 Reading Progress</div>
+                            <div class="dual-progress-row">
+                                <span class="dual-progress-label" style="color: #00d4aa;">Alex</span>
+                                <div class="dual-progress-bar">
+                                    <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
+                                </div>
+                                <span class="dual-progress-value">${alexProgress.completed}/${chapters.length}</span>
                             </div>
-                            <div class="meta-stat">
-                                <span class="meta-stat-number">${progressPercent}%</span>
-                                <span class="meta-stat-label">Progress</span>
+                            <div class="dual-progress-row">
+                                <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
+                                <div class="dual-progress-bar">
+                                    <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
+                                </div>
+                                <span class="dual-progress-value">${dhiannaProgress.completed}/${chapters.length}</span>
                             </div>
-                            <div class="meta-stat">
-                                <span class="meta-stat-number">${completedCount}</span>
-                                <span class="meta-stat-label">Completed</span>
-                            </div>
-                        </div>
-                        
-                        <div class="book-progress-section">
-                            <div class="progress-header-row">
-                                <span class="progress-label">Reading Progress</span>
-                                <span class="progress-percentage">${progressPercent}%</span>
-                            </div>
-                            <div class="progress-bar-book">
-                                <div class="progress-fill-book ${progressPercent === 100 ? 'complete' : ''}" style="width: ${progressPercent}%"></div>
-                            </div>
-                            <p class="progress-chapters">${completedCount} of ${chapters.length} chapters completed</p>
-                        </div>
-                        
-                        <div class="book-actions">
-                            <a href="#chapters" class="btn btn-accent">📑 View Chapters</a>
-                            <a href="library.html" class="btn btn-secondary">📚 All Books</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="chapters-card" id="chapters">
+                <div class="chapters-card">
                     <div class="chapters-card-header">
-                        <h2>📑 Book Chapters</h2>
-                        <span class="chapter-count-badge">${chapters.length} Chapters</span>
+                        <h2>📑 Chapters - Transparent View</h2>
                     </div>
                     <div class="chapters-list-container">
                         ${chapters.map(chapter => {
-                            const isCompleted = user && BookClub.isChapterCompleted(user.id, chapter.id);
+                            const alexCompleted = isChapterCompleted('acro16hunna', chapter.id);
+                            const dhiannaCompleted = isChapterCompleted('Dhianna369', chapter.id);
+                            
+                            let statusBadge = '';
+                            if (alexCompleted && dhiannaCompleted) {
+                                statusBadge = '<span class="status-badge both">✓ Both</span>';
+                            } else if (alexCompleted) {
+                                statusBadge = '<span class="status-badge alex">✓ Alex</span>';
+                            } else if (dhiannaCompleted) {
+                                statusBadge = '<span class="status-badge dhianna">✓ Dhianna</span>';
+                            } else {
+                                statusBadge = '<span class="status-badge none">○ None</span>';
+                            }
+
                             return `
-                                <div class="chapter-item ${isCompleted ? 'completed' : ''}">
-                                    <div class="chapter-status-icon">
-                                        ${isCompleted ? '✓' : '○'}
-                                    </div>
-                                    
+                                <div class="chapter-item">
                                     <div class="chapter-number-display">${chapter.number}</div>
-                                    
                                     <div class="chapter-info-content">
-                                        <h4 class="chapter-title-text">${chapter.title}</h4>
-                                        ${chapter.summary ? `<p class="chapter-summary">${chapter.summary}</p>` : ''}
-                                        
-                                        ${chapter.key_concepts ? `
-                                            <div class="chapter-key-concepts">
-                                                ${chapter.key_concepts.slice(0, 3).map(concept => `
-                                                    <span class="concept-tag-item">${concept}</span>
-                                                `).join('')}
-                                                ${chapter.key_concepts.length > 3 ? `<span class="concept-tag-item">+${chapter.key_concepts.length - 3} more</span>` : ''}
-                                            </div>
-                                        ` : ''}
+                                        <div class="chapter-title-text">${chapter.title}</div>
+                                        <div class="chapter-summary">${chapter.summary ? chapter.summary.substring(0, 100) + '...' : ''}</div>
                                     </div>
-                                    
-                                    <a href="chapter.html?id=${chapter.id}" class="chapter-action-btn">
-                                        ${isCompleted ? 'Review →' : 'Start Reading →'}
-                                    </a>
+                                    <div class="chapter-status-badges">
+                                        ${statusBadge}
+                                    </div>
+                                    <div class="mark-buttons">
+                                        <button class="mark-btn alex ${alexCompleted ? 'completed' : ''}" 
+                                                onclick="markChapter(${chapter.id}, 'Alex')" 
+                                                ${!currentUser || alexCompleted ? 'disabled' : ''}>
+                                            ${alexCompleted ? '✓ Done' : 'Mark Alex'}
+                                        </button>
+                                        <button class="mark-btn dhianna ${dhiannaCompleted ? 'completed' : ''}" 
+                                                onclick="markChapter(${chapter.id}, 'Dhianna')" 
+                                                ${!currentUser || dhiannaCompleted ? 'disabled' : ''}>
+                                            ${dhiannaCompleted ? '✓ Done' : 'Mark Dhianna'}
+                                        </button>
+                                    </div>
+                                    <a href="chapter.html?id=${chapter.id}" class="btn btn-secondary btn-sm" style="padding: 6px 12px; font-size: 11px;">Read →</a>
                                 </div>
                             `;
                         }).join('')}
@@ -689,6 +541,83 @@
                 </div>
             `;
         }
+
+        function getBookCover(bookId) {
+            if (bookId === 1) return 'images/thinking-in-bets-cover.png';
+            if (bookId === 2) return 'images/hour-between-dog-wolf-cover.png';
+            if (bookId === 3) return 'images/80-80-marriage-cover.png';
+            return 'images/default-book-cover.png';
+        }
+
+        function calculateProgress(discordId, chapters) {
+            const user = usersData[discordId];
+            if (!user || !user.progress) return { completed: 0, total: chapters.length, percentage: 0 };
+            
+            let completed = 0;
+            chapters.forEach(ch => {
+                if (user.progress[ch.id] && user.progress[ch.id].completed) {
+                    completed++;
+                }
+            });
+            
+            return {
+                completed,
+                total: chapters.length,
+                percentage: chapters.length > 0 ? Math.round((completed / chapters.length) * 100) : 0
+            };
+        }
+
+        function isChapterCompleted(discordId, chapterId) {
+            const user = usersData[discordId];
+            if (!user || !user.progress) return false;
+            return user.progress[chapterId] && user.progress[chapterId].completed;
+        }
+
+        async function markChapter(chapterId, who) {
+            const discordId = who === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+            
+            try {
+                const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: who,
+                        chapter_id: chapterId,
+                        completed: true,
+                        notes: ''
+                    })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('sync-text').textContent = `✓ Marked for ${who}`;
+                    await loadData();
+                    setTimeout(() => {
+                        document.getElementById('sync-text').textContent = 'Cloud sync active';
+                    }, 2000);
+                }
+            } catch (e) {
+                console.error('Error marking chapter:', e);
+                alert('Error saving progress. Please try again.');
+            }
+        }
+
+        // Mobile Navigation
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+
+        // Init
+        updateWhoAmIUI();
+        loadData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>

@@ -3,14 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard | Trading Book Club</title>
+    <title>Leaderboard | BookClub Transparent</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Who Am I Bar */
+        .whoami-bar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .whoami-title {
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .whoami-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .whoami-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .whoami-btn.alex {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+        }
+        .whoami-btn.alex:hover, .whoami-btn.alex.active {
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        .whoami-btn.dhianna {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+        }
+        .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Sync Bar */
+        .sync-bar {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4aa;
+            font-size: 14px;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* User cards in leaderboard */
+        .user-card-alex { border-left: 3px solid #00d4aa; }
+        .user-card-dhianna { border-left: 3px solid #ff6b6b; }
+    </style>
 </head>
 <body>
-    <!-- Chart Bars Left -->
+    <!-- Chart Bars -->
     <div class="chart-bars chart-bars-left">
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
@@ -19,8 +112,6 @@
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
-
-    <!-- Chart Bars Right -->
     <div class="chart-bars chart-bars-right">
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
@@ -48,6 +139,18 @@
     </nav>
 
     <main class="main-content">
+        <!-- Who Am I Bar -->
+        <div class="whoami-bar">
+            <div>
+                <div class="whoami-title">Who are you?</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+            </div>
+            <div class="whoami-buttons">
+                <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+            </div>
+        </div>
+
         <header class="page-header">
             <h1>🏆 Leaderboard</h1>
             <p class="subtitle">Friendly competition drives growth</p>
@@ -56,40 +159,55 @@
         <!-- Stats Overview -->
         <div class="stats-overview" id="stats-overview">
             <div class="overview-card">
-                <span class="overview-value" id="stat-users">0</span>
+                <span class="overview-value" id="stat-users">-</span>
                 <span class="overview-label">Readers</span>
             </div>
             <div class="overview-card">
-                <span class="overview-value" id="stat-chapters">0</span>
+                <span class="overview-value" id="stat-chapters">-</span>
                 <span class="overview-label">Chapters Read</span>
             </div>
             <div class="overview-card">
-                <span class="overview-value" id="stat-quizzes">0</span>
-                <span class="overview-label">Quizzes Taken</span>
+                <span class="overview-value" id="stat-streak">-</span>
+                <span class="overview-label">Best Streak</span>
             </div>
             <div class="overview-card">
-                <span class="overview-value" id="stat-avg">0</span>
-                <span class="overview-label">Avg Quiz Score</span>
+                <span class="overview-value" id="stat-badges">-</span>
+                <span class="overview-label">Total Badges</span>
             </div>
         </div>
 
+        <div id="loading-state" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading leaderboard...</p>
+        </div>
+
         <!-- Leaderboard Table -->
-        <div class="leaderboard-table-container">
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Reader</th>
-                        <th>Chapters</th>
-                        <th>Streak</th>
-                        <th>Avg Score</th>
-                        <th>Badges</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body">
-                    <!-- Populated by JS -->
-                </tbody>
-            </table>
+        <div id="leaderboard-container" style="display: none;">
+            <div class="leaderboard-table-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Reader</th>
+                            <th>Chapters</th>
+                            <th>Streak</th>
+                            <th>Badges</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sync Bar -->
+        <div class="sync-bar">
+            <div class="sync-status">
+                <span>☁️</span>
+                <span id="sync-text">Cloud sync active</span>
+            </div>
+            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
         </div>
     </main>
 
@@ -97,110 +215,105 @@
         <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
     </footer>
 
-    <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/sync.js"></script>
     <script>
-        // Mobile Navigation Toggle
-        document.getElementById('navToggle')?.addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
-            });
-        });
-        
-        // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
-        if (!BookClub.getCompletedChapters) {
-            BookClub.getCompletedChapters = function(userId) {
-                const progress = BookClub.getProgress(userId);
-                return Object.keys(progress).filter(key => {
-                    const val = progress[key];
-                    return val === true || (val && val.completed === true);
-                }).map(Number);
-            };
-        }
-        
-        // Initialize data first (critical!)
-        BookClub.initializeData();
-        
-        // Load data immediately on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Show localStorage data instantly
-            loadFromLocalStorage();
-            
-            // Try API sync in background (optional)
-            setTimeout(syncWithApi, 100);
-        });
+        const API_URL = 'https://5-189-142-233.nip.io/api';
+        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        let usersData = [];
 
-        function loadFromLocalStorage() {
-            // Load stats
-            const stats = BookClub.getStats();
-            document.getElementById('stat-users').textContent = stats.total_users;
-            document.getElementById('stat-chapters').textContent = stats.total_chapters_read;
-            document.getElementById('stat-quizzes').textContent = stats.total_quizzes_taken;
-            document.getElementById('stat-avg').textContent = stats.average_quiz_score;
-            
-            // Load leaderboard
-            const leaderboard = BookClub.getLeaderboard();
-            renderLeaderboard(leaderboard);
+        function setWhoAmI(name) {
+            currentUser = name;
+            localStorage.setItem('bookclub_whoami', name);
+            updateWhoAmIUI();
         }
 
-        function renderLeaderboard(leaderboard) {
+        function updateWhoAmIUI() {
+            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentUser === 'Alex') {
+                document.getElementById('btn-alex').classList.add('active');
+            } else if (currentUser === 'Dhianna') {
+                document.getElementById('btn-dhianna').classList.add('active');
+            }
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const users = await response.json();
+                
+                usersData = users.sort((a, b) => (b.total_chapters_read || 0) - (a.total_chapters_read || 0));
+                
+                // Calculate stats
+                const totalReaders = users.length;
+                const totalChapters = users.reduce((sum, u) => sum + (u.total_chapters_read || 0), 0);
+                const bestStreak = Math.max(...users.map(u => u.current_streak || 0));
+                const totalBadges = users.reduce((sum, u) => sum + ((u.badges && u.badges.length) || 0), 0);
+                
+                document.getElementById('stat-users').textContent = totalReaders;
+                document.getElementById('stat-chapters').textContent = totalChapters;
+                document.getElementById('stat-streak').textContent = bestStreak;
+                document.getElementById('stat-badges').textContent = totalBadges;
+                
+                // Render leaderboard
+                renderLeaderboard();
+                
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('leaderboard-container').style.display = 'block';
+            } catch (e) {
+                console.error('Error loading data:', e);
+                document.getElementById('loading-state').innerHTML = '<p>Error loading data. Please refresh.</p>';
+            }
+        }
+
+        function renderLeaderboard() {
             const tbody = document.getElementById('leaderboard-body');
             
-            if (leaderboard.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No data yet. Start reading to appear on the leaderboard!</td></tr>';
+            if (usersData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No data yet.</td></tr>';
                 return;
             }
             
-            tbody.innerHTML = leaderboard.map((user, index) => {
+            tbody.innerHTML = usersData.map((user, index) => {
                 const rank = index + 1;
+                const isAlex = user.discord_id === 'acro16hunna';
+                
                 let rankDisplay = rank.toString();
                 if (rank === 1) rankDisplay = '🥇';
                 else if (rank === 2) rankDisplay = '🥈';
                 else if (rank === 3) rankDisplay = '🥉';
                 
                 return `
-                    <tr class="${rank <= 3 ? 'top-' + rank : ''}">
+                    <tr class="${rank <= 3 ? 'top-' + rank : ''} ${isAlex ? 'user-card-alex' : 'user-card-dhianna'}">
                         <td class="rank">${rankDisplay}</td>
-                        <td class="user-name">${user.name} ${user.discord_id ? '(' + user.discord_id + ')' : ''}</td>
-                        <td class="chapters-count">${user.completed_chapters}</td>
+                        <td class="user-name">
+                            ${isAlex ? '👨' : '👩'} ${user.name}
+                        </td>
+                        <td class="chapters-count">${user.total_chapters_read || 0}</td>
                         <td class="streak">${user.current_streak > 0 ? '🔥 ' + user.current_streak : '-'}</td>
-                        <td class="avg-score">${user.avg_quiz_score > 0 ? user.avg_quiz_score.toFixed(1) + '/10' : '-'}</td>
                         <td class="badges-cell">
-                            ${(user.badges || []).slice(0, 5).map(badgeId => {
-                                const badge = BookClub.getAllBadges().find(b => b.id === badgeId);
-                                return badge ? '<span class="badge-mini" title="' + badge.name + '">' + badge.emoji + '</span>' : '';
-                            }).join('')}
+                            ${(user.badges || []).map(b => `<span style="margin-right: 4px;">${b}</span>`).join('') || '-'}
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        async function syncWithApi() {
-            try {
-                const apiUsers = await SyncAPI.getAllUsers();
-                if (apiUsers && apiUsers.length > 0) {
-                    const leaderboard = apiUsers.map(u => ({
-                        name: u.name,
-                        discord_id: u.discord_id,
-                        completed_chapters: u.chapters_completed,
-                        current_streak: u.current_streak,
-                        avg_quiz_score: 0,
-                        badges: u.badges || []
-                    })).sort((a, b) => b.completed_chapters - a.completed_chapters);
-                    
-                    renderLeaderboard(leaderboard);
-                }
-            } catch (e) {
-                // Ignore API errors
-            }
-        }
+        // Mobile Navigation
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+
+        // Init
+        updateWhoAmIUI();
+        loadData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>
