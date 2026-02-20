@@ -292,6 +292,9 @@
                                     ← Back to Chapter
                                 </a>
                             </div>
+                            
+                            <!-- Transparent Results Section -->
+                            <div id="transparent-results-container"></div>
                         </div>
                     ` : ''}
 
@@ -344,6 +347,11 @@
                     </div>
                 </div>
             `;
+            
+            // If user has already taken the quiz, show transparent results
+            if (hasTaken) {
+                setTimeout(() => displayTransparentResults(), 100);
+            }
         }
 
         async function handleSubmit(event) {
@@ -389,6 +397,9 @@
                     result.autoMarked = true;
                 }
                 showResults(result);
+                
+                // Also show transparent results for both users
+                setTimeout(() => displayTransparentResults(), 100);
             }
         }
 
@@ -442,6 +453,103 @@
             
             // Scroll to results
             document.getElementById('quiz-results').scrollIntoView({ behavior: 'smooth' });
+            
+            // Show transparent results for both users
+            displayTransparentResults();
+        }
+        
+        // Display quiz results for both users (transparency)
+        function displayTransparentResults() {
+            const allResults = BookClub.getQuizResultsForChapter(currentChapterId);
+            const users = BookClub.getAllUsers ? BookClub.getAllUsers() : {};
+            
+            // Find the appropriate container - either quiz-results or previous-results
+            let transparentSection = document.getElementById('transparent-results');
+            let container = document.getElementById('quiz-results');
+            
+            // If we're in previous-results view, use that container
+            const previousResults = document.getElementById('previous-results');
+            const transparentContainer = document.getElementById('transparent-results-container');
+            
+            if (transparentContainer) {
+                // We're in the previous-results view
+                transparentContainer.innerHTML = buildTransparentResultsHTML(allResults, users);
+                return;
+            }
+            
+            // Otherwise use the new results view
+            if (!transparentSection) {
+                transparentSection = document.createElement('div');
+                transparentSection.id = 'transparent-results';
+                transparentSection.className = 'transparent-results';
+                transparentSection.style.cssText = 'margin-top: 2rem; padding: 1.5rem; background: rgba(30, 35, 50, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;';
+                
+                if (container) {
+                    container.appendChild(transparentSection);
+                }
+            }
+            
+            transparentSection.innerHTML = buildTransparentResultsHTML(allResults, users);
+        }
+        
+        // Build HTML for transparent results
+        function buildTransparentResultsHTML(allResults, users) {
+            let resultsHTML = `
+                <div style="margin-bottom: 1rem; font-size: 14px; color: #8b9bb4; text-align: center;">
+                    👥 Quiz Results - Transparent View
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+            `;
+            
+            Object.keys(allResults).forEach(userId => {
+                const result = allResults[userId];
+                const isAlex = result.name === 'Alex';
+                const color = isAlex ? '#00d4aa' : '#ff6b6b';
+                const avatar = isAlex ? '👨' : '👩';
+                
+                resultsHTML += `
+                    <div style="flex: 1; min-width: 200px; max-width: 300px; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; border-left: 3px solid ${color};">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                            <span style="font-size: 20px;">${avatar}</span>
+                            <span style="font-weight: 600; color: ${color};">${result.name}</span>
+                        </div>
+                        <div style="font-size: 24px; font-weight: 700; color: white;">
+                            ${result.score}/${currentQuiz.questions.length}
+                            <span style="font-size: 14px; font-weight: 400; color: #8b9bb4;">(${Math.round((result.score / currentQuiz.questions.length) * 100)}%)</span>
+                        </div>
+                        ${result.completed_at ? `
+                            <div style="font-size: 11px; color: #6b7a94; margin-top: 4px;">
+                                Completed ${new Date(result.completed_at).toLocaleDateString()}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            // Add "Not taken yet" for users without results
+            Object.keys(users).forEach(userId => {
+                if (!allResults[userId]) {
+                    const user = users[userId];
+                    const isAlex = user.name === 'Alex';
+                    const color = isAlex ? '#00d4aa' : '#ff6b6b';
+                    const avatar = isAlex ? '👨' : '👩';
+                    
+                    resultsHTML += `
+                        <div style="flex: 1; min-width: 200px; max-width: 300px; padding: 1rem; background: rgba(0,0,0,0.1); border-radius: 8px; border-left: 3px solid rgba(139, 155, 180, 0.3); opacity: 0.6;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                                <span style="font-size: 20px;">${avatar}</span>
+                                <span style="font-weight: 600; color: ${color};">${user.name}</span>
+                            </div>
+                            <div style="font-size: 14px; color: #6b7a94; font-style: italic;">
+                                ○ Not taken yet
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            resultsHTML += '</div>';
+            return resultsHTML;
         }
 
         function retakeQuiz() {

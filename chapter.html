@@ -430,6 +430,21 @@
             document.getElementById('loading-state').style.display = 'none';
             container.style.display = 'block';
 
+            // Render chapter content
+            renderChapterContent(chapter, book, allChapters, currentIndex, prevChapter, nextChapter, alexCompleted, dhiannaCompleted);
+            
+            // Update status cards
+            updatePersonalStatus(chapterId, alexCompleted, dhiannaCompleted);
+            
+            // Auto-mark chapter if user is logged in and chapter not already completed
+            if (currentUser && !isChapterCompleted(currentUserId, chapterId)) {
+                await autoMarkChapter(chapterId);
+            }
+        }
+        
+        function renderChapterContent(chapter, book, allChapters, currentIndex, prevChapter, nextChapter, alexCompleted, dhiannaCompleted) {
+            const container = document.getElementById('chapter-content');
+            
             container.innerHTML = `
                 <div class="breadcrumb">
                     <a href="library.html">Library</a>
@@ -484,27 +499,30 @@
 
                     <!-- Sidebar -->
                     <div class="chapter-sidebar" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Transparent Status Card -->
-                        <div class="transparent-status-card">
-                            <div class="status-card-title">👥 Who's Completed This?</div>
+                        <!-- Personal Status Card -->
+                        <div class="transparent-status-card" id="personal-status-card">
+                            <div class="status-card-title">📖 Your Progress</div>
                             
-                            <div class="status-row">
-                                <div class="status-user">
-                                    <div class="status-avatar alex">👨</div>
-                                    <span class="status-name">Alex</span>
-                                </div>
-                                <span class="status-indicator ${alexCompleted ? 'completed' : 'pending'}">
-                                    ${alexCompleted ? '✓ Completed' : '○ Not yet'}
-                                </span>
+                            <div id="status-content">
+                                <!-- Populated by JS based on login status -->
                             </div>
                             
+                            <div id="auto-mark-feedback" style="margin-top: 12px; padding: 8px 12px; border-radius: 8px; font-size: 12px; display: none;">
+                                <!-- Feedback message shown after auto-mark -->
+                            </div>
+                        </div>
+                        
+                        <!-- Partner Progress Card (visible when logged in) -->
+                        <div class="transparent-status-card" id="partner-status-card" style="display: none;">
+                            <div class="status-card-title">👥 Partner's Progress</div>
+                            
                             <div class="status-row">
                                 <div class="status-user">
-                                    <div class="status-avatar dhianna">👩</div>
-                                    <span class="status-name">Dhianna</span>
+                                    <div class="status-avatar ${currentUser === 'Alex' ? 'dhianna' : 'alex'}">${currentUser === 'Alex' ? '👩' : '👨'}</div>
+                                    <span class="status-name">${currentUser === 'Alex' ? 'Dhianna' : 'Alex'}</span>
                                 </div>
-                                <span class="status-indicator ${dhiannaCompleted ? 'completed' : 'pending'}">
-                                    ${dhiannaCompleted ? '✓ Completed' : '○ Not yet'}
+                                <span class="status-indicator ${currentUser === 'Alex' ? (dhiannaCompleted ? 'completed' : 'pending') : (alexCompleted ? 'completed' : 'pending')}">
+                                    ${currentUser === 'Alex' ? (dhiannaCompleted ? '✓ Completed' : '○ Not yet') : (alexCompleted ? '✓ Completed' : '○ Not yet')}
                                 </span>
                             </div>
                         </div>
@@ -540,6 +558,146 @@
             const user = usersData[discordId];
             if (!user || !user.progress) return false;
             return user.progress[chapterId] && user.progress[chapterId].completed;
+        }
+
+        // Update personal status card based on login state
+        function updatePersonalStatus(chapterId, alexCompleted, dhiannaCompleted) {
+            const statusContent = document.getElementById('status-content');
+            const partnerCard = document.getElementById('partner-status-card');
+            
+            if (!statusContent) return;
+            
+            if (!currentUser) {
+                // Not logged in - show message
+                statusContent.innerHTML = `
+                    <div style="text-align: center; padding: 1rem; color: #8b9bb4;">
+                        <div style="font-size: 24px; margin-bottom: 8px;">👤</div>
+                        <div style="font-size: 14px;">Log in to track progress</div>
+                        <div style="font-size: 12px; margin-top: 4px;">Use the buttons above</div>
+                    </div>
+                `;
+                if (partnerCard) partnerCard.style.display = 'none';
+                return;
+            }
+            
+            // User is logged in - show their status
+            const isCompleted = currentUser === 'Alex' ? alexCompleted : dhiannaCompleted;
+            const userColor = currentUser === 'Alex' ? '#00d4aa' : '#ff6b6b';
+            const avatarEmoji = currentUser === 'Alex' ? '👨' : '👩';
+            
+            statusContent.innerHTML = `
+                <div class="status-row">
+                    <div class="status-user">
+                        <div class="status-avatar" style="background: ${currentUser === 'Alex' ? 'rgba(0, 212, 170, 0.2)' : 'rgba(255, 107, 107, 0.2)'};">${avatarEmoji}</div>
+                        <span class="status-name">You (${currentUser})</span>
+                    </div>
+                    <span class="status-indicator ${isCompleted ? 'completed' : 'pending'}">
+                        ${isCompleted ? '✓ Completed' : '○ Not completed'}
+                    </span>
+                </div>
+            `;
+            
+            // Show partner card
+            if (partnerCard) {
+                partnerCard.style.display = 'block';
+                // Update partner status
+                const partnerName = currentUser === 'Alex' ? 'Dhianna' : 'Alex';
+                const partnerCompleted = currentUser === 'Alex' ? dhiannaCompleted : alexCompleted;
+                const partnerAvatar = currentUser === 'Alex' ? '👩' : '👨';
+                const partnerColorClass = currentUser === 'Alex' ? 'dhianna' : 'alex';
+                
+                partnerCard.innerHTML = `
+                    <div class="status-card-title">👥 ${partnerName}'s Progress</div>
+                    <div class="status-row">
+                        <div class="status-user">
+                            <div class="status-avatar ${partnerColorClass}">${partnerAvatar}</div>
+                            <span class="status-name">${partnerName}</span>
+                        </div>
+                        <span class="status-indicator ${partnerCompleted ? 'completed' : 'pending'}">
+                            ${partnerCompleted ? '✓ Completed' : '○ Not yet'}
+                        </span>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-mark chapter as complete when logged-in user opens it
+        async function autoMarkChapter(chapterId) {
+            if (!currentUser || !currentUserId) {
+                console.log('No user logged in, skipping auto-mark');
+                return false;
+            }
+            
+            // Check if already completed
+            const alreadyCompleted = isChapterCompleted(currentUserId, chapterId);
+            if (alreadyCompleted) {
+                console.log(`Chapter ${chapterId} already completed for ${currentUser}`);
+                return false;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/user/${currentUserId}/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: currentUser,
+                        chapter_id: chapterId,
+                        completed: true,
+                        notes: `Auto-marked on ${new Date().toLocaleDateString()} by opening chapter`
+                    })
+                });
+
+                if (response.ok) {
+                    console.log(`✓ Auto-marked chapter ${chapterId} as complete for ${currentUser}`);
+                    
+                    // Update local data
+                    if (!usersData[currentUserId]) {
+                        usersData[currentUserId] = { progress: {} };
+                    }
+                    if (!usersData[currentUserId].progress) {
+                        usersData[currentUserId].progress = {};
+                    }
+                    usersData[currentUserId].progress[chapterId] = { completed: true };
+                    
+                    // Show feedback
+                    showAutoMarkFeedback();
+                    
+                    // Refresh status display
+                    const alexCompleted = isChapterCompleted('acro16hunna', chapterId);
+                    const dhiannaCompleted = isChapterCompleted('Dhianna369', chapterId);
+                    updatePersonalStatus(chapterId, alexCompleted, dhiannaCompleted);
+                    
+                    return true;
+                } else {
+                    console.error('Auto-mark failed:', response.status);
+                    return false;
+                }
+            } catch (e) {
+                console.error('Error auto-marking chapter:', e);
+                return false;
+            }
+        }
+
+        // Show discrete feedback for auto-mark
+        function showAutoMarkFeedback() {
+            const feedbackEl = document.getElementById('auto-mark-feedback');
+            if (feedbackEl) {
+                feedbackEl.innerHTML = '✓ Automatically marked as read';
+                feedbackEl.style.display = 'block';
+                feedbackEl.style.background = 'rgba(63, 185, 80, 0.15)';
+                feedbackEl.style.color = '#3fb950';
+                feedbackEl.style.border = '1px solid rgba(63, 185, 80, 0.3)';
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    feedbackEl.style.opacity = '0';
+                    feedbackEl.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        feedbackEl.style.display = 'none';
+                        feedbackEl.style.opacity = '1';
+                    }, 500);
+                }, 5000);
+            }
         }
 
         // Mobile Navigation

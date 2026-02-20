@@ -348,10 +348,21 @@ function markChapterComplete(userId, chapterId, notes = '') {
 }
 
 // Save quiz result
-function saveQuizResult(userId, chapterId, score) {
+function saveQuizResult(userId, chapterId, score, answers = null) {
     const user = getAllUsers()[userId];
     if (user) {
+        // Save score
         user.quiz_scores[chapterId] = Math.max(score, user.quiz_scores[chapterId] || 0);
+        
+        // Save detailed result with answers (for transparency)
+        if (!user.quiz_results) {
+            user.quiz_results = {};
+        }
+        user.quiz_results[chapterId] = {
+            score: score,
+            answers: answers,
+            completed_at: new Date().toISOString()
+        };
         
         // Check for badges
         const newBadges = checkBadges(user);
@@ -783,7 +794,7 @@ const BookClub = {
         const percentage = Math.round((correct / maxScore) * 100);
         
         // Save result - folosim chapterId nu quiz.id
-        saveQuizResult(user.id, chapterId, score);
+        saveQuizResult(user.id, chapterId, score, answers);
         
         // Check for badges - folosim user direct
         const userData = getAllUsers()[user.id];
@@ -875,5 +886,24 @@ const BookClub = {
     getDraft,
     clearDraft,
     setUnsavedChanges,
-    initializeData
+    initializeData,
+    // Quiz transparency - get results for both users
+    getQuizResultsForChapter: (chapterId) => {
+        const users = getAllUsers();
+        const results = {};
+        
+        Object.keys(users).forEach(userId => {
+            const user = users[userId];
+            if (user.quiz_results && user.quiz_results[chapterId]) {
+                results[userId] = {
+                    name: user.name,
+                    score: user.quiz_results[chapterId].score,
+                    answers: user.quiz_results[chapterId].answers,
+                    completed_at: user.quiz_results[chapterId].completed_at
+                };
+            }
+        });
+        
+        return results;
+    }
 };
