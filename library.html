@@ -3,103 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library | Trading Book Club</title>
+    <title>Library | BookClub Transparent</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Who Am I Bar */
+        .whoami-bar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .whoami-title {
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .whoami-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .whoami-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .whoami-btn.alex {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+        }
+        .whoami-btn.alex:hover, .whoami-btn.alex.active {
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        .whoami-btn.dhianna {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+        }
+        .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: rgba(26, 31, 46, 0.8);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .comparison-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .comparison-card {
+            background: linear-gradient(135deg, #252b3d 0%, #1e2331 100%);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .comparison-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .comparison-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .comparison-card.alex .comparison-avatar { background: rgba(0, 212, 170, 0.2); }
+        .comparison-card.dhianna .comparison-avatar { background: rgba(255, 107, 107, 0.2); }
+        .comparison-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .progress-comparison {
+            margin-top: 10px;
+        }
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .progress-label {
+            font-size: 12px;
+            color: #8b9bb4;
+            min-width: 100px;
+        }
+        .progress-bar-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .progress-bar-fill.alex { background: linear-gradient(90deg, #00d4aa, #00a884); }
+        .progress-bar-fill.dhianna { background: linear-gradient(90deg, #ff6b6b, #ee5a5a); }
+        .progress-value {
+            font-size: 12px;
+            color: #8b9bb4;
+            min-width: 35px;
+            text-align: right;
+        }
+
+        /* Book Cards with Dual Progress */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .book-card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        .book-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            height: 100%;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
+        }
+        .book-card-featured {
+            position: relative;
+            overflow: hidden;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .book-card-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        .book-bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(2px) brightness(0.4);
+            transform: scale(1.1);
+        }
+        .book-bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(13, 17, 23, 0.3) 0%,
+                rgba(13, 17, 23, 0.7) 50%,
+                rgba(13, 17, 23, 0.95) 100%
+            );
+        }
+        .book-card-content {
+            position: relative;
+            z-index: 1;
+        }
+        .book-cover {
+            margin-bottom: 1rem;
+        }
+        .cover-placeholder {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: var(--radius-md);
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .cover-placeholder:hover {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        .book-emoji {
+            font-size: 4rem;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+        }
+        .book-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .book-title-featured {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+        .book-author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .book-author-featured {
+            color: #ff8c42;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+        .book-description {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .book-description-featured {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Dual Progress Display */
+        .dual-progress {
+            margin-top: 1rem;
+        }
+        .dual-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .dual-progress-label {
+            font-size: 11px;
+            color: #8b9bb4;
+            min-width: 60px;
+        }
+        .dual-progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .dual-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        .dual-progress-fill.alex {
+            background: linear-gradient(90deg, #00d4aa, #00a884);
+        }
+        .dual-progress-fill.dhianna {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+        }
+        .dual-progress-value {
+            font-size: 11px;
+            color: #8b9bb4;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        /* Sync Status Bar */
+        .sync-bar {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4aa;
+            font-size: 14px;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-        <!-- Chart Bars Left -->
+    <!-- Chart Bars Left -->
     <div class="chart-bars chart-bars-left">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
 
     <!-- Chart Bars Right -->
     <div class="chart-bars chart-bars-right">
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-        <div class="chart-bar-group">
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
+        <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
 
     <nav class="navbar">
@@ -108,9 +371,7 @@
                 <span>📚</span>
                 <span>BookClub</span>
             </a>
-            
             <button class="nav-toggle" id="navToggle">☰</button>
-            
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
                 <li><a href="library.html" class="nav-link active">📚 Library</a></li>
@@ -122,13 +383,48 @@
     </nav>
 
     <main class="main-content">
+        <!-- Who Am I Bar -->
+        <div class="whoami-bar">
+            <div>
+                <div class="whoami-title">Who are you?</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+            </div>
+            <div class="whoami-buttons">
+                <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+            </div>
+        </div>
+
+        <!-- Comparison Section -->
+        <div class="comparison-section">
+            <div class="comparison-title">📊 Reading Progress Comparison</div>
+            <div class="comparison-grid" id="comparison-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Books Grid -->
         <header class="page-header">
             <h1>📚 Library</h1>
             <p class="subtitle">Your trading psychology collection</p>
         </header>
 
-        <div class="books-grid" id="books-grid">
+        <div id="loading-state" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading books...</p>
+        </div>
+
+        <div class="books-grid" id="books-grid" style="display: none;">
             <!-- Books populated by JS -->
+        </div>
+
+        <!-- Sync Bar -->
+        <div class="sync-bar">
+            <div class="sync-status">
+                <span>☁️</span>
+                <span id="sync-text">Cloud sync active</span>
+            </div>
+            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
         </div>
     </main>
 
@@ -137,8 +433,262 @@
     </footer>
 
     <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
     <script>
+        const API_URL = 'https://5-189-142-233.nip.io/api';
+        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        let usersData = {};
+        let booksData = [];
+        let chaptersData = [];
+
+        function setWhoAmI(name) {
+            currentUser = name;
+            localStorage.setItem('bookclub_whoami', name);
+            updateWhoAmIUI();
+            renderBooks();
+        }
+
+        function updateWhoAmIUI() {
+            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentUser === 'Alex') {
+                document.getElementById('btn-alex').classList.add('active');
+            } else if (currentUser === 'Dhianna') {
+                document.getElementById('btn-dhianna').classList.add('active');
+            }
+        }
+
+        async function loadData() {
+            try {
+                // Load users
+                const usersRes = await fetch(`${API_URL}/users`);
+                const users = await usersRes.json();
+                
+                // Process user data
+                users.forEach(user => {
+                    usersData[user.discord_id] = user;
+                });
+
+                // Use local data for books and chapters
+                booksData = BOOKCLUB_DATA.books;
+                chaptersData = BOOKCLUB_DATA.chapters;
+
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('books-grid').style.display = 'grid';
+
+                renderComparison();
+                renderBooks();
+            } catch (e) {
+                console.error('Error loading data:', e);
+                document.getElementById('loading-state').innerHTML = '<p>Error loading data. Please refresh.</p>';
+            }
+        }
+
+        function getBookProgressForUser(discordId, bookId) {
+            const user = usersData[discordId];
+            if (!user || !user.progress) return { completed: 0, total: 0, percentage: 0 };
+            
+            const bookChapters = chaptersData.filter(c => c.book_id === bookId);
+            const total = bookChapters.length;
+            let completed = 0;
+            
+            bookChapters.forEach(ch => {
+                if (user.progress[ch.id] && user.progress[ch.id].completed) {
+                    completed++;
+                }
+            });
+            
+            return {
+                completed,
+                total,
+                percentage: total > 0 ? Math.round((completed / total) * 100) : 0
+            };
+        }
+
+        function renderComparison() {
+            const container = document.getElementById('comparison-grid');
+            container.innerHTML = '';
+
+            const alexData = usersData['acro16hunna'];
+            const dhiannaData = usersData['Dhianna369'];
+
+            // Create comparison cards for each book
+            booksData.forEach(book => {
+                const alexProgress = getBookProgressForUser('acro16hunna', book.id);
+                const dhiannaProgress = getBookProgressForUser('Dhianna369', book.id);
+                
+                const card = document.createElement('div');
+                card.className = 'comparison-card';
+                card.innerHTML = `
+                    <div class="comparison-header">
+                        <span style="font-size: 24px;">${book.emoji || '📖'}</span>
+                        <div class="comparison-name">${book.title}</div>
+                    </div>
+                    <div class="progress-comparison">
+                        <div class="progress-row">
+                            <span class="progress-label">Alex</span>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill alex" style="width: ${alexProgress.percentage}%"></div>
+                            </div>
+                            <span class="progress-value">${alexProgress.percentage}%</span>
+                        </div>
+                        <div class="progress-row">
+                            <span class="progress-label">Dhianna</span>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
+                            </div>
+                            <span class="progress-value">${dhiannaProgress.percentage}%</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 11px; color: #8b9bb4; text-align: center;">
+                        ${alexProgress.completed + dhiannaProgress.completed} of ${book.total_chapters * 2} total chapters read
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderBooks() {
+            const container = document.getElementById('books-grid');
+            container.innerHTML = '';
+
+            booksData.forEach(book => {
+                const alexProgress = getBookProgressForUser('acro16hunna', book.id);
+                const dhiannaProgress = getBookProgressForUser('Dhianna369', book.id);
+                const bookChapters = chaptersData.filter(c => c.book_id === book.id);
+
+                const bookCard = document.createElement('a');
+                bookCard.href = `book.html?id=${book.id}`;
+                bookCard.className = 'book-card-link';
+
+                let cardHTML = '';
+                
+                if (book.id === 1) {
+                    cardHTML = `
+                        <div class="book-card book-card-featured">
+                            <div class="book-card-bg">
+                                <img src="images/thinking-in-bets-cover.png" alt="${book.title}" class="book-bg-img">
+                                <div class="book-bg-overlay"></div>
+                            </div>
+                            <div class="book-card-content">
+                                <h3 class="book-title-featured">${book.title}</h3>
+                                <p class="book-author-featured">${book.author}</p>
+                                <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
+                                <div class="dual-progress">
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #00d4aa;">Alex</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (book.id === 2) {
+                    cardHTML = `
+                        <div class="book-card book-card-featured">
+                            <div class="book-card-bg">
+                                <img src="images/hour-between-dog-wolf-cover.png" alt="${book.title}" class="book-bg-img">
+                                <div class="book-bg-overlay"></div>
+                            </div>
+                            <div class="book-card-content">
+                                <h3 class="book-title-featured">${book.title}</h3>
+                                <p class="book-author-featured">${book.author}</p>
+                                <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
+                                <div class="dual-progress">
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #00d4aa;">Alex</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (book.id === 3) {
+                    cardHTML = `
+                        <div class="book-card book-card-featured">
+                            <div class="book-card-bg">
+                                <img src="images/80-80-marriage-cover.png" alt="${book.title}" class="book-bg-img">
+                                <div class="book-bg-overlay"></div>
+                            </div>
+                            <div class="book-card-content">
+                                <h3 class="book-title-featured">${book.title}</h3>
+                                <p class="book-author-featured">${book.author}</p>
+                                <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
+                                <div class="dual-progress">
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #00d4aa;">Alex</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    cardHTML = `
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <div class="cover-placeholder">
+                                    <span class="book-emoji">${book.emoji || '📖'}</span>
+                                </div>
+                            </div>
+                            <div class="book-details">
+                                <h3 class="book-title">${book.title}</h3>
+                                <p class="book-author">${book.author}</p>
+                                <p class="book-description">${book.description.substring(0, 120)}${book.description.length > 120 ? '...' : ''}</p>
+                                <div class="dual-progress">
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #00d4aa;">Alex</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div class="dual-progress-row">
+                                        <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
+                                        <div class="dual-progress-bar">
+                                            <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
+                                        </div>
+                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                bookCard.innerHTML = cardHTML;
+                container.appendChild(bookCard);
+            });
+        }
+
         // Mobile Navigation Toggle
         document.getElementById('navToggle')?.addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
@@ -150,132 +700,13 @@
                 document.getElementById('navMenu').classList.remove('active');
             });
         });
-        
-        // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
-        if (!BookClub.getCompletedChapters) {
-            BookClub.getCompletedChapters = function(userId) {
-                const progress = BookClub.getProgress(userId);
-                return Object.keys(progress).filter(key => {
-                    const val = progress[key];
-                    return val === true || (val && val.completed === true);
-                }).map(Number);
-            };
-        }
-        
-        // Initialize data first
-        BookClub.initializeData();
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            loadBooks();
-        });
 
-        function loadBooks() {
-            const container = document.getElementById('books-grid');
-            const currentUser = BookClub.getCurrentUser();
-            
-            container.innerHTML = BOOKCLUB_DATA.books.map(book => {
-                const chapters = BookClub.getChaptersByBook(book.id);
-                let completedCount = 0;
-                let progress = 0;
-                
-                if (currentUser) {
-                    // Use getBookProgress for consistent calculation
-                    const bookProgress = BookClub.getBookProgress(currentUser.id, book.id);
-                    completedCount = bookProgress.completed;
-                    progress = bookProgress.percentage;
-                } else {
-                    // Check if any user has progress for this book
-                    const allUsers = BookClub.getAllUsers();
-                    const userIds = Object.keys(allUsers);
-                    if (userIds.length > 0) {
-                        // Use first user found
-                        const firstUserId = userIds[0];
-                        const bookProgress = BookClub.getBookProgress(firstUserId, book.id);
-                        completedCount = bookProgress.completed;
-                        progress = bookProgress.percentage;
-                    }
-                }
-                
-                return `
-                    <a href="book.html?id=${book.id}" class="book-card-link">
-                        ${book.id === 1 ? `
-                            <div class="book-card book-card-featured">
-                                <div class="book-card-bg">
-                                    <img src="images/thinking-in-bets-cover.png" alt="${book.title}" class="book-bg-img">
-                                    <div class="book-bg-overlay"></div>
-                                </div>
-                                <div class="book-card-content">
-                                    <h3 class="book-title-featured">${book.title}</h3>
-                                    <p class="book-author-featured">${book.author}</p>
-                                    <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
-                                    <div class="book-progress-featured">
-                                        <div class="mini-progress-bar">
-                                            <div class="mini-progress-fill" style="width: ${progress}%"></div>
-                                        </div>
-                                        <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : book.id === 2 ? `
-                            <div class="book-card book-card-featured">
-                                <div class="book-card-bg">
-                                    <img src="images/hour-between-dog-wolf-cover.png" alt="${book.title}" class="book-bg-img">
-                                    <div class="book-bg-overlay"></div>
-                                </div>
-                                <div class="book-card-content">
-                                    <h3 class="book-title-featured">${book.title}</h3>
-                                    <p class="book-author-featured">${book.author}</p>
-                                    <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
-                                    <div class="book-progress-featured">
-                                        <div class="mini-progress-bar">
-                                            <div class="mini-progress-fill" style="width: ${progress}%"></div>
-                                        </div>
-                                        <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : book.id === 3 ? `
-                            <div class="book-card book-card-featured">
-                                <div class="book-card-bg">
-                                    <img src="images/80-80-marriage-cover.png" alt="${book.title}" class="book-bg-img">
-                                    <div class="book-bg-overlay"></div>
-                                </div>
-                                <div class="book-card-content">
-                                    <h3 class="book-title-featured">${book.title}</h3>
-                                    <p class="book-author-featured">${book.author}</p>
-                                    <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
-                                    <div class="book-progress-featured">
-                                        <div class="mini-progress-bar">
-                                            <div class="mini-progress-fill" style="width: ${progress}%"></div>
-                                        </div>
-                                        <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : `
-                            <div class="book-card">
-                                <div class="book-cover">
-                                    <div class="cover-placeholder">
-                                        <span class="book-emoji">${book.emoji || '📖'}</span>
-                                    </div>
-                                </div>
-                                <div class="book-details">
-                                    <h3 class="book-title">${book.title}</h3>
-                                    <p class="book-author">${book.author}</p>
-                                    <p class="book-description">${book.description.substring(0, 120)}${book.description.length > 120 ? '...' : ''}</p>
-                                    <div class="book-progress">
-                                        <div class="mini-progress-bar">
-                                            <div class="mini-progress-fill" style="width: ${progress}%"></div>
-                                        </div>
-                                        <span class="progress-count">${completedCount}/${chapters.length} chapters</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `}
-                    </a>
-                `;
-            }).join('');
-        }
+        // Init
+        updateWhoAmIUI();
+        loadData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>
