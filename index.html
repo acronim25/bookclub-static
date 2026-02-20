@@ -260,38 +260,19 @@
             background: rgba(139, 155, 180, 0.2);
             color: #8b9bb4;
         }
-        .mark-buttons {
+        .chapter-status {
             display: flex;
-            gap: 5px;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
         }
-        .mark-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-                .mark-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        .mark-btn.alex {
-            background: rgba(0, 212, 170, 0.2);
-            color: #00d4aa;
-        }
-        .mark-btn.alex:hover:not(:disabled) {
-            background: #00d4aa;
-            color: white;
-        }
-        .mark-btn.dhianna {
-            background: rgba(255, 107, 107, 0.2);
-            color: #ff6b6b;
-        }
-        .mark-btn.dhianna:hover:not(:disabled) {
-            background: #ff6b6b;
-            color: white;
+        
+        @media (min-width: 480px) {
+            .chapter-status {
+                flex-direction: row;
+                align-items: center;
+                gap: 12px;
+            }
         }
         .sync-bar {
             background: rgba(0, 212, 170, 0.1);
@@ -358,27 +339,6 @@
             }
         }
 
-        /* Touch-friendly chapter buttons */
-        .mark-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .mark-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            min-height: 40px;
-            min-width: 80px;
-            touch-action: manipulation;
-        }
-        .mark-btn:active {
-            transform: scale(0.95);
-        }
     </style>
 </head>
 <body>
@@ -686,10 +646,6 @@
                             </div>
                             <div class="chapter-status">
                                 ${statusHTML}
-                                <div class="mark-buttons">
-                                    <button class="mark-btn alex" onclick="markChapter(${chapter.id}, 'Alex')" ${!currentUser ? 'disabled' : ''}>Mark Alex</button>
-                                    <button class="mark-btn dhianna" onclick="markChapter(${chapter.id}, 'Dhianna')" ${!currentUser ? 'disabled' : ''}>Mark Dhianna</button>
-                                </div>
                             </div>
                         </div>
                     `;
@@ -710,46 +666,6 @@
                 
                 container.appendChild(bookCard);
             });
-        }
-
-        async function markChapter(chapterId, who) {
-            const discordId = who === 'Alex' ? 'acro16hunna' : 'Dhianna369';
-            
-            // Disable buttons during request
-            const buttons = document.querySelectorAll('.mark-btn');
-            buttons.forEach(btn => btn.disabled = true);
-            
-            try {
-                const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: who,
-                        chapter_id: chapterId,
-                        completed: true,
-                        notes: ''
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
-                // Show success feedback
-                document.getElementById('sync-text').textContent = `✓ Marked Chapter ${chapterId} for ${who}`;
-                
-                // Reload data from cloud to reflect changes
-                await loadData();
-                
-            } catch (e) {
-                console.error('Error marking chapter:', e);
-                document.getElementById('sync-text').textContent = 'Error marking chapter - retry';
-            } finally {
-                // Re-enable buttons
-                buttons.forEach(btn => {
-                    if (currentUser) btn.disabled = false;
-                });
-            }
         }
 
         async function syncAll() {
