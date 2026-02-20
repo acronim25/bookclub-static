@@ -285,12 +285,13 @@
                                     ${quizResult.score >= 8 ? '🎉' : quizResult.score >= 6 ? '👍' : '📚'}
                                 </div>
                                 <div class="result-score">${quizResult.score}<span>/${quizResult.maxScore}</span></div>
-                                <div class="result-percentage">${quizResult.percentage}%</div>
+                                <div class="result-percentage">${Math.round((quizResult.score / quizResult.maxScore) * 100)}%</div>
                                 <div class="result-message">
                                     ${quizResult.score >= 9 ? 'Outstanding! You really know this material.' : 
                                       quizResult.score >= 8 ? 'Great job! You\'re mastering these concepts.' : 
                                       quizResult.score >= 6 ? 'Good work! Keep reviewing to improve.' : 
                                       'Keep learning! Review the chapter and try again.'}
+                                    <br><span style="color: #22c55e; font-size: 0.9em;">🏆 Chapter marked as read!</span>
                                 </div>
                             </div>
 
@@ -417,6 +418,14 @@
                 
                 // Also show transparent results for both users
                 setTimeout(() => displayTransparentResults(), 100);
+                
+                // Show success notification
+                BookClub.showNotification(`Quiz completed! ${result.correct}/${result.total} correct (${result.percentage}%)`, 'success');
+            } else {
+                // Reset button if submission failed
+                submitBtn.innerHTML = submitBtn.dataset.originalText;
+                submitBtn.disabled = false;
+                BookClub.showNotification('Failed to save quiz results. Please try again.', 'error');
             }
         }
         
@@ -433,30 +442,32 @@
                 }
             });
             
-            const maxScore = quiz.questions.length;
-            const score = correct;
-            const percentage = Math.round((correct / maxScore) * 100);
+            const totalQuestions = quiz.questions.length;
+            const score = Math.round((correct / totalQuestions) * 100); // Percentage score
             
-            // Save result using BookClub's saveQuizResult function via app.js internals
-            // We need to access the saveQuizResult function from app.js
-            const users = BookClub.getAllUsers ? BookClub.getAllUsers() : {};
+            // Save result using the same key as app.js
+            const STORAGE_KEYS_USER_DATA = 'bookclub_user_data';
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS_USER_DATA) || '{}');
             const user = users[userId];
             
             if (user) {
-                // Save score
+                // Initialize quiz_scores if not exists
                 if (!user.quiz_scores) user.quiz_scores = {};
-                user.quiz_scores[chapterId] = Math.max(score, user.quiz_scores[chapterId] || 0);
+                
+                // Save raw correct count (not percentage) for compatibility with app.js
+                const rawScore = correct; // Number of correct answers (0-10)
+                user.quiz_scores[chapterId] = Math.max(rawScore, user.quiz_scores[chapterId] || 0);
                 
                 // Save detailed result with answers (for transparency)
                 if (!user.quiz_results) user.quiz_results = {};
                 user.quiz_results[chapterId] = {
-                    score: score,
+                    score: rawScore, // Store raw count for display
+                    percentage: score, // Store percentage too
                     answers: answers,
                     completed_at: new Date().toISOString()
                 };
                 
-                // Update localStorage
-                const STORAGE_KEYS_USER_DATA = 'bookclub_user_data';
+                // Save back to localStorage
                 localStorage.setItem(STORAGE_KEYS_USER_DATA, JSON.stringify(users));
                 
                 // Track activity - add to activities
@@ -465,7 +476,7 @@
                     id: Date.now(),
                     user_id: userId,
                     type: 'quiz_completed',
-                    data: { chapter_id: chapterId, score: score },
+                    data: { chapter_id: chapterId, score: rawScore },
                     created_at: new Date().toISOString()
                 });
                 // Keep only last 50
@@ -476,11 +487,11 @@
                 const newBadges = checkBadgesForUser(user);
                 
                 return {
-                    score,
-                    maxScore,
-                    percentage,
-                    correct,
-                    total: maxScore,
+                    score: rawScore,
+                    maxScore: totalQuestions,
+                    percentage: score,
+                    correct: correct,
+                    total: totalQuestions,
                     newBadges: newBadges.map(id => {
                         const badge = BookClub.getAllBadges().find(b => b.id === id);
                         return badge ? { id: badge.id, name: badge.name, emoji: badge.emoji } : null;
@@ -547,8 +558,8 @@
             document.getElementById('quiz-form-container').classList.add('hidden');
             document.getElementById('quiz-results').classList.remove('hidden');
             
-            // Update score
-            document.getElementById('result-score').innerHTML = `${result.score}<span>/${result.maxScore}</span>`;
+            // Update score display: "8/10 (80%)"
+            document.getElementById('result-score').innerHTML = `${result.correct}<span>/${result.total}</span>`;
             document.getElementById('result-percentage').textContent = `${result.percentage}%`;
             
             // Set emoji and message
@@ -572,7 +583,7 @@
             
             // Add auto-mark confirmation
             if (result.autoMarked) {
-                message += ' ✓ Chapter marked as read!';
+                message += ' \n🏆 Chapter marked as read!';
             }
             messageEl.textContent = message;
             
@@ -580,7 +591,7 @@
             if (result.newBadges && result.newBadges.length > 0) {
                 const badgesContainer = document.getElementById('new-badges');
                 badgesContainer.innerHTML = `
-                    <h3>🏆 New Badges Earned!</h3>
+                    <h3>🏅 New Badges Earned!</h3>
                     ${result.newBadges.map(badge => `
                         <div class="badge-earned">
                             <span class="badge-emoji">${badge.emoji}</span>
@@ -706,7 +717,29 @@
             }
 
             const discordId = userId; // Alex = acro16hunna, Dhianna = Dhianna369
+            let apiSuccess = false;
+            let localSuccess = false;
 
+            // 1. Update localStorage immediately for instant UI feedback
+            try {
+                const STORAGE_KEYS_PROGRESS = 'bookclub_progress';
+                const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS_PROGRESS) || '{}');
+                if (!allProgress[userId]) allProgress[userId] = {};
+                
+                allProgress[userId][chapterId] = {
+                    completed: true,
+                    completed_at: new Date().toISOString(),
+                    notes: `Completed via quiz on ${new Date().toLocaleDateString()}`
+                };
+                
+                localStorage.setItem(STORAGE_KEYS_PROGRESS, JSON.stringify(allProgress));
+                localSuccess = true;
+                console.log(`✓ Local progress updated for ${userName}, chapter ${chapterId}`);
+            } catch (e) {
+                console.error('Error updating local progress:', e);
+            }
+
+            // 2. Also sync with API
             try {
                 const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
                     method: 'POST',
@@ -720,16 +753,16 @@
                 });
 
                 if (response.ok) {
-                    console.log(`✓ Auto-marked chapter ${chapterId} as complete for ${userName}`);
-                    return true;
+                    console.log(`✓ API: Auto-marked chapter ${chapterId} as complete for ${userName}`);
+                    apiSuccess = true;
                 } else {
-                    console.error('Auto-mark failed:', response.status);
-                    return false;
+                    console.error('Auto-mark API call failed:', response.status);
                 }
             } catch (e) {
-                console.error('Error auto-marking chapter:', e);
-                return false;
+                console.error('Error auto-marking chapter via API:', e);
             }
+            
+            return localSuccess || apiSuccess;
         }
     </script>
 </body>

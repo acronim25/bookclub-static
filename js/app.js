@@ -754,7 +754,9 @@ const BookClub = {
         const user = getAllUsers()[userId];
         const score = user?.quiz_scores?.[chapterId];
         if (score === undefined) return null;
-        return { score, maxScore: 10 };
+        const maxScore = 10;
+        const percentage = Math.round((score / maxScore) * 100);
+        return { score, maxScore, percentage };
     },
     getQuizByChapter: getQuiz,
     getNotesForChapter: getNotesByChapter,
