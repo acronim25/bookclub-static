@@ -485,12 +485,17 @@
 
             try {
                 const discordId = user.discord_id || user.id;
-                const result = await SyncAPI.fullSync(discordId);
+                const result = await SyncAPI.loadFromCloud(discordId);
 
-                if (result) {
-                    statusEl.innerHTML = '✅ Loaded from cloud! Reloading...';
+                if (result && result.success) {
+                    // Merge cloud data with local data
+                    if (result.progress) {
+                        const progressArray = Object.keys(result.progress).map(id => parseInt(id));
+                        BookClub.saveProgress(progressArray);
+                    }
+                    statusEl.innerHTML = '✅ Loaded from cloud successfully!';
                     statusEl.style.color = 'var(--accent-success)';
-                    setTimeout(() => location.reload(), 1500);
+                    setTimeout(() => location.reload(), 1000);
                 } else {
                     statusEl.innerHTML = '⚠️ No cloud data found for this user';
                     statusEl.style.color = 'var(--accent-gold)';

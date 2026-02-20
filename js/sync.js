@@ -142,8 +142,8 @@ class BookClubSync {
         }
     }
 
-    // Sincronizare completă
-    async fullSync(userId) {
+    // Sincronizare completă (save - POST)
+    async fullSync(userId, data) {
         try {
             const response = await fetch(`${this.apiUrl}/sync`, {
                 method: 'POST',
@@ -151,7 +151,7 @@ class BookClubSync {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ userId })
+                body: JSON.stringify({ userId, ...data })
             });
 
             if (!response.ok) {
@@ -161,6 +161,27 @@ class BookClubSync {
             return await response.json();
         } catch (error) {
             console.error('Eroare la full sync:', error);
+            throw error;
+        }
+    }
+
+    // Load from cloud (GET)
+    async loadFromCloud(userId) {
+        try {
+            const response = await fetch(`${this.apiUrl}/sync?userId=${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Eroare la load from cloud:', error);
             throw error;
         }
     }
