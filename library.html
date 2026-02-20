@@ -74,7 +74,7 @@
         }
         .comparison-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 15px;
         }
         .comparison-card {
@@ -82,6 +82,14 @@
             border-radius: 12px;
             padding: 15px;
             border: 1px solid rgba(255,255,255,0.1);
+        }
+        .comparison-card.alex-highlight {
+            border: 2px solid #00d4aa;
+            box-shadow: 0 0 15px rgba(0, 212, 170, 0.3);
+        }
+        .comparison-card.dhianna-highlight {
+            border: 2px solid #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
         }
         .comparison-header {
             display: flex;
@@ -98,8 +106,8 @@
             justify-content: center;
             font-size: 18px;
         }
-        .comparison-card.alex .comparison-avatar { background: rgba(0, 212, 170, 0.2); }
-        .comparison-card.dhianna .comparison-avatar { background: rgba(255, 107, 107, 0.2); }
+        .comparison-card.alex .comparison-avatar, .comparison-card.alex-highlight .comparison-avatar { background: rgba(0, 212, 170, 0.2); }
+        .comparison-card.dhianna .comparison-avatar, .comparison-card.dhianna-highlight .comparison-avatar { background: rgba(255, 107, 107, 0.2); }
         .comparison-name {
             font-weight: 600;
             font-size: 16px;
@@ -135,14 +143,37 @@
         .progress-value {
             font-size: 12px;
             color: #8b9bb4;
-            min-width: 35px;
+            min-width: 45px;
             text-align: right;
         }
+
+        /* Chapter Scores Display */
+        .chapter-scores {
+            font-size: 11px;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 6px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        .chapter-scores.alex { color: #00d4aa; }
+        .chapter-scores.dhianna { color: #ff6b6b; }
+        .chapter-score-item {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 4px;
+            padding: 2px 6px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+        .chapter-score-item.pass { background: rgba(0, 212, 170, 0.15); }
+        .chapter-score-item.fail { background: rgba(255, 107, 107, 0.15); }
 
         /* Book Cards with Dual Progress */
         .books-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
@@ -167,7 +198,7 @@
         .book-card-featured {
             position: relative;
             overflow: hidden;
-            min-height: 280px;
+            min-height: 320px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -265,28 +296,31 @@
         /* Dual Progress Display */
         .dual-progress {
             margin-top: 1rem;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
         }
         .dual-progress-row {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         .dual-progress-label {
-            font-size: 11px;
-            color: #8b9bb4;
-            min-width: 60px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 65px;
         }
         .dual-progress-bar {
             flex: 1;
-            height: 6px;
+            height: 8px;
             background: rgba(255,255,255,0.1);
-            border-radius: 3px;
+            border-radius: 4px;
             overflow: hidden;
         }
         .dual-progress-fill {
             height: 100%;
-            border-radius: 3px;
+            border-radius: 4px;
             transition: width 0.5s ease;
         }
         .dual-progress-fill.alex {
@@ -296,11 +330,22 @@
             background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
         }
         .dual-progress-value {
-            font-size: 11px;
+            font-size: 12px;
             color: #8b9bb4;
-            min-width: 30px;
+            min-width: 50px;
             text-align: right;
+            font-weight: 500;
         }
+
+        /* Chapter Details in Book Card */
+        .book-chapter-details {
+            margin-top: 8px;
+            font-size: 10px;
+            max-height: 60px;
+            overflow-y: auto;
+        }
+        .book-chapter-details.alex { color: #00d4aa; }
+        .book-chapter-details.dhianna { color: #ff6b6b; }
 
         /* Sync Status Bar */
         .sync-bar {
@@ -315,12 +360,23 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+        .sync-bar.offline {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
         .sync-status {
             display: flex;
             align-items: center;
             gap: 10px;
             color: #00d4aa;
             font-size: 14px;
+        }
+        .sync-bar.offline .sync-status {
+            color: #ff6b6b;
+        }
+        .sync-last-update {
+            font-size: 12px;
+            color: #6b7a94;
         }
 
         /* Loading State */
@@ -341,6 +397,48 @@
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* User Highlight Badge */
+        .user-highlight-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .user-highlight-badge.alex {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00d4aa;
+        }
+        .user-highlight-badge.dhianna {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        /* Refresh Button */
+        .refresh-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: #8b9bb4;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .refresh-btn.spinning {
+            animation: spin 1s linear infinite;
         }
     </style>
 </head>
@@ -384,10 +482,10 @@
 
     <main class="main-content">
         <!-- Who Am I Bar -->
-        <div class="whoami-bar">
+        <div class="whoami-bar" id="whoami-bar">
             <div>
                 <div class="whoami-title">Who are you?</div>
-                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to view and track your progress</div>
             </div>
             <div class="whoami-buttons">
                 <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
@@ -397,7 +495,12 @@
 
         <!-- Comparison Section -->
         <div class="comparison-section">
-            <div class="comparison-title">📊 Reading Progress Comparison</div>
+            <div class="comparison-title">
+                📊 Reading Progress Comparison
+                <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">
+                    🔄 Refresh
+                </button>
+            </div>
             <div class="comparison-grid" id="comparison-grid">
                 <!-- Populated by JS -->
             </div>
@@ -411,7 +514,7 @@
 
         <div id="loading-state" class="loading-state">
             <div class="loading-spinner"></div>
-            <p>Loading books...</p>
+            <p>Loading books and progress...</p>
         </div>
 
         <div class="books-grid" id="books-grid" style="display: none;">
@@ -419,12 +522,15 @@
         </div>
 
         <!-- Sync Bar -->
-        <div class="sync-bar">
+        <div class="sync-bar" id="sync-bar">
             <div class="sync-status">
-                <span>☁️</span>
+                <span id="sync-icon">☁️</span>
                 <span id="sync-text">Cloud sync active</span>
             </div>
-            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="sync-last-update" id="last-update">Last update: never</span>
+                <span style="font-size: 12px; color: #6b7a94;">Auto-refreshes every 30s</span>
+            </div>
         </div>
     </main>
 
@@ -438,14 +544,20 @@
         const API_URL = 'https://5-189-142-233.nip.io/api';
         let currentUser = null;
         let currentUserId = null;
-        let usersData = {};
+        let apiUserData = {};  // Data from API
+        let localQuizData = {};  // Data from localStorage
         let booksData = [];
         let chaptersData = [];
+        let isOnline = true;
+        let lastUpdateTime = null;
         
         // Session persistence constants
         const SESSION_DURATION_DAYS = 7;
         const SESSION_KEY = 'bookclub_session';
         
+        /**
+         * Get stored session from localStorage
+         */
         function getStoredSession() {
             try {
                 const session = localStorage.getItem(SESSION_KEY);
@@ -466,6 +578,9 @@
             }
         }
         
+        /**
+         * Save session to localStorage
+         */
         function saveSession(userName, userId) {
             const session = {
                 userName: userName,
@@ -476,42 +591,51 @@
             localStorage.setItem('bookclub_whoami', userName);
         }
         
+        /**
+         * Clear session from localStorage
+         */
         function clearSession() {
             localStorage.removeItem(SESSION_KEY);
             localStorage.removeItem('bookclub_whoami');
         }
 
+        /**
+         * Set current user
+         */
         function setWhoAmI(name) {
             currentUser = name;
             currentUserId = name === 'Alex' ? 'acro16hunna' : 'Dhianna369';
             saveSession(name, currentUserId);
             showLoggedInBar();
+            highlightCurrentUser(name);
+            renderComparison();
             renderBooks();
         }
 
+        /**
+         * Clear current user selection
+         */
         function clearWhoAmI() {
             currentUser = null;
             currentUserId = null;
             clearSession();
             showSelectionUI();
+            renderComparison();
             renderBooks();
         }
         
+        /**
+         * Switch to different user
+         */
         function switchUser() {
             clearWhoAmI();
         }
 
-        function updateWhoAmIUI() {
-            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
-            if (currentUser === 'Alex') {
-                document.getElementById('btn-alex')?.classList.add('active');
-            } else if (currentUser === 'Dhianna') {
-                document.getElementById('btn-dhianna')?.classList.add('active');
-            }
-        }
-        
+        /**
+         * Show logged in user bar
+         */
         function showLoggedInBar() {
-            const container = document.querySelector('.whoami-bar');
+            const container = document.getElementById('whoami-bar');
             const userColor = currentUser === 'Alex' ? '#00d4aa' : '#ff6b6b';
             const isLegacy = !getStoredSession() && localStorage.getItem('bookclub_whoami');
             
@@ -533,12 +657,15 @@
             `;
         }
         
+        /**
+         * Show user selection UI
+         */
         function showSelectionUI() {
-            const container = document.querySelector('.whoami-bar');
+            const container = document.getElementById('whoami-bar');
             container.innerHTML = `
                 <div>
                     <div class="whoami-title">Who are you?</div>
-                    <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to view your progress</div>
+                    <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to view and track your progress</div>
                 </div>
                 <div class="whoami-buttons">
                     <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
@@ -547,6 +674,9 @@
             `;
         }
         
+        /**
+         * Initialize session from stored data
+         */
         function initSession() {
             // Check for new session format first
             const session = getStoredSession();
@@ -572,84 +702,283 @@
             showSelectionUI();
         }
 
-        async function loadData() {
-            try {
-                // Load users
-                const usersRes = await fetch(`${API_URL}/users`);
-                const users = await usersRes.json();
-                
-                // Process user data
-                users.forEach(user => {
-                    usersData[user.discord_id] = user;
+        /**
+         * Highlight current user in the UI
+         */
+        function highlightCurrentUser(userName) {
+            // Remove existing highlights
+            document.querySelectorAll('.comparison-card').forEach(card => {
+                card.classList.remove('alex-highlight', 'dhianna-highlight');
+            });
+            
+            // Add highlight to current user's cards
+            if (userName === 'Alex') {
+                document.querySelectorAll('.comparison-card').forEach(card => {
+                    card.classList.add('alex-highlight');
                 });
-
-                // Use local data for books and chapters
-                booksData = BOOKCLUB_DATA.books;
-                chaptersData = BOOKCLUB_DATA.chapters;
-
-                document.getElementById('loading-state').style.display = 'none';
-                document.getElementById('books-grid').style.display = 'grid';
-
-                renderComparison();
-                renderBooks();
-            } catch (e) {
-                console.error('Error loading data:', e);
-                document.getElementById('loading-state').innerHTML = '<p>Error loading data. Please refresh.</p>';
+            } else if (userName === 'Dhianna') {
+                document.querySelectorAll('.comparison-card').forEach(card => {
+                    card.classList.add('dhianna-highlight');
+                });
             }
         }
 
-        function getBookProgressForUser(discordId, bookId) {
-            // Calculează progresul REAL bazat pe quiz-uri completate
+        /**
+         * Load user progress from localStorage (fallback)
+         */
+        function loadLocalProgress() {
+            const progress = {};
+            
+            // Load from bookclub_quiz_results (new format)
+            try {
+                const quizResults = JSON.parse(localStorage.getItem('bookclub_quiz_results') || '[]');
+                quizResults.forEach(result => {
+                    const userId = normalizeUserId(result.userId);
+                    if (!progress[userId]) progress[userId] = {};
+                    progress[userId][result.chapterId] = {
+                        completed: true,
+                        score: result.score || 0,
+                        total: result.total || 10,
+                        percentage: result.percentage || 0,
+                        completedAt: result.completedAt || result.timestamp
+                    };
+                });
+            } catch (e) {
+                console.error('Error loading quiz results:', e);
+            }
+            
+            // Also load from bookclub_progress (legacy format)
+            try {
+                const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
+                ['alex', 'dhianna'].forEach((key, idx) => {
+                    const userId = idx === 0 ? 'acro16hunna' : 'Dhianna369';
+                    if (allProgress[key]) {
+                        if (!progress[userId]) progress[userId] = {};
+                        Object.entries(allProgress[key]).forEach(([chapterId, data]) => {
+                            if (data.completed || data.quizScore !== undefined) {
+                                progress[userId][chapterId] = {
+                                    completed: true,
+                                    score: data.quizScore || data.score || 0,
+                                    total: data.quizTotal || data.total || 10,
+                                    percentage: data.percentage || 0,
+                                    completedAt: data.completed_at || data.completedAt
+                                };
+                            }
+                        });
+                    }
+                });
+            } catch (e) {
+                console.error('Error loading progress:', e);
+            }
+            
+            return progress;
+        }
+
+        /**
+         * Load user data from API
+         */
+        async function loadUserDataFromAPI(userId) {
+            try {
+                const response = await fetch(`${API_URL}/user/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API returned ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data;
+            } catch (e) {
+                console.warn(`Failed to load ${userId} from API:`, e);
+                return null;
+            }
+        }
+
+        /**
+         * Main function to load library progress
+         * Priority: API (primary) → localStorage (fallback)
+         */
+        async function loadLibraryProgress() {
+            const syncBar = document.getElementById('sync-bar');
+            const syncText = document.getElementById('sync-text');
+            const syncIcon = document.getElementById('sync-icon');
+            
+            // Try API first
+            try {
+                const [alexData, dhiannaData] = await Promise.all([
+                    loadUserDataFromAPI('acro16hunna'),
+                    loadUserDataFromAPI('Dhianna369')
+                ]);
+                
+                // Store API data
+                if (alexData) {
+                    apiUserData['acro16hunna'] = alexData;
+                }
+                if (dhiannaData) {
+                    apiUserData['Dhianna369'] = dhiannaData;
+                }
+                
+                // If at least one API call succeeded, we're online
+                if (alexData || dhiannaData) {
+                    isOnline = true;
+                    syncBar.classList.remove('offline');
+                    syncText.textContent = 'Cloud sync active (API)';
+                    syncIcon.textContent = '☁️';
+                } else {
+                    // Both failed, use fallback
+                    throw new Error('Both API calls failed');
+                }
+            } catch (e) {
+                // Fallback to localStorage
+                console.log('API unavailable, using localStorage fallback');
+                isOnline = false;
+                syncBar.classList.add('offline');
+                syncText.textContent = 'Offline mode (localStorage)';
+                syncIcon.textContent = '💾';
+                
+                localQuizData = loadLocalProgress();
+            }
+            
+            // Update last update time
+            lastUpdateTime = new Date();
+            updateLastUpdateTime();
+            
+            // Render with the data we have
+            renderComparison();
+            renderBooks();
+        }
+
+        /**
+         * Update the last update time display
+         */
+        function updateLastUpdateTime() {
+            const el = document.getElementById('last-update');
+            if (lastUpdateTime) {
+                const timeStr = lastUpdateTime.toLocaleTimeString();
+                el.textContent = `Last update: ${timeStr}`;
+            }
+        }
+
+        /**
+         * Get quiz result for a chapter and user
+         * Checks API data first, then localStorage
+         */
+        function getQuizResultWithFallback(chapterId, userId) {
+            const normalizedUserId = normalizeUserId(userId);
+            
+            // 1. Check API data first (primary source)
+            const apiData = apiUserData[normalizedUserId];
+            if (apiData && apiData.progress && apiData.progress[chapterId]) {
+                const progress = apiData.progress[chapterId];
+                return {
+                    completed: progress.completed,
+                    score: progress.quiz_score || 0,
+                    total: progress.quiz_total || 10,
+                    percentage: progress.quiz_percentage || 0,
+                    completedAt: progress.completed_at,
+                    source: 'api'
+                };
+            }
+            
+            // 2. Fall back to localStorage
+            if (localQuizData[normalizedUserId] && localQuizData[normalizedUserId][chapterId]) {
+                return {
+                    ...localQuizData[normalizedUserId][chapterId],
+                    source: 'local'
+                };
+            }
+            
+            // 3. Fall back to getQuizResult from utils.js
+            return getQuizResult(chapterId, normalizedUserId);
+        }
+
+        /**
+         * Calculate REAL book progress for a user
+         */
+        function calculateBookProgress(bookId, userId) {
             const bookChapters = chaptersData.filter(c => c.book_id === bookId);
             const total = bookChapters.length;
-            let completed = 0;
             
-            // Pentru FIECARE capitol, verifică dacă există quiz result
-            bookChapters.forEach(chapter => {
-                const quizResult = getQuizResult(chapter.id, discordId);
-                if (quizResult) {
+            let completed = 0;
+            const chapterDetails = [];
+            
+            for (const chapter of bookChapters) {
+                const quizResult = getQuizResultWithFallback(chapter.id, userId);
+                if (quizResult && quizResult.completed) {
                     completed++;
+                    chapterDetails.push({
+                        chapterNum: chapter.number,
+                        score: quizResult.score,
+                        total: quizResult.total,
+                        percentage: quizResult.percentage,
+                        passed: quizResult.percentage >= 70 // Assuming 70% is pass
+                    });
                 }
-            });
+            }
             
             return {
                 completed,
                 total,
-                percentage: total > 0 ? Math.round((completed / total) * 100) : 0
+                percentage: total > 0 ? Math.round((completed / total) * 100) : 0,
+                chapterDetails
             };
         }
 
+        /**
+         * Format chapter details for display
+         */
+        function formatChapterDetails(details, colorClass) {
+            if (details.length === 0) {
+                return '<span style="opacity: 0.6;">No chapters completed yet</span>';
+            }
+            
+            return details.map(d => {
+                const passClass = d.passed ? 'pass' : 'fail';
+                const icon = d.passed ? '✓' : '✗';
+                return `<span class="chapter-score-item ${passClass}">Ch${d.chapterNum}: ${d.score}/${d.total} ${icon}</span>`;
+            }).join('');
+        }
+
+        /**
+         * Format chapter details for book cards
+         */
+        function formatBookChapterDetails(details) {
+            if (details.length === 0) {
+                return 'No chapters completed';
+            }
+            
+            return details.map(d => {
+                const icon = d.passed ? '✓' : '✗';
+                return `Ch${d.chapterNum}: ${d.score}/${d.total} ${icon}`;
+            }).join(' • ');
+        }
+
+        /**
+         * Render comparison section
+         */
         function renderComparison() {
             const container = document.getElementById('comparison-grid');
             container.innerHTML = '';
 
-            // Create comparison cards for each book
             booksData.forEach(book => {
-                const alexProgress = getBookProgressForUser('acro16hunna', book.id);
-                const dhiannaProgress = getBookProgressForUser('Dhianna369', book.id);
+                const alexProgress = calculateBookProgress(book.id, 'acro16hunna');
+                const dhiannaProgress = calculateBookProgress(book.id, 'Dhianna369');
                 
-                // Obține capitolele completate cu scoruri pentru afișare
-                const bookChapters = chaptersData.filter(c => c.book_id === book.id);
-                let alexCompletedChapters = [];
-                let dhiannaCompletedChapters = [];
+                const alexDetails = formatChapterDetails(alexProgress.chapterDetails, 'alex');
+                const dhiannaDetails = formatChapterDetails(dhiannaProgress.chapterDetails, 'dhianna');
                 
-                bookChapters.forEach(ch => {
-                    const alexQuiz = getQuizResult(ch.id, 'acro16hunna');
-                    const dhiannaQuiz = getQuizResult(ch.id, 'Dhianna369');
-                    if (alexQuiz) alexCompletedChapters.push({...ch, ...alexQuiz});
-                    if (dhiannaQuiz) dhiannaCompletedChapters.push({...ch, ...dhiannaQuiz});
-                });
-                
-                // Construiește textul cu capitolele completate
-                const alexChaptersText = alexCompletedChapters.length > 0 
-                    ? alexCompletedChapters.map(ch => `Ch${ch.number}: ${ch.score}/${ch.total}`).join(', ')
-                    : 'No chapters completed';
-                const dhiannaChaptersText = dhiannaCompletedChapters.length > 0
-                    ? dhiannaCompletedChapters.map(ch => `Ch${ch.number}: ${ch.score}/${ch.total}`).join(', ')
-                    : 'No chapters completed';
+                // Determine highlight class based on current user
+                let highlightClass = '';
+                if (currentUser === 'Alex') highlightClass = 'alex-highlight';
+                else if (currentUser === 'Dhianna') highlightClass = 'dhianna-highlight';
                 
                 const card = document.createElement('div');
-                card.className = 'comparison-card';
+                card.className = `comparison-card ${highlightClass}`;
                 card.innerHTML = `
                     <div class="comparison-header">
                         <span style="font-size: 24px;">${book.emoji || '📖'}</span>
@@ -663,18 +992,19 @@
                             </div>
                             <span class="progress-value">${alexProgress.completed}/${alexProgress.total}</span>
                         </div>
-                        <div style="font-size: 11px; color: #00d4aa; margin-top: 4px; margin-left: 110px;">
-                            ${alexChaptersText}
+                        <div class="chapter-scores alex">
+                            ${alexDetails}
                         </div>
-                        <div class="progress-row" style="margin-top: 10px;">
+                        
+                        <div class="progress-row" style="margin-top: 12px;">
                             <span class="progress-label">Dhianna</span>
                             <div class="progress-bar-container">
                                 <div class="progress-bar-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                             </div>
                             <span class="progress-value">${dhiannaProgress.completed}/${dhiannaProgress.total}</span>
                         </div>
-                        <div style="font-size: 11px; color: #ff6b6b; margin-top: 4px; margin-left: 110px;">
-                            ${dhiannaChaptersText}
+                        <div class="chapter-scores dhianna">
+                            ${dhiannaDetails}
                         </div>
                     </div>
                 `;
@@ -682,35 +1012,34 @@
             });
         }
 
+        /**
+         * Render books grid
+         */
         function renderBooks() {
             const container = document.getElementById('books-grid');
             container.innerHTML = '';
 
             booksData.forEach(book => {
-                const alexProgress = getBookProgressForUser('acro16hunna', book.id);
-                const dhiannaProgress = getBookProgressForUser('Dhianna369', book.id);
+                const alexProgress = calculateBookProgress(book.id, 'acro16hunna');
+                const dhiannaProgress = calculateBookProgress(book.id, 'Dhianna369');
                 const bookChapters = chaptersData.filter(c => c.book_id === book.id);
 
                 const bookCard = document.createElement('a');
                 bookCard.href = `book.html?id=${book.id}`;
                 bookCard.className = 'book-card-link';
 
+                const alexChaptersDetail = formatBookChapterDetails(alexProgress.chapterDetails);
+                const dhiannaChaptersDetail = formatBookChapterDetails(dhiannaProgress.chapterDetails);
+                
+                // Current user badge
+                let userBadge = '';
+                if (currentUser === 'Alex') {
+                    userBadge = '<span class="user-highlight-badge alex">● You</span>';
+                } else if (currentUser === 'Dhianna') {
+                    userBadge = '<span class="user-highlight-badge dhianna">● You</span>';
+                }
+                
                 let cardHTML = '';
-                
-                // Obține capitolele completate cu scoruri pentru tooltip
-                const getCompletedChaptersText = (discordId) => {
-                    const completedChapters = bookChapters
-                        .map(ch => ({ ...ch, quiz: getQuizResult(ch.id, discordId) }))
-                        .filter(ch => ch.quiz);
-                    
-                    if (completedChapters.length === 0) return 'No chapters completed yet';
-                    return completedChapters.map(ch => 
-                        `Ch${ch.number}: ${ch.quiz.score}/${ch.quiz.total}`
-                    ).join(' • ');
-                };
-                
-                const alexChaptersDetail = getCompletedChaptersText('acro16hunna');
-                const dhiannaChaptersDetail = getCompletedChaptersText('Dhianna369');
                 
                 if (book.id === 1) {
                     cardHTML = `
@@ -720,7 +1049,7 @@
                                 <div class="book-bg-overlay"></div>
                             </div>
                             <div class="book-card-content">
-                                <h3 class="book-title-featured">${book.title}</h3>
+                                <h3 class="book-title-featured">${book.title} ${userBadge}</h3>
                                 <p class="book-author-featured">${book.author}</p>
                                 <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
                                 <div class="dual-progress">
@@ -729,19 +1058,20 @@
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${alexProgress.percentage}% (${alexProgress.completed}/${bookChapters.length})</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                    <div class="book-chapter-details alex" title="${alexChaptersDetail}">
                                         ${alexChaptersDetail}
                                     </div>
-                                    <div class="dual-progress-row" style="margin-top: 8px;">
+                                    
+                                    <div class="dual-progress-row" style="margin-top: 10px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${dhiannaProgress.percentage}% (${dhiannaProgress.completed}/${bookChapters.length})</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                    <div class="book-chapter-details dhianna" title="${dhiannaChaptersDetail}">
                                         ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
@@ -756,7 +1086,7 @@
                                 <div class="book-bg-overlay"></div>
                             </div>
                             <div class="book-card-content">
-                                <h3 class="book-title-featured">${book.title}</h3>
+                                <h3 class="book-title-featured">${book.title} ${userBadge}</h3>
                                 <p class="book-author-featured">${book.author}</p>
                                 <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
                                 <div class="dual-progress">
@@ -765,19 +1095,20 @@
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${alexProgress.percentage}% (${alexProgress.completed}/${bookChapters.length})</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                    <div class="book-chapter-details alex" title="${alexChaptersDetail}">
                                         ${alexChaptersDetail}
                                     </div>
-                                    <div class="dual-progress-row" style="margin-top: 8px;">
+                                    
+                                    <div class="dual-progress-row" style="margin-top: 10px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${dhiannaProgress.percentage}% (${dhiannaProgress.completed}/${bookChapters.length})</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                    <div class="book-chapter-details dhianna" title="${dhiannaChaptersDetail}">
                                         ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
@@ -792,7 +1123,7 @@
                                 <div class="book-bg-overlay"></div>
                             </div>
                             <div class="book-card-content">
-                                <h3 class="book-title-featured">${book.title}</h3>
+                                <h3 class="book-title-featured">${book.title} ${userBadge}</h3>
                                 <p class="book-author-featured">${book.author}</p>
                                 <p class="book-description-featured">${book.description.substring(0, 100)}${book.description.length > 100 ? '...' : ''}</p>
                                 <div class="dual-progress">
@@ -801,19 +1132,20 @@
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${alexProgress.percentage}% (${alexProgress.completed}/${bookChapters.length})</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                    <div class="book-chapter-details alex" title="${alexChaptersDetail}">
                                         ${alexChaptersDetail}
                                     </div>
-                                    <div class="dual-progress-row" style="margin-top: 8px;">
+                                    
+                                    <div class="dual-progress-row" style="margin-top: 10px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${dhiannaProgress.percentage}% (${dhiannaProgress.completed}/${bookChapters.length})</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                    <div class="book-chapter-details dhianna" title="${dhiannaChaptersDetail}">
                                         ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
@@ -829,7 +1161,7 @@
                                 </div>
                             </div>
                             <div class="book-details">
-                                <h3 class="book-title">${book.title}</h3>
+                                <h3 class="book-title">${book.title} ${userBadge}</h3>
                                 <p class="book-author">${book.author}</p>
                                 <p class="book-description">${book.description.substring(0, 120)}${book.description.length > 120 ? '...' : ''}</p>
                                 <div class="dual-progress">
@@ -838,19 +1170,20 @@
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill alex" style="width: ${alexProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${alexProgress.percentage}%</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                    <div class="book-chapter-details alex" title="${alexChaptersDetail}">
                                         ${alexChaptersDetail}
                                     </div>
-                                    <div class="dual-progress-row" style="margin-top: 8px;">
+                                    
+                                    <div class="dual-progress-row" style="margin-top: 10px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
-                                        <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                        <span class="dual-progress-value">${dhiannaProgress.percentage}%</span>
                                     </div>
-                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                    <div class="book-chapter-details dhianna" title="${dhiannaChaptersDetail}">
                                         ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
@@ -862,6 +1195,40 @@
                 bookCard.innerHTML = cardHTML;
                 container.appendChild(bookCard);
             });
+        }
+
+        /**
+         * Manual refresh triggered by user
+         */
+        async function manualRefresh() {
+            const btn = document.getElementById('refresh-btn');
+            btn.classList.add('spinning');
+            btn.disabled = true;
+            
+            await loadLibraryProgress();
+            
+            btn.classList.remove('spinning');
+            btn.disabled = false;
+        }
+
+        /**
+         * Load initial data
+         */
+        async function loadData() {
+            try {
+                // Use local data for books and chapters
+                booksData = BOOKCLUB_DATA.books;
+                chaptersData = BOOKCLUB_DATA.chapters;
+
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('books-grid').style.display = 'grid';
+
+                // Load progress from API or localStorage
+                await loadLibraryProgress();
+            } catch (e) {
+                console.error('Error loading data:', e);
+                document.getElementById('loading-state').innerHTML = '<p>Error loading data. Please refresh.</p>';
+            }
         }
 
         // Mobile Navigation Toggle
@@ -876,12 +1243,15 @@
             });
         });
 
-        // Init
+        // Initialize
         initSession();
         loadData();
         
         // Auto-refresh every 30 seconds
-        setInterval(loadData, 30000);
+        setInterval(loadLibraryProgress, 30000);
+        
+        // Update "last update" time display every minute
+        setInterval(updateLastUpdateTime, 60000);
     </script>
 </body>
 </html>
