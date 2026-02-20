@@ -3,7 +3,7 @@
 
 console.log('Loading sync.js v4...');
 
-const API_BASE_URL = 'https://5-189-142-233.sslip.io/api';
+const API_BASE_URL = 'https://5-189-142-233.nip.io/api';
 const API_VERSION = 'v4';
 
 class BookClubSync {
