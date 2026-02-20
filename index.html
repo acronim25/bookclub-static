@@ -107,10 +107,11 @@
             border-radius: 12px;
             padding: 15px;
             border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s;
+            transition: all 0.3s;
         }
         .user-card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .user-card-header {
             display: flex;
@@ -152,6 +153,12 @@
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .book-card:hover {
+            border-color: rgba(255,255,255,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
         .book-header {
             display: flex;
@@ -183,14 +190,12 @@
             grid-template-columns: 1fr;
             gap: 12px;
         }
-        
         @media (min-width: 768px) {
             .chapters-grid {
                 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
                 gap: 10px;
             }
         }
-        
         .chapter-item {
             background: #252b3d;
             border-radius: 12px;
@@ -201,7 +206,6 @@
             border: 1px solid transparent;
             transition: all 0.3s;
         }
-        
         @media (min-width: 480px) {
             .chapter-item {
                 flex-direction: row;
@@ -210,9 +214,9 @@
                 padding: 14px 16px;
             }
         }
-        
         .chapter-item:hover {
             border-color: rgba(255,255,255,0.1);
+            transform: translateX(5px);
         }
         .chapter-info {
             flex: 1;
@@ -234,7 +238,6 @@
             gap: 10px;
             align-items: flex-start;
         }
-        
         @media (min-width: 480px) {
             .chapter-status {
                 flex-direction: row;
@@ -256,23 +259,13 @@
             background: rgba(255, 107, 107, 0.2);
             color: #ff6b6b;
         }
+        .status-badge.both {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), rgba(255, 107, 107, 0.2));
+            color: #ffd700;
+        }
         .status-badge.none {
             background: rgba(139, 155, 180, 0.2);
             color: #8b9bb4;
-        }
-        .chapter-status {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: flex-start;
-        }
-        
-        @media (min-width: 480px) {
-            .chapter-status {
-                flex-direction: row;
-                align-items: center;
-                gap: 12px;
-            }
         }
         .sync-bar {
             background: rgba(0, 212, 170, 0.1);
@@ -300,9 +293,15 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s;
         }
         .sync-btn:hover {
             opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 170, 0.3);
+        }
+        .sync-btn:active {
+            transform: scale(0.95);
         }
 
         /* Responsive Who Am I - Mobile First */
@@ -316,7 +315,6 @@
                 max-width: 200px;
             }
         }
-
         @media (min-width: 768px) {
             .whoami-bar {
                 flex-direction: row;
@@ -339,6 +337,25 @@
             }
         }
 
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -380,7 +397,7 @@
 
     <main class="main-content">
         <!-- Who Am I Bar -->
-        <div class="whoami-bar">
+        <div class="whoami-bar" id="whoami-bar">
             <div class="whoami-header">
                 <div class="whoami-title">Who are you?</div>
                 <div class="whoami-subtitle">Select to mark chapters as completed</div>
@@ -393,7 +410,7 @@
         </div>
 
         <!-- Leaderboard Section -->
-        <div class="leaderboard-section">
+        <div class="leaderboard-section animate-on-load">
             <div class="leaderboard-title">🏆 Leaderboard - Who's Reading?</div>
             <div class="leaderboard-grid" id="leaderboard">
                 <!-- Populated by JS -->
@@ -415,77 +432,34 @@
         </div>
     </main>
 
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/ui-utils.js"></script>
     <script src="js/sync.js"></script>
     <script>
-        const API_URL = 'https://5-189-142-233.nip.io/api';
+        // Use global config
+        const API_URL = window.BOOKCLUB_CONFIG.API_URL;
         let currentUser = null;
         let currentUserId = null;
         let usersData = {};
         let booksData = [];
         
-        // Session persistence constants
-        const SESSION_DURATION_DAYS = 7;
-        const SESSION_KEY = 'bookclub_session';
-        
-        function getStoredSession() {
-            try {
-                const session = localStorage.getItem(SESSION_KEY);
-                if (!session) return null;
-                
-                const data = JSON.parse(session);
-                const now = Date.now();
-                const sessionAge = now - data.timestamp;
-                const maxAge = SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000;
-                
-                if (sessionAge > maxAge) {
-                    localStorage.removeItem(SESSION_KEY);
-                    return null;
-                }
-                return data;
-            } catch (e) {
-                return null;
-            }
-        }
-        
-        function saveSession(userName, userId) {
-            const session = {
-                userName: userName,
-                userId: userId,
-                timestamp: Date.now()
-            };
-            localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-            // Also keep legacy support
-            localStorage.setItem('bookclub_whoami', userName);
-        }
-        
-        function clearSession() {
-            localStorage.removeItem(SESSION_KEY);
-            localStorage.removeItem('bookclub_whoami');
-        }
-
         function setWhoAmI(name) {
             currentUser = name;
             currentUserId = name === 'Alex' ? 'acro16hunna' : 'Dhianna369';
-            saveSession(name, currentUserId);
+            BookClubUI.saveSession(name, currentUserId);
+            BookClubUI.showSuccess(`Welcome, ${name}! ✓`);
             updateWhoAmIUI();
-            renderBooks(); // Re-render to enable buttons
+            renderBooks();
         }
 
         function clearWhoAmI() {
             currentUser = null;
             currentUserId = null;
-            clearSession();
+            BookClubUI.clearSession();
             updateWhoAmIUI();
-            renderBooks(); // Re-render to disable buttons
-            document.getElementById('sync-text').textContent = 'Selection cleared - simulating new device';
-        }
-        
-        function switchUser() {
-            clearWhoAmI();
-            document.getElementById('sync-text').textContent = 'Select a user below';
-            // Show buttons again
-            document.querySelector('.whoami-buttons').style.display = 'flex';
-            document.getElementById('logged-in-bar')?.remove();
+            renderBooks();
+            BookClubUI.updateSyncStatus('Selection cleared - simulating new device', 'offline');
         }
 
         function updateWhoAmIUI() {
@@ -499,10 +473,32 @@
             }
         }
         
+        function initSession() {
+            const session = BookClubUI.getStoredSession();
+            if (session) {
+                currentUser = session.userName;
+                currentUserId = session.userId;
+                showLoggedInBar();
+                return;
+            }
+            
+            // Legacy fallback
+            const legacyUser = localStorage.getItem('bookclub_whoami');
+            if (legacyUser) {
+                currentUser = legacyUser;
+                currentUserId = legacyUser === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+                BookClubUI.saveSession(currentUser, currentUserId);
+                showLoggedInBar();
+                return;
+            }
+            
+            updateWhoAmIUI();
+        }
+
         function showLoggedInBar() {
             const container = document.querySelector('.whoami-bar');
             const userColor = currentUser === 'Alex' ? '#00d4aa' : '#ff6b6b';
-            const isLegacy = !getStoredSession() && localStorage.getItem('bookclub_whoami');
+            const isLegacy = !BookClubUI.getStoredSession() && localStorage.getItem('bookclub_whoami');
             
             container.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
@@ -522,71 +518,50 @@
             `;
         }
         
-        function initSession() {
-            // Check for new session format first
-            const session = getStoredSession();
-            if (session) {
-                currentUser = session.userName;
-                currentUserId = session.userId;
-                showLoggedInBar();
-                return;
-            }
-            
-            // Legacy fallback
-            const legacyUser = localStorage.getItem('bookclub_whoami');
-            if (legacyUser) {
-                currentUser = legacyUser;
-                currentUserId = legacyUser === 'Alex' ? 'acro16hunna' : 'Dhianna369';
-                // Migrate to new format
-                saveSession(currentUser, currentUserId);
-                showLoggedInBar();
-                return;
-            }
-            
-            // No session - show selection UI (default state)
-            updateWhoAmIUI();
+        function switchUser() {
+            clearWhoAmI();
+            document.querySelector('.whoami-buttons').style.display = 'flex';
         }
 
         async function loadData() {
+            BookClubUI.updateSyncStatus('Loading...', 'syncing');
+            
             try {
-                document.getElementById('sync-text').textContent = 'Loading...';
-                
                 // Load books
                 const booksRes = await fetch(`${API_URL}/books`);
+                if (!booksRes.ok) throw new Error(`HTTP ${booksRes.status}`);
                 booksData = await booksRes.json();
 
-                // Load detailed user data with progress for cross-device sync
-                // Fetch each user's individual data to get real progress from cloud
-                const [alexData, dhiannaData] = await Promise.all([
-                    fetch(`${API_URL}/user/acro16hunna`).then(r => r.json()).catch(() => null),
-                    fetch(`${API_URL}/user/Dhianna369`).then(r => r.json()).catch(() => null)
+                // Load detailed user data
+                const [alexData, dhiannaData] = await Promise.allSettled([
+                    fetch(`${API_URL}/user/acro16hunna`).then(r => r.json()),
+                    fetch(`${API_URL}/user/Dhianna369`).then(r => r.json())
                 ]);
 
-                // Store user data with their progress
                 usersData = {};
-                if (alexData) {
-                    usersData['acro16hunna'] = alexData;
+                if (alexData.status === 'fulfilled' && alexData.value) {
+                    usersData['acro16hunna'] = alexData.value;
                 }
-                if (dhiannaData) {
-                    usersData['Dhianna369'] = dhiannaData;
+                if (dhiannaData.status === 'fulfilled' && dhiannaData.value) {
+                    usersData['Dhianna369'] = dhiannaData.value;
                 }
 
                 renderLeaderboard();
                 renderBooks();
                 
-                document.getElementById('sync-text').textContent = 'Cloud sync active - ' + new Date().toLocaleTimeString();
+                BookClubUI.updateSyncStatus('Cloud sync active - ' + new Date().toLocaleTimeString(), 'online');
+                BookClubUI.animateProgressBars();
             } catch (e) {
                 console.error('Error loading data:', e);
-                document.getElementById('sync-text').textContent = 'Sync error - retrying...';
+                BookClubUI.handleApiError(e, 'loadData');
+                BookClubUI.updateSyncStatus('Sync error - using local data', 'error');
             }
         }
 
-        // Get completed chapters count for a user (from API or localStorage)
         function getCompletedChaptersCount(discordId) {
             const userData = usersData[discordId];
             const apiCount = userData?.chapters_completed || 0;
             
-            // Also check localStorage for any chapters not yet synced to API
             const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
             const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
             const userProgress = allProgress[userKey] || {};
@@ -598,7 +573,6 @@
                 return false;
             });
             
-            // Return the maximum of API count or local count
             return Math.max(apiCount, localCompleted.length);
         }
 
@@ -606,7 +580,6 @@
             const container = document.getElementById('leaderboard');
             container.innerHTML = '';
 
-            // Get user data with combined counts
             const users = Object.values(usersData).map(user => ({
                 ...user,
                 chapters_completed: getCompletedChaptersCount(user.discord_id)
@@ -633,17 +606,14 @@
             });
         }
 
-        // Check if chapter is completed for a user (from API, localStorage, OR quiz results)
         function isChapterCompletedForUser(discordId, chapterId) {
             const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
             
-            // 1. First check API data
             const userData = usersData[discordId];
             if (userData?.progress?.[chapterId]?.completed === 1 || userData?.progress?.[chapterId]?.completed === true) {
                 return true;
             }
             
-            // 2. Check localStorage progress
             const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
             const userProgress = allProgress[userKey];
             if (userProgress?.[chapterId]) {
@@ -652,41 +622,19 @@
                 if (typeof data === 'object' && data.completed === true) return true;
             }
             
-            // 3. Check quiz results (chapter is only complete if quiz was taken)
             const quizResults = JSON.parse(localStorage.getItem('bookclub_quiz_results') || '[]');
             const quizCompleted = quizResults.find(r => r.chapterId == chapterId && r.userId == discordId);
             if (quizCompleted) return true;
             
-            // 4. Check old format in bookclub_user_data
-            const allUserData = JSON.parse(localStorage.getItem('bookclub_user_data') || '{}');
-            const userDataLegacy = allUserData[userKey];
-            if (userDataLegacy?.quiz_results?.[chapterId]) {
-                return true;
-            }
-            
             return false;
         }
         
-        // Get quiz score for display
         function getQuizScore(discordId, chapterId) {
-            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
-            
-            // Check new format
             const quizResults = JSON.parse(localStorage.getItem('bookclub_quiz_results') || '[]');
             const result = quizResults.find(r => r.chapterId == chapterId && r.userId == discordId);
             if (result) {
                 return `${result.score}/${result.total || 10}`;
             }
-            
-            // Check old format
-            const allUserData = JSON.parse(localStorage.getItem('bookclub_user_data') || '{}');
-            const userData = allUserData[userKey];
-            if (userData?.quiz_results?.[chapterId]) {
-                const qr = userData.quiz_results[chapterId];
-                const total = qr.answers?.length || 10;
-                return `${qr.score}/${total}`;
-            }
-            
             return null;
         }
 
@@ -694,24 +642,23 @@
             const container = document.getElementById('books-section');
             container.innerHTML = '';
 
-            booksData.forEach(book => {
+            booksData.forEach((book, bookIndex) => {
                 const bookCard = document.createElement('div');
-                bookCard.className = 'book-card';
+                bookCard.className = 'book-card animate-on-load';
+                bookCard.style.animationDelay = `${bookIndex * 100}ms`;
                 
                 let chaptersHTML = '';
-                book.chapters.forEach(chapter => {
-                    // Check progress from API, localStorage, or quiz results
+                book.chapters.forEach((chapter, chIndex) => {
                     const alexCompleted = isChapterCompletedForUser('acro16hunna', chapter.id);
                     const dhiannaCompleted = isChapterCompletedForUser('Dhianna369', chapter.id);
                     
-                    // Get quiz scores if available
                     const alexScore = alexCompleted ? getQuizScore('acro16hunna', chapter.id) : null;
                     const dhiannaScore = dhiannaCompleted ? getQuizScore('Dhianna369', chapter.id) : null;
                     
                     let statusHTML = '';
                     if (alexCompleted && dhiannaCompleted) {
-                        const scoreText = (alexScore || dhiannaScore) ? ` (${alexScore || ''}${alexScore && dhiannaScore ? '/' : ''}${dhiannaScore || ''})` : '';
-                        statusHTML = `<span class="status-badge alex">✓ Both${scoreText}</span>`;
+                        const scoreText = (alexScore || dhiannaScore) ? ` (${alexScore || ''}${alexScore && dhiannaScore ? ' • ' : ''}${dhiannaScore || ''})` : '';
+                        statusHTML = `<span class="status-badge both">✓ Both${scoreText}</span>`;
                     } else if (alexCompleted) {
                         statusHTML = `<span class="status-badge alex">✓ Alex${alexScore ? ' ' + alexScore : ''}</span>`;
                     } else if (dhiannaCompleted) {
@@ -721,7 +668,7 @@
                     }
 
                     chaptersHTML += `
-                        <div class="chapter-item">
+                        <div class="chapter-item" style="animation-delay: ${chIndex * 50}ms">
                             <div class="chapter-info">
                                 <div class="chapter-number">Chapter ${chapter.number}</div>
                                 <div class="chapter-title">${chapter.title}</div>
@@ -751,14 +698,30 @@
         }
 
         async function syncAll() {
-            document.getElementById('sync-text').textContent = 'Syncing...';
+            const btn = document.querySelector('.sync-btn');
+            BookClubUI.setButtonLoading(btn, 'Syncing...');
+            
             await loadData();
-            document.getElementById('sync-text').textContent = 'Cloud sync active - ' + new Date().toLocaleTimeString();
+            
+            BookClubUI.restoreButton(btn);
+            BookClubUI.showSuccess('Data refreshed!');
         }
+
+        // Mobile Navigation
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
 
         // Init
         initSession();
         loadData();
+        BookClubUI.animateOnLoad();
         
         // Auto-refresh every 30 seconds
         setInterval(loadData, 30000);
