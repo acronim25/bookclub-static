@@ -3,14 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Trading Book Club</title>
+    <title>BookClub | Transparent Reading</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .whoami-bar {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .whoami-title {
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .whoami-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .whoami-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .whoami-btn.alex {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+        }
+        .whoami-btn.alex:hover, .whoami-btn.alex.active {
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+        }
+        .whoami-btn.dhianna {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+        }
+        .whoami-btn.dhianna:hover, .whoami-btn.dhianna.active {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+        .leaderboard-section {
+            background: rgba(26, 31, 46, 0.8);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .leaderboard-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .leaderboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .user-card {
+            background: linear-gradient(135deg, #252b3d 0%, #1e2331 100%);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+        .user-card:hover {
+            transform: translateY(-3px);
+        }
+        .user-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .user-card.alex .user-avatar { background: rgba(0, 212, 170, 0.2); }
+        .user-card.dhianna .user-avatar { background: rgba(255, 107, 107, 0.2); }
+        .user-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .user-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #8b9bb4;
+        }
+        .user-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .book-progress-section {
+            margin-top: 30px;
+        }
+        .book-card {
+            background: rgba(26, 31, 46, 0.8);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .book-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .book-cover {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .book-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+        .book-info p {
+            margin: 0;
+            color: #8b9bb4;
+            font-size: 14px;
+        }
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+        }
+        .chapter-item {
+            background: #252b3d;
+            border-radius: 8px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        .chapter-item:hover {
+            border-color: rgba(255,255,255,0.1);
+        }
+        .chapter-info {
+            flex: 1;
+        }
+        .chapter-number {
+            font-size: 12px;
+            color: #8b9bb4;
+            margin-bottom: 2px;
+        }
+        .chapter-title {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .chapter-status {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge.alex {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00d4aa;
+        }
+        .status-badge.dhianna {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+        .status-badge.none {
+            background: rgba(139, 155, 180, 0.2);
+            color: #8b9bb4;
+        }
+        .mark-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .mark-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .mark-btn.alex {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00d4aa;
+        }
+        .mark-btn.alex:hover {
+            background: #00d4aa;
+            color: white;
+        }
+        .mark-btn.dhianna {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+        .mark-btn.dhianna:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+        .sync-bar {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4aa;
+        }
+        .sync-btn {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .sync-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
 </head>
 <body>
-    <!-- Chart Bars Left -->
+    <!-- Background -->
     <div class="chart-bars chart-bars-left">
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
@@ -19,8 +268,6 @@
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
-
-    <!-- Chart Bars Right -->
     <div class="chart-bars chart-bars-right">
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
@@ -30,6 +277,7 @@
         <div class="chart-bar-group"><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div><div class="chart-bar"></div></div>
     </div>
 
+    <!-- Nav -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -48,570 +296,206 @@
     </nav>
 
     <main class="main-content">
-        <!-- User Selector -->
-        <div class="user-selector-container">
-            <label for="user-selector">Select User:</label>
-            <select id="user-selector">
-                <option value="">Select a user...</option>
-            </select>
-            <div class="current-user-display" id="current-user-display" style="display: none;">
-                <span>Logged in as:</span>
-                <span class="user-name" id="display-user-name"></span>
+        <!-- Who Am I Bar -->
+        <div class="whoami-bar">
+            <div>
+                <div class="whoami-title">Who are you?</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+            </div>
+            <div class="whoami-buttons">
+                <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
             </div>
         </div>
 
-        <!-- Dashboard Content -->
-        <div id="dashboard-content" style="display: none;">
-            <div class="page-header">
-                <h1>📊 Dashboard</h1>
-                <p class="subtitle">Track your reading progress and achievements</p>
-            </div>
-
-            <div class="dashboard-grid">
-                <!-- Stats Cards -->
-                <div class="stats-grid" id="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">📖</div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="stat-chapters">0</div>
-                            <div class="stat-label">Chapters Read</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon accent-orange">🔥</div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="stat-streak">0</div>
-                            <div class="stat-label">Day Streak</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon accent-green">✓</div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="stat-score">0</div>
-                            <div class="stat-label">Avg Quiz Score</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon accent-purple">📝</div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="stat-notes">0</div>
-                            <div class="stat-label">Notes Shared</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Current Book -->
-                <div class="card current-book-card">
-                    <div class="card-header"><h2>🔖 Currently Reading</h2></div>
-                    <div class="card-body">
-                        <div class="book-info">
-                            <h3 id="current-book-title">Select a book to read</h3>
-                            <p class="book-author" id="current-book-author"></p>
-                            <div class="progress-section">
-                                <div class="progress-header">
-                                    <span>Progress</span>
-                                    <span class="progress-percent" id="progress-percent">0%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                                </div>
-                                <p class="progress-text" id="progress-text">0 of 0 chapters completed</p>
-                            </div>
-                            <a href="library.html" id="continue-reading-link" class="btn btn-primary">📚 Continue Reading</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Badges -->
-                <div class="card badges-preview-card">
-                    <div class="card-header">
-                        <h2>🏅 Badge Progress</h2>
-                        <a href="badges.html" class="btn btn-sm btn-secondary">View All</a>
-                    </div>
-                    <div class="card-body">
-                        <div class="badge-progress-grid" id="badge-progress-grid"></div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity -->
-                <div class="card">
-                    <div class="card-header"><h2>🕐 Recent Activity</h2></div>
-                    <div class="card-body">
-                        <div class="activity-list" id="activity-list">
-                            <p class="empty-state">No recent activity. Start reading to track your progress!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Data Backup -->
-                <div class="card backup-card" style="border: 1px solid var(--accent-gold); background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(22,27,34,0.85) 100%);">
-                    <div class="card-header"><h2>💾 Data Backup</h2></div>
-                    <div class="card-body">
-                        <p class="backup-info" style="color: var(--accent-gold); margin-bottom: 1rem;">⚠️ Your progress is saved in your browser. Download a backup to keep your data safe!</p>
-                        <div class="backup-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                            <button class="btn btn-secondary" onclick="downloadBackup()">📥 Download Backup</button>
-                            <div class="restore-section">
-                                <input type="file" id="restore-file" accept=".json" style="display:none" onchange="restoreBackup(this)">
-                                <button class="btn btn-primary" onclick="document.getElementById('restore-file').click()">📤 Restore from Backup</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cloud Sync -->
-                <div class="card sync-card" style="border: 1px solid var(--accent-primary); background: linear-gradient(135deg, rgba(0,212,255,0.05) 0%, rgba(22,27,34,0.85) 100%);">
-                    <div class="card-header"><h2>☁️ Cloud Sync</h2></div>
-                    <div class="card-body">
-                        <p class="sync-info" style="color: var(--accent-primary); margin-bottom: 1rem;">🔄 Your progress is synced to the cloud. Both Alex and Dhianna can see each other's progress!</p>
-                        <div class="sync-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                            <button class="btn btn-primary" onclick="syncToCloud()">⬆️ Save to Cloud</button>
-                            <button class="btn btn-secondary" onclick="syncFromCloud()">⬇️ Load from Cloud</button>
-                            <button class="btn btn-secondary" onclick="viewAllProgress()">👥 View Both Progress</button>
-                        </div>
-                        <div id="sync-status" style="margin-top: 1rem; font-size: 0.9rem;"></div>
-                    </div>
-                </div>
+        <!-- Leaderboard Section -->
+        <div class="leaderboard-section">
+            <div class="leaderboard-title">🏆 Leaderboard - Who's Reading?</div>
+            <div class="leaderboard-grid" id="leaderboard">
+                <!-- Populated by JS -->
             </div>
         </div>
 
-        <!-- Welcome State -->
-        <div id="welcome-state" class="empty-state-container">
-            <div class="empty-state-icon">👋</div>
-            <h2>Welcome to Book Club</h2>
-            <p>Select a user above to track your reading progress, earn badges, and compete on the leaderboard.</p>
-            <a href="library.html" class="btn btn-primary">Browse Books</a>
+        <!-- Books Progress -->
+        <div class="book-progress-section" id="books-section">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Sync Bar -->
+        <div class="sync-bar">
+            <div class="sync-status">
+                <span>☁️</span>
+                <span id="sync-text">Cloud sync active</span>
+            </div>
+            <button class="sync-btn" onclick="syncAll()">🔄 Refresh Data</button>
         </div>
     </main>
 
-    <footer class="footer">
-        <p>© 2026 Trading Book Club. Level up your trading knowledge.</p>
-    </footer>
-
-    <script src="js/data.js?v=2"></script>
-    <script src="js/app.js?v=2"></script>
-    <script src="js/sync.js?v=4"></script>
+    <script src="js/sync.js"></script>
     <script>
-        // PATCH: Ensure SyncAPI exists (fallback for cache issues)
-        if (typeof SyncAPI === 'undefined' && typeof BookClubSync !== 'undefined') {
-            console.log('Creating SyncAPI from BookClubSync...');
-            window.SyncAPI = new BookClubSync();
-        }
-        
-        // Mobile Navigation Toggle
-        document.getElementById('navToggle')?.addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
-            });
-        });
-        
-        // PATCH: Ensure getCompletedChapters exists (works with old cached app.js)
-        if (!BookClub.getCompletedChapters) {
-            BookClub.getCompletedChapters = function(userId) {
-                const progress = BookClub.getProgress(userId);
-                return Object.keys(progress).filter(key => {
-                    const val = progress[key];
-                    return val === true || (val && val.completed === true);
-                }).map(Number);
-            };
-        }
-        
-        function populateUserDropdown() {
-            const select = document.getElementById('user-selector');
-            const users = BookClub.getAllUsers();
-            while (select.options.length > 1) select.remove(1);
-            Object.values(users).forEach(user => {
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = user.name;
-                select.appendChild(option);
-            });
+        const API_URL = 'https://5-189-142-233.nip.io/api';
+        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        let usersData = {};
+        let booksData = [];
+
+        function setWhoAmI(name) {
+            currentUser = name;
+            localStorage.setItem('bookclub_whoami', name);
+            updateWhoAmIUI();
         }
 
-        document.getElementById('user-selector').addEventListener('change', function() {
-            if (this.value) {
-                BookClub.setCurrentUser(this.value);
-                location.reload();
+        function updateWhoAmIUI() {
+            document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentUser === 'Alex') {
+                document.getElementById('btn-alex').classList.add('active');
+            } else if (currentUser === 'Dhianna') {
+                document.getElementById('btn-dhianna').classList.add('active');
             }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            populateUserDropdown();
-            const user = BookClub.getCurrentUser();
-            
-            if (user) {
-                document.getElementById('dashboard-content').style.display = 'block';
-                document.getElementById('welcome-state').style.display = 'none';
-                document.getElementById('current-user-display').style.display = 'flex';
-                document.getElementById('display-user-name').textContent = user.name;
-                document.getElementById('user-selector').value = user.id;
-                loadDashboard(user);
-            }
-        });
-
-        function loadDashboard(user) {
-            const completed = BookClub.getCompletedChapters(user.id);
-            const streak = BookClub.getStreakStatus(user.id);
-            document.getElementById('stat-chapters').textContent = completed.length;
-            document.getElementById('stat-streak').textContent = streak.current;
-            document.getElementById('stat-notes').textContent = BookClub.getUserNoteCount(user.id);
-            
-            let totalScore = 0, quizCount = 0;
-            const userData = BookClub.getAllUsers()[user.id];
-            if (userData && userData.quiz_scores) {
-                Object.values(userData.quiz_scores).forEach(s => { totalScore += s; quizCount++; });
-            }
-            document.getElementById('stat-score').textContent = quizCount > 0 ? Math.round(totalScore / quizCount) : 0;
-            
-            // Find the most recently read book
-            const currentBook = getMostRecentlyReadBook(user.id);
-            if (currentBook) {
-                const bookProgress = BookClub.getBookProgress(user.id, currentBook.id);
-                const pct = Math.round((bookProgress.completed / currentBook.total_chapters) * 100);
-                document.getElementById('current-book-title').textContent = currentBook.title;
-                document.getElementById('current-book-author').textContent = `by ${currentBook.author}`;
-                document.getElementById('progress-percent').textContent = pct + '%';
-                document.getElementById('progress-fill').style.width = pct + '%';
-                document.getElementById('progress-text').textContent = `${bookProgress.completed} of ${currentBook.total_chapters} chapters completed`;
-                document.getElementById('continue-reading-link').href = `book.html?id=${currentBook.id}`;
-            } else {
-                document.getElementById('current-book-title').textContent = 'Start your reading journey!';
-                document.getElementById('current-book-author').textContent = 'Visit the library to begin';
-                document.getElementById('progress-percent').textContent = '0%';
-                document.getElementById('progress-fill').style.width = '0%';
-                document.getElementById('progress-text').textContent = '0 of 0 chapters completed';
-                document.getElementById('continue-reading-link').href = 'library.html';
-            }
-            
-            loadBadgeProgress(user);
-            loadRecentActivity(user);
         }
 
-        function getMostRecentlyReadBook(userId) {
-            // Use BookClub API to get progress consistently
-            const progress = BookClub.getProgress(userId);
-            const progressEntries = Object.entries(progress);
-            
-            if (progressEntries.length === 0) {
-                // No progress at all - return first book as suggestion
-                const books = BookClub.getAllBooks();
-                return books.length > 0 ? books[0] : null;
+        async function loadData() {
+            try {
+                // Load users
+                const usersRes = await fetch(`${API_URL}/users`);
+                const users = await usersRes.json();
+                
+                // Load books
+                const booksRes = await fetch(`${API_URL}/books`);
+                booksData = await booksRes.json();
+
+                // Process user data
+                users.forEach(user => {
+                    usersData[user.discord_id] = user;
+                });
+
+                renderLeaderboard();
+                renderBooks();
+            } catch (e) {
+                console.error('Error loading data:', e);
             }
-            
-            // Sort by timestamp (newest first)
-            // For old format (boolean true), use a default old timestamp so they still count
-            const sortedChapters = progressEntries
-                .map(([chapterId, data]) => {
-                    let timestamp = 0;
-                    let isCompleted = false;
-                    
-                    // New format: object with completed_at
-                    if (data && typeof data === 'object' && data.completed === true) {
-                        isCompleted = true;
-                        timestamp = data.completed_at ? new Date(data.completed_at).getTime() : Date.now();
-                    }
-                    // Old format: boolean true
-                    else if (data === true) {
-                        isCompleted = true;
-                        timestamp = 1; // Give old entries a minimal timestamp so they count
-                    }
-                    
-                    return { chapterId: parseInt(chapterId), timestamp, isCompleted };
-                })
-                .filter(item => item.isCompleted) // Only include completed chapters
-                .sort((a, b) => b.timestamp - a.timestamp);
-            
-            // Get the most recent chapter
-            if (sortedChapters.length > 0) {
-                const mostRecent = sortedChapters[0];
-                const chapter = BookClub.getChapter(mostRecent.chapterId);
-                if (chapter) {
-                    return BookClub.getBook(chapter.book_id);
-                }
-            }
-            
-            // Fallback: if we have progress but no completed chapters,
-            // return the first book
-            const books = BookClub.getAllBooks();
-            return books.length > 0 ? books[0] : null;
         }
 
-        function loadBadgeProgress(user) {
-            const container = document.getElementById('badge-progress-grid');
-            const progress = BookClub.getBadgeProgress(user.id);
-            const ids = Object.keys(progress).slice(0, 4);
-            if (ids.length === 0) {
-                container.innerHTML = '<p class="empty-state">Complete chapters to earn badges!</p>';
-                return;
-            }
-            container.innerHTML = ids.map(id => {
-                const p = progress[id];
-                return `<div class="badge-progress-item"><div class="badge-info"><span class="badge-emoji">${p.badge.emoji}</span><span class="badge-name">${p.badge.name}</span></div><div class="progress-bar small"><div class="progress-fill ${p.earned ? 'complete' : ''}" style="width: ${p.percentage}%"></div></div><span class="progress-text">${p.current}/${p.target}</span></div>`;
-            }).join('');
-        }
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard');
+            container.innerHTML = '';
 
-        function loadRecentActivity(user) {
-            const container = document.getElementById('activity-list');
-            const activities = BookClub.getRecentActivity(user.id, 3);
-            
-            if (activities.length === 0) {
-                container.innerHTML = '<p class="empty-state">No recent activity. Start reading to track your progress!</p>';
-                return;
-            }
-            
-            container.innerHTML = activities.map(activity => {
-                return `
-                    <div class="activity-item">
-                        <div class="activity-icon" style="background: ${activity.color}20; color: ${activity.color}; border-color: ${activity.color}40;">
-                            ${activity.icon}
-                        </div>
-                        <div class="activity-content">
-                            <p class="activity-title">${activity.title}</p>
-                            ${activity.subtitle ? `<p class="activity-subtitle">${activity.subtitle}</p>` : ''}
-                            <span class="activity-time">${activity.time}</span>
+            const users = Object.values(usersData).sort((a, b) => 
+                (b.total_chapters_read || 0) - (a.total_chapters_read || 0)
+            );
+
+            users.forEach((user, index) => {
+                const isAlex = user.discord_id === 'acro16hunna';
+                const card = document.createElement('div');
+                card.className = `user-card ${isAlex ? 'alex' : 'dhianna'}`;
+                card.innerHTML = `
+                    <div class="user-card-header">
+                        <div class="user-avatar">${isAlex ? '👨' : '👩'}</div>
+                        <div>
+                            <div class="user-name">${user.name}</div>
+                            <div style="font-size: 11px; color: #8b9bb4;">Rank #${index + 1}</div>
                         </div>
                     </div>
+                    <div class="user-stats">
+                        <div class="user-stat">📖 ${user.total_chapters_read || 0} chapters</div>
+                        <div class="user-stat">🔥 ${user.current_streak || 0} streak</div>
+                    </div>
                 `;
-            }).join('');
+                container.appendChild(card);
+            });
         }
 
-        // Backup/Restore Functions
-        function downloadBackup() {
-            const data = BookClub.exportData();
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `bookclub-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            alert('✅ Backup downloaded! Keep this file safe.');
-        }
+        function renderBooks() {
+            const container = document.getElementById('books-section');
+            container.innerHTML = '';
 
-        function restoreBackup(input) {
-            const file = input.files[0];
-            if (!file) return;
-
-            if (!confirm('⚠️ This will REPLACE all current data. Are you sure?')) {
-                input.value = '';
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const result = BookClub.importData(e.target.result);
-                if (result.success) {
-                    alert('✅ ' + result.message + '\n\nPage will reload now.');
-                    location.reload();
-                } else {
-                    alert('❌ ' + result.message);
-                }
-            };
-            reader.readAsText(file);
-            input.value = '';
-        }
-
-        // Cloud Sync Functions
-        async function syncToCloud() {
-            const user = BookClub.getCurrentUser();
-            if (!user) {
-                alert('Please select a user first');
-                return;
-            }
-
-            const statusEl = document.getElementById('sync-status');
-            const btn = event.target;
-            btn.classList.add('btn-loading');
-            btn.disabled = true;
-            
-            statusEl.innerHTML = '<span class="loading-spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Syncing to cloud...';
-            statusEl.style.color = 'var(--accent-primary)';
-
-            try {
-                const users = BookClub.getAllUsers();
-                const userData = users[user.id];
-                const progress = BookClub.getCompletedChapters(user.id);
+            booksData.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
                 
-                const progressObj = {};
-                progress.forEach(chId => {
-                    progressObj[chId] = { completed: true, notes: '' };
-                });
-
-                const result = await SyncAPI.syncToBackend(user.discord_id || user.id, {
-                    name: user.name,
-                    progress: progressObj
-                });
-
-                if (result.success) {
-                    statusEl.innerHTML = '✅ Saved to cloud successfully!';
-                    statusEl.style.color = 'var(--accent-success)';
-                } else if (result.offline) {
-                    statusEl.innerHTML = '⚠️ API offline - data saved locally only';
-                    statusEl.style.color = 'var(--accent-gold)';
-                } else {
-                    statusEl.innerHTML = '❌ Sync failed: ' + (result.error || 'Unknown error');
-                    statusEl.style.color = 'var(--accent-danger)';
-                }
-            } catch (error) {
-                statusEl.innerHTML = '❌ Error: ' + error.message;
-                statusEl.style.color = 'var(--accent-danger)';
-            } finally {
-                btn.classList.remove('btn-loading');
-                btn.disabled = false;
-                setTimeout(() => statusEl.textContent = '', 5000);
-            }
-        }
-
-        async function syncFromCloud() {
-            const user = BookClub.getCurrentUser();
-            if (!user) {
-                alert('Please select a user first');
-                return;
-            }
-
-            const statusEl = document.getElementById('sync-status');
-            const btn = event.target;
-            btn.classList.add('btn-loading');
-            btn.disabled = true;
-            
-            statusEl.innerHTML = '<span class="loading-spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Loading from cloud...';
-            statusEl.style.color = 'var(--accent-primary)';
-
-            try {
-                const discordId = user.discord_id || user.id;
-                const result = await SyncAPI.loadFromCloud(discordId);
-
-                if (result && result.success) {
-                    // Merge cloud data with local data
-                    if (result.progress) {
-                        // Convert progress object to array of completed chapter IDs
-                        const progressArray = Object.entries(result.progress)
-                            .filter(([id, data]) => data.completed)
-                            .map(([id, data]) => parseInt(id));
-                        
-                        // Save to localStorage
-                        const STORAGE_KEYS = {
-                            PROGRESS: 'bookclub_progress',
-                            USER_DATA: 'bookclub_user_data'
-                        };
-                        
-                        // Save progress array
-                        localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progressArray));
-                        
-                        // Update user data with cloud data
-                        const userData = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_DATA) || '{}');
-                        if (userData[discordId]) {
-                            userData[discordId].current_streak = result.user?.current_streak || 0;
-                            userData[discordId].longest_streak = result.user?.longest_streak || 0;
-                            userData[discordId].total_chapters_read = result.user?.total_chapters_read || progressArray.length;
-                            userData[discordId].badges = result.user?.badges || [];
-                            localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
-                        }
+                let chaptersHTML = '';
+                book.chapters.forEach(chapter => {
+                    const alexCompleted = usersData['acro16hunna']?.progress?.[chapter.id]?.completed;
+                    const dhiannaCompleted = usersData['Dhianna369']?.progress?.[chapter.id]?.completed;
+                    
+                    let statusHTML = '';
+                    if (alexCompleted && dhiannaCompleted) {
+                        statusHTML = '<span class="status-badge alex">✓ Both</span>';
+                    } else if (alexCompleted) {
+                        statusHTML = '<span class="status-badge alex">✓ Alex</span>';
+                    } else if (dhiannaCompleted) {
+                        statusHTML = '<span class="status-badge dhianna">✓ Dhianna</span>';
+                    } else {
+                        statusHTML = '<span class="status-badge none">○ None</span>';
                     }
-                    statusEl.innerHTML = '✅ Loaded from cloud successfully!';
-                    statusEl.style.color = 'var(--accent-success)';
-                    setTimeout(() => location.reload(), 1000);
-                } else {
-                    statusEl.innerHTML = '⚠️ No cloud data found for this user';
-                    statusEl.style.color = 'var(--accent-gold)';
-                }
-            } catch (error) {
-                statusEl.innerHTML = '❌ Error: ' + error.message;
-                statusEl.style.color = 'var(--accent-danger)';
-            } finally {
-                btn.classList.remove('btn-loading');
-                btn.disabled = false;
-                if (!statusEl.textContent.includes('Reloading')) {
-                    setTimeout(() => statusEl.textContent = '', 5000);
-                }
-            }
-        }
 
-        async function viewAllProgress() {
-            const statusEl = document.getElementById('sync-status');
-            const btn = event.target;
-            btn.classList.add('btn-loading');
-            btn.disabled = true;
-            
-            statusEl.innerHTML = '<span class="loading-spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Loading users...';
-            statusEl.style.color = 'var(--accent-primary)';
-
-            try {
-                const users = await SyncAPI.getAllUsers();
-                
-                if (users.length === 0) {
-                    statusEl.innerHTML = '⚠️ No users found';
-                    statusEl.style.color = 'var(--accent-gold)';
-                    return;
-                }
-
-                // Create a nice display
-                let html = `
-                    <html>
-                    <head>
-                        <style>
-                            body { background: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 20px; line-height: 1.6; }
-                            h3 { color: #00d4ff; margin-bottom: 20px; font-size: 1.5rem; }
-                            .user-card { margin-bottom: 1rem; padding: 1rem; background: rgba(0,212,255,0.1); border-radius: 8px; border: 1px solid rgba(0,212,255,0.2); }
-                            .user-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; }
-                            .user-meta { color: #8b949e; font-size: 0.9rem; margin-bottom: 0.5rem; }
-                            .progress-bar { background: #21262d; border-radius: 4px; overflow: hidden; height: 8px; margin-top: 0.5rem; }
-                            .progress-fill { background: linear-gradient(90deg, #00d4ff, #7c3aed); height: 100%; border-radius: 4px; transition: width 0.3s; }
-                            .progress-text { color: #8b949e; font-size: 0.85rem; margin-top: 0.25rem; }
-                            .badge { display: inline-block; margin-right: 4px; }
-                        </style>
-                    </head>
-                    <body>
-                        <h3>👥 Everyone's Progress</h3>
-                        <div>`;
-                        
-                users.forEach(u => {
-                    const pct = Math.min(100, Math.round((u.chapters_completed / 32) * 100)); // 32 total chapters
-                    html += `
-                        <div class="user-card">
-                            <div class="user-name">${u.name}</div>
-                            <div class="user-meta">📚 ${u.chapters_completed} chapters | 🔥 ${u.current_streak} streak | 🏅 ${u.badges?.length || 0} badges</div>
-                            <div class="progress-bar"><div class="progress-fill" style="width: ${pct}%"></div></div>
-                            <div class="progress-text">${pct}% complete</div>
+                    chaptersHTML += `
+                        <div class="chapter-item">
+                            <div class="chapter-info">
+                                <div class="chapter-number">Chapter ${chapter.number}</div>
+                                <div class="chapter-title">${chapter.title}</div>
+                            </div>
+                            <div class="chapter-status">
+                                ${statusHTML}
+                                <div class="mark-buttons">
+                                    <button class="mark-btn alex" onclick="markChapter(${chapter.id}, 'Alex')" ${!currentUser ? 'disabled' : ''}>Mark Alex</button>
+                                    <button class="mark-btn dhianna" onclick="markChapter(${chapter.id}, 'Dhianna')" ${!currentUser ? 'disabled' : ''}>Mark Dhianna</button>
+                                </div>
+                            </div>
                         </div>
                     `;
                 });
-                
-                html += `</div></body></html>`;
 
-                const win = window.open('', 'Progress', 'width=500,height=600,scrollbars=yes');
-                win.document.write(html);
-                statusEl.textContent = '';
-            } catch (error) {
-                statusEl.innerHTML = '❌ Error: ' + error.message;
-                statusEl.style.color = 'var(--accent-danger)';
-            } finally {
-                btn.classList.remove('btn-loading');
-                btn.disabled = false;
-                setTimeout(() => {
-                    if (!statusEl.textContent.includes('Error')) statusEl.textContent = '';
-                }, 3000);
+                bookCard.innerHTML = `
+                    <div class="book-header">
+                        <div class="book-cover">📚</div>
+                        <div class="book-info">
+                            <h3>${book.title}</h3>
+                            <p>by ${book.author}</p>
+                        </div>
+                    </div>
+                    <div class="chapters-grid">
+                        ${chaptersHTML}
+                    </div>
+                `;
+                
+                container.appendChild(bookCard);
+            });
+        }
+
+        async function markChapter(chapterId, who) {
+            const discordId = who === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+            
+            try {
+                await fetch(`${API_URL}/user/${discordId}/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: who,
+                        chapter_id: chapterId,
+                        completed: true,
+                        notes: ''
+                    })
+                });
+                
+                // Reload data
+                await loadData();
+            } catch (e) {
+                console.error('Error marking chapter:', e);
             }
         }
 
-        // Auto-sync when page loads
-        document.addEventListener('DOMContentLoaded', async function() {
-            const user = BookClub.getCurrentUser();
-            if (user) {
-                // Try to sync from cloud on load
-                const discordId = user.discord_id || user.id;
-                const backendData = await SyncAPI.getUserFromBackend(discordId);
-                if (backendData) {
-                    console.log('Cloud data available for', user.name);
-                }
-            }
-        });
+        async function syncAll() {
+            document.getElementById('sync-text').textContent = 'Syncing...';
+            await loadData();
+            document.getElementById('sync-text').textContent = 'Cloud sync active - ' + new Date().toLocaleTimeString();
+        }
+
+        // Init
+        updateWhoAmIUI();
+        loadData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>
