@@ -121,7 +121,8 @@ class BookClubSync {
     // Sincronizare către backend (upload progres)
     async syncToBackend(userId, data) {
         try {
-            const response = await fetch(`${this.apiUrl}/users/${userId}/progress`, {
+            // API uses singular 'user', not plural 'users'
+            const response = await fetch(`${this.apiUrl}/user/${userId}/progress`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
