@@ -555,9 +555,39 @@
         }
 
         function isChapterCompleted(discordId, chapterId) {
+            // 1. First check API data (from usersData)
             const user = usersData[discordId];
-            if (!user || !user.progress) return false;
-            return user.progress[chapterId] && user.progress[chapterId].completed;
+            if (user && user.progress && user.progress[chapterId] && user.progress[chapterId].completed) {
+                return true;
+            }
+            
+            // 2. Fallback to localStorage progress (synced by quiz.html)
+            // quiz.html saves with user keys 'alex' or 'dhianna'
+            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
+            const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
+            const userProgress = allProgress[userKey];
+            if (userProgress && userProgress[chapterId]) {
+                const data = userProgress[chapterId];
+                // Handle both boolean and object format
+                if (data === true) return true;
+                if (typeof data === 'object' && data.completed === true) return true;
+            }
+            
+            return false;
+        }
+        
+        // Get completion timestamp for a chapter
+        function getChapterCompletionTime(discordId, chapterId) {
+            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
+            const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
+            const userProgress = allProgress[userKey];
+            if (userProgress && userProgress[chapterId]) {
+                const data = userProgress[chapterId];
+                if (typeof data === 'object' && data.completed_at) {
+                    return new Date(data.completed_at).toLocaleDateString();
+                }
+            }
+            return null;
         }
 
         // Update personal status card based on login state
@@ -635,6 +665,30 @@
                 return false;
             }
             
+            let apiSuccess = false;
+            let localSuccess = false;
+            
+            // 1. Update localStorage immediately for instant UI feedback
+            try {
+                const userKey = currentUserId === 'acro16hunna' ? 'alex' : 'dhianna';
+                const STORAGE_KEYS_PROGRESS = 'bookclub_progress';
+                const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS_PROGRESS) || '{}');
+                if (!allProgress[userKey]) allProgress[userKey] = {};
+                
+                allProgress[userKey][chapterId] = {
+                    completed: true,
+                    completed_at: new Date().toISOString(),
+                    notes: `Auto-marked on ${new Date().toLocaleDateString()} by opening chapter`
+                };
+                
+                localStorage.setItem(STORAGE_KEYS_PROGRESS, JSON.stringify(allProgress));
+                localSuccess = true;
+                console.log(`✓ Local progress updated for ${currentUser} (key: ${userKey}), chapter ${chapterId}`);
+            } catch (e) {
+                console.error('Error updating local progress:', e);
+            }
+            
+            // 2. Also sync with API
             try {
                 const response = await fetch(`${API_URL}/user/${currentUserId}/progress`, {
                     method: 'POST',
@@ -648,9 +702,9 @@
                 });
 
                 if (response.ok) {
-                    console.log(`✓ Auto-marked chapter ${chapterId} as complete for ${currentUser}`);
+                    console.log(`✓ API: Auto-marked chapter ${chapterId} as complete for ${currentUser}`);
                     
-                    // Update local data
+                    // Update local data cache
                     if (!usersData[currentUserId]) {
                         usersData[currentUserId] = { progress: {} };
                     }
@@ -659,23 +713,27 @@
                     }
                     usersData[currentUserId].progress[chapterId] = { completed: true };
                     
-                    // Show feedback
-                    showAutoMarkFeedback();
-                    
-                    // Refresh status display
-                    const alexCompleted = isChapterCompleted('acro16hunna', chapterId);
-                    const dhiannaCompleted = isChapterCompleted('Dhianna369', chapterId);
-                    updatePersonalStatus(chapterId, alexCompleted, dhiannaCompleted);
-                    
-                    return true;
+                    apiSuccess = true;
                 } else {
-                    console.error('Auto-mark failed:', response.status);
-                    return false;
+                    console.error('Auto-mark API call failed:', response.status);
                 }
             } catch (e) {
-                console.error('Error auto-marking chapter:', e);
-                return false;
+                console.error('Error auto-marking chapter via API:', e);
             }
+            
+            // Show feedback and refresh UI if either method succeeded
+            if (localSuccess || apiSuccess) {
+                showAutoMarkFeedback();
+                
+                // Refresh status display
+                const alexCompleted = isChapterCompleted('acro16hunna', chapterId);
+                const dhiannaCompleted = isChapterCompleted('Dhianna369', chapterId);
+                updatePersonalStatus(chapterId, alexCompleted, dhiannaCompleted);
+                
+                return true;
+            }
+            
+            return false;
         }
 
         // Show discrete feedback for auto-mark

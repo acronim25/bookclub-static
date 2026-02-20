@@ -581,13 +581,36 @@
             }
         }
 
+        // Get completed chapters count for a user (from API or localStorage)
+        function getCompletedChaptersCount(discordId) {
+            const userData = usersData[discordId];
+            const apiCount = userData?.chapters_completed || 0;
+            
+            // Also check localStorage for any chapters not yet synced to API
+            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
+            const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
+            const userProgress = allProgress[userKey] || {};
+            
+            const localCompleted = Object.keys(userProgress).filter(chId => {
+                const data = userProgress[chId];
+                if (data === true) return true;
+                if (typeof data === 'object' && data.completed === true) return true;
+                return false;
+            });
+            
+            // Return the maximum of API count or local count
+            return Math.max(apiCount, localCompleted.length);
+        }
+
         function renderLeaderboard() {
             const container = document.getElementById('leaderboard');
             container.innerHTML = '';
 
-            const users = Object.values(usersData).sort((a, b) => 
-                (b.chapters_completed || 0) - (a.chapters_completed || 0)
-            );
+            // Get user data with combined counts
+            const users = Object.values(usersData).map(user => ({
+                ...user,
+                chapters_completed: getCompletedChaptersCount(user.discord_id)
+            })).sort((a, b) => b.chapters_completed - a.chapters_completed);
 
             users.forEach((user, index) => {
                 const isAlex = user.discord_id === 'acro16hunna';
@@ -602,12 +625,33 @@
                         </div>
                     </div>
                     <div class="user-stats">
-                        <div class="user-stat">📖 ${user.chapters_completed || 0} chapters</div>
+                        <div class="user-stat">📖 ${user.chapters_completed} chapters</div>
                         <div class="user-stat">🔥 ${user.current_streak || 0} streak</div>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        }
+
+        // Check if chapter is completed for a user (from API or localStorage)
+        function isChapterCompletedForUser(discordId, chapterId) {
+            // 1. First check API data
+            const userData = usersData[discordId];
+            if (userData?.progress?.[chapterId]?.completed === 1 || userData?.progress?.[chapterId]?.completed === true) {
+                return true;
+            }
+            
+            // 2. Fallback to localStorage (synced by quiz.html)
+            const userKey = discordId === 'acro16hunna' ? 'alex' : 'dhianna';
+            const allProgress = JSON.parse(localStorage.getItem('bookclub_progress') || '{}');
+            const userProgress = allProgress[userKey];
+            if (userProgress?.[chapterId]) {
+                const data = userProgress[chapterId];
+                if (data === true) return true;
+                if (typeof data === 'object' && data.completed === true) return true;
+            }
+            
+            return false;
         }
 
         function renderBooks() {
@@ -620,12 +664,9 @@
                 
                 let chaptersHTML = '';
                 book.chapters.forEach(chapter => {
-                    // Check progress from the detailed user data fetched from API
-                    const alexProgress = usersData['acro16hunna']?.progress?.[chapter.id];
-                    const dhiannaProgress = usersData['Dhianna369']?.progress?.[chapter.id];
-                    
-                    const alexCompleted = alexProgress?.completed === 1 || alexProgress?.completed === true;
-                    const dhiannaCompleted = dhiannaProgress?.completed === 1 || dhiannaProgress?.completed === true;
+                    // Check progress from API or localStorage
+                    const alexCompleted = isChapterCompletedForUser('acro16hunna', chapter.id);
+                    const dhiannaCompleted = isChapterCompletedForUser('Dhianna369', chapter.id);
                     
                     let statusHTML = '';
                     if (alexCompleted && dhiannaCompleted) {
