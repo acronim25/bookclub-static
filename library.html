@@ -433,6 +433,7 @@
     </footer>
 
     <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
     <script>
         const API_URL = 'https://5-189-142-233.nip.io/api';
         let currentUser = null;
@@ -598,15 +599,15 @@
         }
 
         function getBookProgressForUser(discordId, bookId) {
-            const user = usersData[discordId];
-            if (!user || !user.progress) return { completed: 0, total: 0, percentage: 0 };
-            
+            // Calculează progresul REAL bazat pe quiz-uri completate
             const bookChapters = chaptersData.filter(c => c.book_id === bookId);
             const total = bookChapters.length;
             let completed = 0;
             
-            bookChapters.forEach(ch => {
-                if (user.progress[ch.id] && user.progress[ch.id].completed) {
+            // Pentru FIECARE capitol, verifică dacă există quiz result
+            bookChapters.forEach(chapter => {
+                const quizResult = getQuizResult(chapter.id, discordId);
+                if (quizResult) {
                     completed++;
                 }
             });
@@ -622,13 +623,30 @@
             const container = document.getElementById('comparison-grid');
             container.innerHTML = '';
 
-            const alexData = usersData['acro16hunna'];
-            const dhiannaData = usersData['Dhianna369'];
-
             // Create comparison cards for each book
             booksData.forEach(book => {
                 const alexProgress = getBookProgressForUser('acro16hunna', book.id);
                 const dhiannaProgress = getBookProgressForUser('Dhianna369', book.id);
+                
+                // Obține capitolele completate cu scoruri pentru afișare
+                const bookChapters = chaptersData.filter(c => c.book_id === book.id);
+                let alexCompletedChapters = [];
+                let dhiannaCompletedChapters = [];
+                
+                bookChapters.forEach(ch => {
+                    const alexQuiz = getQuizResult(ch.id, 'acro16hunna');
+                    const dhiannaQuiz = getQuizResult(ch.id, 'Dhianna369');
+                    if (alexQuiz) alexCompletedChapters.push({...ch, ...alexQuiz});
+                    if (dhiannaQuiz) dhiannaCompletedChapters.push({...ch, ...dhiannaQuiz});
+                });
+                
+                // Construiește textul cu capitolele completate
+                const alexChaptersText = alexCompletedChapters.length > 0 
+                    ? alexCompletedChapters.map(ch => `Ch${ch.number}: ${ch.score}/${ch.total}`).join(', ')
+                    : 'No chapters completed';
+                const dhiannaChaptersText = dhiannaCompletedChapters.length > 0
+                    ? dhiannaCompletedChapters.map(ch => `Ch${ch.number}: ${ch.score}/${ch.total}`).join(', ')
+                    : 'No chapters completed';
                 
                 const card = document.createElement('div');
                 card.className = 'comparison-card';
@@ -643,18 +661,21 @@
                             <div class="progress-bar-container">
                                 <div class="progress-bar-fill alex" style="width: ${alexProgress.percentage}%"></div>
                             </div>
-                            <span class="progress-value">${alexProgress.percentage}%</span>
+                            <span class="progress-value">${alexProgress.completed}/${alexProgress.total}</span>
                         </div>
-                        <div class="progress-row">
+                        <div style="font-size: 11px; color: #00d4aa; margin-top: 4px; margin-left: 110px;">
+                            ${alexChaptersText}
+                        </div>
+                        <div class="progress-row" style="margin-top: 10px;">
                             <span class="progress-label">Dhianna</span>
                             <div class="progress-bar-container">
                                 <div class="progress-bar-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                             </div>
-                            <span class="progress-value">${dhiannaProgress.percentage}%</span>
+                            <span class="progress-value">${dhiannaProgress.completed}/${dhiannaProgress.total}</span>
                         </div>
-                    </div>
-                    <div style="margin-top: 10px; font-size: 11px; color: #8b9bb4; text-align: center;">
-                        ${alexProgress.completed + dhiannaProgress.completed} of ${book.total_chapters * 2} total chapters read
+                        <div style="font-size: 11px; color: #ff6b6b; margin-top: 4px; margin-left: 110px;">
+                            ${dhiannaChaptersText}
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -676,6 +697,21 @@
 
                 let cardHTML = '';
                 
+                // Obține capitolele completate cu scoruri pentru tooltip
+                const getCompletedChaptersText = (discordId) => {
+                    const completedChapters = bookChapters
+                        .map(ch => ({ ...ch, quiz: getQuizResult(ch.id, discordId) }))
+                        .filter(ch => ch.quiz);
+                    
+                    if (completedChapters.length === 0) return 'No chapters completed yet';
+                    return completedChapters.map(ch => 
+                        `Ch${ch.number}: ${ch.quiz.score}/${ch.quiz.total}`
+                    ).join(' • ');
+                };
+                
+                const alexChaptersDetail = getCompletedChaptersText('acro16hunna');
+                const dhiannaChaptersDetail = getCompletedChaptersText('Dhianna369');
+                
                 if (book.id === 1) {
                     cardHTML = `
                         <div class="book-card book-card-featured">
@@ -695,12 +731,18 @@
                                         </div>
                                         <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
                                     </div>
-                                    <div class="dual-progress-row">
+                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                        ${alexChaptersDetail}
+                                    </div>
+                                    <div class="dual-progress-row" style="margin-top: 8px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
                                         <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                        ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
                             </div>
@@ -725,12 +767,18 @@
                                         </div>
                                         <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
                                     </div>
-                                    <div class="dual-progress-row">
+                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                        ${alexChaptersDetail}
+                                    </div>
+                                    <div class="dual-progress-row" style="margin-top: 8px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
                                         <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                        ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
                             </div>
@@ -755,12 +803,18 @@
                                         </div>
                                         <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
                                     </div>
-                                    <div class="dual-progress-row">
+                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                        ${alexChaptersDetail}
+                                    </div>
+                                    <div class="dual-progress-row" style="margin-top: 8px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
                                         <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                        ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
                             </div>
@@ -786,12 +840,18 @@
                                         </div>
                                         <span class="dual-progress-value">${alexProgress.completed}/${bookChapters.length}</span>
                                     </div>
-                                    <div class="dual-progress-row">
+                                    <div style="font-size: 10px; color: #00d4aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${alexChaptersDetail}">
+                                        ${alexChaptersDetail}
+                                    </div>
+                                    <div class="dual-progress-row" style="margin-top: 8px;">
                                         <span class="dual-progress-label" style="color: #ff6b6b;">Dhianna</span>
                                         <div class="dual-progress-bar">
                                             <div class="dual-progress-fill dhianna" style="width: ${dhiannaProgress.percentage}%"></div>
                                         </div>
                                         <span class="dual-progress-value">${dhiannaProgress.completed}/${bookChapters.length}</span>
+                                    </div>
+                                    <div style="font-size: 10px; color: #ff6b6b; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${dhiannaChaptersDetail}">
+                                        ${dhiannaChaptersDetail}
                                     </div>
                                 </div>
                             </div>

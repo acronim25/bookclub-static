@@ -402,6 +402,7 @@
     </footer>
 
     <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
     <script>
         const API_URL = 'https://5-189-142-233.nip.io/api';
         let currentUser = null;
@@ -569,9 +570,9 @@
 
             const chapters = BOOKCLUB_DATA.chapters.filter(c => c.book_id === book.id);
             
-            // Calculate progress for both users
-            const alexProgress = calculateProgress('acro16hunna', chapters);
-            const dhiannaProgress = calculateProgress('Dhianna369', chapters);
+            // Calculate progress for both users - bazat pe quiz-uri
+            const alexProgress = calculateRealProgress(book.id, 'acro16hunna', BOOKCLUB_DATA.books, BOOKCLUB_DATA.chapters);
+            const dhiannaProgress = calculateRealProgress(book.id, 'Dhianna369', BOOKCLUB_DATA.books, BOOKCLUB_DATA.chapters);
 
             document.getElementById('loading-state').style.display = 'none';
             container.style.display = 'block';
@@ -608,22 +609,29 @@
 
                 <div class="chapters-card">
                     <div class="chapters-card-header">
-                        <h2>📑 Chapters - Transparent View</h2>
+                        <h2>📑 Chapters - Quiz Progress</h2>
                     </div>
                     <div class="chapters-list-container">
                         ${chapters.map(chapter => {
-                            const alexCompleted = isChapterCompleted('acro16hunna', chapter.id);
-                            const dhiannaCompleted = isChapterCompleted('Dhianna369', chapter.id);
+                            const alexQuiz = getQuizResult(chapter.id, 'acro16hunna');
+                            const dhiannaQuiz = getQuizResult(chapter.id, 'Dhianna369');
+                            
+                            const alexCompleted = !!alexQuiz;
+                            const dhiannaCompleted = !!dhiannaQuiz;
                             
                             let statusBadge = '';
                             if (alexCompleted && dhiannaCompleted) {
-                                statusBadge = '<span class="status-badge both">✓ Both</span>';
+                                const alexScore = alexQuiz ? `${alexQuiz.score}/${alexQuiz.total}` : '';
+                                const dhiannaScore = dhiannaQuiz ? `${dhiannaQuiz.score}/${dhiannaQuiz.total}` : '';
+                                statusBadge = `<span class="status-badge both">✓ Both (${alexScore} • ${dhiannaScore})</span>`;
                             } else if (alexCompleted) {
-                                statusBadge = '<span class="status-badge alex">✓ Alex</span>';
+                                const score = alexQuiz ? ` ${alexQuiz.score}/${alexQuiz.total}` : '';
+                                statusBadge = `<span class="status-badge alex">✓ Alex${score}</span>`;
                             } else if (dhiannaCompleted) {
-                                statusBadge = '<span class="status-badge dhianna">✓ Dhianna</span>';
+                                const score = dhiannaQuiz ? ` ${dhiannaQuiz.score}/${dhiannaQuiz.total}` : '';
+                                statusBadge = `<span class="status-badge dhianna">✓ Dhianna${score}</span>`;
                             } else {
-                                statusBadge = '<span class="status-badge none">○ None</span>';
+                                statusBadge = '<span class="status-badge none">○ Not completed</span>';
                             }
 
                             return `
@@ -652,30 +660,9 @@
             return 'images/default-book-cover.png';
         }
 
-        function calculateProgress(discordId, chapters) {
-            const user = usersData[discordId];
-            if (!user || !user.progress) return { completed: 0, total: chapters.length, percentage: 0 };
-            
-            let completed = 0;
-            chapters.forEach(ch => {
-                if (user.progress[ch.id] && user.progress[ch.id].completed) {
-                    completed++;
-                }
-            });
-            
-            return {
-                completed,
-                total: chapters.length,
-                percentage: chapters.length > 0 ? Math.round((completed / chapters.length) * 100) : 0
-            };
-        }
-
-        function isChapterCompleted(discordId, chapterId) {
-            const user = usersData[discordId];
-            if (!user || !user.progress) return false;
-            return user.progress[chapterId] && user.progress[chapterId].completed;
-        }
-
+        // Funcțiile calculateProgress și isChapterCompleted sunt acum în utils.js
+        // calculateRealProgress și getQuizResult sunt importate din utils.js
+        
         async function markChapter(chapterId, who) {
             const discordId = who === 'Alex' ? 'acro16hunna' : 'Dhianna369';
             
