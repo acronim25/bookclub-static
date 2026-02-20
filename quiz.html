@@ -138,6 +138,9 @@
         const SESSION_DURATION_DAYS = 7;
         const SESSION_KEY = 'bookclub_session';
         
+        // Global variable to store current session
+        let currentSession = null;
+        
         function getStoredSession() {
             try {
                 const session = localStorage.getItem(SESSION_KEY);
@@ -161,6 +164,9 @@
         function syncSessionWithBookClub() {
             const session = getStoredSession();
             if (session) {
+                // Store session globally for quiz submit
+                currentSession = session;
+                
                 // Sync session with BookClub's current user
                 const expectedUserId = session.userId;
                 const currentBookClubUser = BookClub.getCurrentUser();
@@ -179,6 +185,7 @@
                         timestamp: Date.now()
                     };
                     localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
+                    currentSession = newSession;
                     BookClub.setCurrentUser(userId);
                 }
             }
@@ -221,7 +228,10 @@
             
             const book = BookClub.getBookById(chapter.book_id);
             const quiz = BookClub.getQuizByChapter(chapterId);
-            const user = BookClub.getCurrentUser();
+            
+            // Use session for user identification
+            const session = getStoredSession();
+            const userId = session ? session.userId : null;
             
             if (!quiz) {
                 container.innerHTML = `
@@ -247,7 +257,7 @@
             currentQuiz = quiz;
             currentChapterId = chapterId;
             
-            const quizResult = user ? BookClub.getQuizResult(user.id, chapterId) : null;
+            const quizResult = userId ? BookClub.getQuizResult(userId, chapterId) : null;
             const hasTaken = quizResult && !retake;
             
             container.innerHTML = `
@@ -359,6 +369,13 @@
             
             if (!currentQuiz) return;
             
+            // Check for active session first
+            const session = getStoredSession();
+            if (!session || !session.userId) {
+                BookClub.showNotification('Please log in first', 'error');
+                return;
+            }
+            
             const form = event.target;
             const formData = new FormData(form);
             const answers = [];
@@ -386,12 +403,12 @@
             submitBtn.innerHTML = '⏳ Submitting...';
             submitBtn.disabled = true;
             
-            // Submit quiz
-            const result = BookClub.submitQuiz(currentChapterId, answers);
+            // Submit quiz using session data
+            const result = submitQuizWithSession(currentChapterId, answers, session.userId, session.userName);
             
             if (result) {
                 // Auto-mark chapter as complete for the logged-in user
-                const marked = await autoMarkChapter(currentChapterId);
+                const marked = await autoMarkChapter(currentChapterId, session.userId, session.userName);
                 if (marked) {
                     // Add a note about auto-mark to the result message
                     result.autoMarked = true;
@@ -401,6 +418,128 @@
                 // Also show transparent results for both users
                 setTimeout(() => displayTransparentResults(), 100);
             }
+        }
+        
+        // Submit quiz with explicit session data
+        function submitQuizWithSession(chapterId, answers, userId, userName) {
+            const quiz = BookClub.getQuizByChapter(chapterId);
+            if (!quiz) return null;
+            
+            // Calculate score
+            let correct = 0;
+            answers.forEach((answer, idx) => {
+                if (answer === quiz.questions[idx].correct) {
+                    correct++;
+                }
+            });
+            
+            const maxScore = quiz.questions.length;
+            const score = correct;
+            const percentage = Math.round((correct / maxScore) * 100);
+            
+            // Save result using BookClub's saveQuizResult function via app.js internals
+            // We need to access the saveQuizResult function from app.js
+            const users = BookClub.getAllUsers ? BookClub.getAllUsers() : {};
+            const user = users[userId];
+            
+            if (user) {
+                // Save score
+                if (!user.quiz_scores) user.quiz_scores = {};
+                user.quiz_scores[chapterId] = Math.max(score, user.quiz_scores[chapterId] || 0);
+                
+                // Save detailed result with answers (for transparency)
+                if (!user.quiz_results) user.quiz_results = {};
+                user.quiz_results[chapterId] = {
+                    score: score,
+                    answers: answers,
+                    completed_at: new Date().toISOString()
+                };
+                
+                // Update localStorage
+                const STORAGE_KEYS_USER_DATA = 'bookclub_user_data';
+                localStorage.setItem(STORAGE_KEYS_USER_DATA, JSON.stringify(users));
+                
+                // Track activity - add to activities
+                const activities = JSON.parse(localStorage.getItem('bookclub_activities') || '[]');
+                activities.unshift({
+                    id: Date.now(),
+                    user_id: userId,
+                    type: 'quiz_completed',
+                    data: { chapter_id: chapterId, score: score },
+                    created_at: new Date().toISOString()
+                });
+                // Keep only last 50
+                const trimmedActivities = activities.slice(0, 50);
+                localStorage.setItem('bookclub_activities', JSON.stringify(trimmedActivities));
+                
+                // Check for badges
+                const newBadges = checkBadgesForUser(user);
+                
+                return {
+                    score,
+                    maxScore,
+                    percentage,
+                    correct,
+                    total: maxScore,
+                    newBadges: newBadges.map(id => {
+                        const badge = BookClub.getAllBadges().find(b => b.id === id);
+                        return badge ? { id: badge.id, name: badge.name, emoji: badge.emoji } : null;
+                    }).filter(Boolean)
+                };
+            }
+            
+            return null;
+        }
+        
+        // Helper function to check badges for a user
+        function checkBadgesForUser(user) {
+            const newBadges = [];
+            const progress = BookClub.getProgress ? BookClub.getProgress(user.id) : {};
+            const completedChapters = Object.keys(progress).length;
+            
+            const allBadges = BookClub.getAllBadges ? BookClub.getAllBadges() : [];
+            
+            allBadges.forEach(badge => {
+                if (user.badges.includes(badge.id)) return;
+                
+                let earned = false;
+                
+                switch (badge.type) {
+                    case 'chapters':
+                        earned = completedChapters >= badge.target;
+                        break;
+                    case 'streak':
+                        earned = user.current_streak >= badge.target;
+                        break;
+                    case 'perfect_quiz':
+                        earned = Object.values(user.quiz_scores || {}).some(s => s === 10);
+                        break;
+                    case 'notes':
+                        earned = user.notes.length >= badge.target;
+                        break;
+                    case 'books':
+                        const bookChapters = {};
+                        if (typeof BOOKCLUB_DATA !== 'undefined') {
+                            BOOKCLUB_DATA.chapters.forEach(ch => {
+                                if (!bookChapters[ch.book_id]) bookChapters[ch.book_id] = 0;
+                                if (progress[ch.id]) bookChapters[ch.book_id]++;
+                            });
+                            earned = Object.values(bookChapters).some((count, idx) => {
+                                const bookId = Object.keys(bookChapters)[idx];
+                                const total = BOOKCLUB_DATA.chapters.filter(c => c.book_id === parseInt(bookId)).length;
+                                return count >= total;
+                            });
+                        }
+                        break;
+                }
+                
+                if (earned) {
+                    newBadges.push(badge.id);
+                    user.badges.push(badge.id);
+                }
+            });
+            
+            return newBadges;
         }
 
         function showResults(result) {
@@ -560,15 +699,13 @@
         }
 
         // Auto-mark chapter as complete when quiz is submitted
-        async function autoMarkChapter(chapterId) {
-            const user = BookClub.getCurrentUser();
-            if (!user) {
+        async function autoMarkChapter(chapterId, userId, userName) {
+            if (!userId || !userName) {
                 console.log('No user logged in, skipping auto-mark');
-                return;
+                return false;
             }
 
-            const discordId = user.id; // Alex = acro16hunna, Dhianna = Dhianna369
-            const userName = user.name; // Alex or Dhianna
+            const discordId = userId; // Alex = acro16hunna, Dhianna = Dhianna369
 
             try {
                 const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
