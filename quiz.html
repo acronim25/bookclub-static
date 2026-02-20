@@ -167,32 +167,59 @@
                 // Store session globally for quiz submit
                 currentSession = session;
                 
+                // FIX: Map session userId to actual user key
+                // session.userId might be 'acro16hunna' or 'Dhianna369'
+                // We need to find the matching user and use their id ('alex' or 'dhianna')
+                const users = BookClub.getAllUsers ? BookClub.getAllUsers() : {};
+                let matchedUserId = null;
+                
+                for (const [uid, udata] of Object.entries(users)) {
+                    if (udata.discord_id === session.userId || 
+                        udata.name === session.userName ||
+                        uid === session.userId) {
+                        matchedUserId = uid;
+                        break;
+                    }
+                }
+                
+                // Use matched userId or fallback to name-based
+                const effectiveUserId = matchedUserId || (session.userName === 'Alex' ? 'alex' : 'dhianna');
+                
                 // Sync session with BookClub's current user
-                const expectedUserId = session.userId;
+                const expectedUserId = effectiveUserId;
                 const currentBookClubUser = BookClub.getCurrentUser();
                 if (!currentBookClubUser || currentBookClubUser.id !== expectedUserId) {
                     BookClub.setCurrentUser(expectedUserId);
+                    console.log('Synced session to user:', expectedUserId);
                 }
             } else {
                 // Check for legacy format
                 const legacyUser = localStorage.getItem('bookclub_whoami');
                 if (legacyUser) {
-                    const userId = legacyUser === 'Alex' ? 'acro16hunna' : 'Dhianna369';
-                    // Migrate to new session format
+                    const userId = legacyUser === 'Alex' ? 'alex' : 'dhianna';
+                    const discordId = legacyUser === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+                    // Migrate to new session format with CORRECT userId
                     const newSession = {
                         userName: legacyUser,
-                        userId: userId,
+                        userId: discordId, // Keep discord_id for reference
                         timestamp: Date.now()
                     };
                     localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
                     currentSession = newSession;
-                    BookClub.setCurrentUser(userId);
+                    BookClub.setCurrentUser(userId); // Use correct user key
+                    console.log('Migrated legacy user to:', userId);
                 }
             }
         }
         
         // Sync session on load
         syncSessionWithBookClub();
+        
+        // DEBUG: Log session status
+        console.log('=== QUIZ INITIALIZATION ===');
+        console.log('Session:', currentSession);
+        console.log('BookClub current user:', BookClub.getCurrentUser ? BookClub.getCurrentUser() : 'N/A');
+        console.log('All users:', BookClub.getAllUsers ? BookClub.getAllUsers() : 'N/A');
         // Mobile Navigation Toggle
         document.getElementById('navToggle')?.addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
@@ -368,11 +395,21 @@
         async function handleSubmit(event) {
             event.preventDefault();
             
-            if (!currentQuiz) return;
+            console.log('=== HANDLE SUBMIT ===');
+            console.log('Current quiz:', currentQuiz ? 'loaded' : 'null');
+            console.log('Current chapter ID:', currentChapterId);
+            
+            if (!currentQuiz) {
+                console.error('No quiz loaded!');
+                return;
+            }
             
             // Check for active session first
             const session = getStoredSession();
+            console.log('Session from getStoredSession:', session);
+            
             if (!session || !session.userId) {
+                console.error('No session or userId!');
                 BookClub.showNotification('Please log in first', 'error');
                 return;
             }
@@ -386,6 +423,8 @@
                 const answer = formData.get(`question_${i}`);
                 answers.push(answer ? parseInt(answer) : -1);
             }
+            
+            console.log('Collected answers:', answers);
             
             // Check all questions answered
             if (answers.some(a => a === -1)) {
@@ -404,12 +443,30 @@
             submitBtn.innerHTML = '⏳ Submitting...';
             submitBtn.disabled = true;
             
+            // FIX: Find the correct userId to use (map from session to actual user key)
+            const users = BookClub.getAllUsers ? BookClub.getAllUsers() : {};
+            let effectiveUserId = session.userId;
+            let effectiveUserName = session.userName;
+            
+            for (const [uid, udata] of Object.entries(users)) {
+                if (udata.discord_id === session.userId || 
+                    udata.name === session.userName) {
+                    effectiveUserId = uid; // Use the actual user key (alex/dhianna)
+                    effectiveUserName = udata.name;
+                    break;
+                }
+            }
+            
+            console.log('Effective user for submission:', { effectiveUserId, effectiveUserName });
+            
             // Submit quiz using session data
-            const result = submitQuizWithSession(currentChapterId, answers, session.userId, session.userName);
+            const result = submitQuizWithSession(currentChapterId, answers, effectiveUserId, effectiveUserName);
+            
+            console.log('Submit result:', result);
             
             if (result) {
                 // Auto-mark chapter as complete for the logged-in user
-                const marked = await autoMarkChapter(currentChapterId, session.userId, session.userName);
+                const marked = await autoMarkChapter(currentChapterId, effectiveUserId, effectiveUserName);
                 if (marked) {
                     // Add a note about auto-mark to the result message
                     result.autoMarked = true;
@@ -431,8 +488,17 @@
         
         // Submit quiz with explicit session data
         function submitQuizWithSession(chapterId, answers, userId, userName) {
+            console.log('=== SUBMIT QUIZ ===');
+            console.log('Chapter ID:', chapterId);
+            console.log('User ID from session:', userId);
+            console.log('User Name from session:', userName);
+            console.log('Answers:', answers);
+            
             const quiz = BookClub.getQuizByChapter(chapterId);
-            if (!quiz) return null;
+            if (!quiz) {
+                console.error('Quiz not found for chapter:', chapterId);
+                return null;
+            }
             
             // Calculate score
             let correct = 0;
@@ -445,61 +511,122 @@
             const totalQuestions = quiz.questions.length;
             const score = Math.round((correct / totalQuestions) * 100); // Percentage score
             
-            // Save result using the same key as app.js
+            console.log('Calculated score:', correct, '/', totalQuestions, '(', score, '%)');
+            
+            // FIX: Get users and find by matching discord_id or name (not by userId directly)
             const STORAGE_KEYS_USER_DATA = 'bookclub_user_data';
             const users = JSON.parse(localStorage.getItem(STORAGE_KEYS_USER_DATA) || '{}');
-            const user = users[userId];
             
-            if (user) {
-                // Initialize quiz_scores if not exists
-                if (!user.quiz_scores) user.quiz_scores = {};
+            console.log('Available users:', Object.keys(users));
+            
+            // Find user by discord_id or name (case insensitive)
+            let user = null;
+            let actualUserId = null;
+            
+            // Try to find user by discord_id or name
+            for (const [uid, udata] of Object.entries(users)) {
+                const discordMatch = udata.discord_id && udata.discord_id.toLowerCase() === (userId || '').toLowerCase();
+                const nameMatch = udata.name && udata.name.toLowerCase() === (userName || '').toLowerCase();
+                const idMatch = uid.toLowerCase() === (userId || '').toLowerCase();
                 
-                // Save raw correct count (not percentage) for compatibility with app.js
-                const rawScore = correct; // Number of correct answers (0-10)
-                user.quiz_scores[chapterId] = Math.max(rawScore, user.quiz_scores[chapterId] || 0);
+                console.log(`Checking user ${uid}: discord=${udata.discord_id}, name=${udata.name} -> discordMatch=${discordMatch}, nameMatch=${nameMatch}, idMatch=${idMatch}`);
                 
-                // Save detailed result with answers (for transparency)
-                if (!user.quiz_results) user.quiz_results = {};
-                user.quiz_results[chapterId] = {
-                    score: rawScore, // Store raw count for display
-                    percentage: score, // Store percentage too
-                    answers: answers,
-                    completed_at: new Date().toISOString()
-                };
-                
-                // Save back to localStorage
-                localStorage.setItem(STORAGE_KEYS_USER_DATA, JSON.stringify(users));
-                
-                // Track activity - add to activities
-                const activities = JSON.parse(localStorage.getItem('bookclub_activities') || '[]');
-                activities.unshift({
-                    id: Date.now(),
-                    user_id: userId,
-                    type: 'quiz_completed',
-                    data: { chapter_id: chapterId, score: rawScore },
-                    created_at: new Date().toISOString()
-                });
-                // Keep only last 50
-                const trimmedActivities = activities.slice(0, 50);
-                localStorage.setItem('bookclub_activities', JSON.stringify(trimmedActivities));
-                
-                // Check for badges
-                const newBadges = checkBadgesForUser(user);
-                
-                return {
-                    score: rawScore,
-                    maxScore: totalQuestions,
-                    percentage: score,
-                    correct: correct,
-                    total: totalQuestions,
-                    newBadges: newBadges.map(id => {
-                        const badge = BookClub.getAllBadges().find(b => b.id === id);
-                        return badge ? { id: badge.id, name: badge.name, emoji: badge.emoji } : null;
-                    }).filter(Boolean)
-                };
+                if (discordMatch || nameMatch || idMatch) {
+                    user = udata;
+                    actualUserId = uid;
+                    console.log('Found matching user:', uid);
+                    break;
+                }
             }
             
-            return null;
+            // If still not found, try to find by partial match on discord_id
+            if (!user && userId) {
+                for (const [uid, udata] of Object.entries(users)) {
+                    if (udata.discord_id && udata.discord_id.toLowerCase().includes(userId.toLowerCase())) {
+                        user = udata;
+                        actualUserId = uid;
+                        console.log('Found user by partial discord match:', uid);
+                        break;
+                    }
+                }
+            }
+            
+            if (!user) {
+                console.error('User not found! Tried userId:', userId, 'userName:', userName);
+                console.error('Available users:', Object.entries(users).map(([k,v]) => ({id: k, name: v.name, discord_id: v.discord_id})));
+                
+                // Create user on-the-fly if not found (fallback)
+                console.log('Creating user on-the-fly as fallback...');
+                const fallbackId = userName ? userName.toLowerCase() : 'unknown';
+                user = {
+                    id: fallbackId,
+                    name: userName || 'Unknown',
+                    discord_id: userId || '',
+                    current_streak: 0,
+                    longest_streak: 0,
+                    chapters_read: 0,
+                    badges: [],
+                    quiz_scores: {},
+                    notes: [],
+                    last_read_date: null
+                };
+                actualUserId = fallbackId;
+                users[fallbackId] = user;
+            }
+            
+            // Initialize quiz_scores if not exists
+            if (!user.quiz_scores) user.quiz_scores = {};
+            
+            // Save raw correct count (not percentage) for compatibility with app.js
+            const rawScore = correct; // Number of correct answers (0-10)
+            user.quiz_scores[chapterId] = Math.max(rawScore, user.quiz_scores[chapterId] || 0);
+            
+            // Save detailed result with answers (for transparency)
+            if (!user.quiz_results) user.quiz_results = {};
+            user.quiz_results[chapterId] = {
+                score: rawScore, // Store raw count for display
+                percentage: score, // Store percentage too
+                answers: answers,
+                completed_at: new Date().toISOString()
+            };
+            
+            // Save back to localStorage
+            localStorage.setItem(STORAGE_KEYS_USER_DATA, JSON.stringify(users));
+            console.log('User data saved to localStorage');
+            
+            // Track activity - add to activities
+            const activities = JSON.parse(localStorage.getItem('bookclub_activities') || '[]');
+            activities.unshift({
+                id: Date.now(),
+                user_id: actualUserId,
+                type: 'quiz_completed',
+                data: { chapter_id: chapterId, score: rawScore },
+                created_at: new Date().toISOString()
+            });
+            // Keep only last 50
+            const trimmedActivities = activities.slice(0, 50);
+            localStorage.setItem('bookclub_activities', JSON.stringify(trimmedActivities));
+            console.log('Activity tracked');
+            
+            // Check for badges
+            const newBadges = checkBadgesForUser(user);
+            console.log('New badges:', newBadges);
+            
+            // Save user again in case badges were updated
+            users[actualUserId] = user;
+            localStorage.setItem(STORAGE_KEYS_USER_DATA, JSON.stringify(users));
+            
+            return {
+                score: rawScore,
+                maxScore: totalQuestions,
+                percentage: score,
+                correct: correct,
+                total: totalQuestions,
+                newBadges: newBadges.map(id => {
+                    const badge = BookClub.getAllBadges().find(b => b.id === id);
+                    return badge ? { id: badge.id, name: badge.name, emoji: badge.emoji } : null;
+                }).filter(Boolean)
+            };
         }
         
         // Helper function to check badges for a user
@@ -711,12 +838,19 @@
 
         // Auto-mark chapter as complete when quiz is submitted
         async function autoMarkChapter(chapterId, userId, userName) {
+            console.log('=== AUTO MARK CHAPTER ===');
+            console.log('Chapter ID:', chapterId, 'User ID:', userId, 'User Name:', userName);
+            
             if (!userId || !userName) {
                 console.log('No user logged in, skipping auto-mark');
                 return false;
             }
 
-            const discordId = userId; // Alex = acro16hunna, Dhianna = Dhianna369
+            // FIX: Ensure we use the correct userId for localStorage
+            // userId might be 'alex' or 'dhianna' - that's correct
+            // But we need to ensure the progress key matches
+            const effectiveUserId = userId; // Already should be 'alex' or 'dhianna'
+            
             let apiSuccess = false;
             let localSuccess = false;
 
@@ -724,9 +858,9 @@
             try {
                 const STORAGE_KEYS_PROGRESS = 'bookclub_progress';
                 const allProgress = JSON.parse(localStorage.getItem(STORAGE_KEYS_PROGRESS) || '{}');
-                if (!allProgress[userId]) allProgress[userId] = {};
+                if (!allProgress[effectiveUserId]) allProgress[effectiveUserId] = {};
                 
-                allProgress[userId][chapterId] = {
+                allProgress[effectiveUserId][chapterId] = {
                     completed: true,
                     completed_at: new Date().toISOString(),
                     notes: `Completed via quiz on ${new Date().toLocaleDateString()}`
@@ -734,13 +868,18 @@
                 
                 localStorage.setItem(STORAGE_KEYS_PROGRESS, JSON.stringify(allProgress));
                 localSuccess = true;
-                console.log(`✓ Local progress updated for ${userName}, chapter ${chapterId}`);
+                console.log(`✓ Local progress updated for ${userName} (ID: ${effectiveUserId}), chapter ${chapterId}`);
             } catch (e) {
                 console.error('Error updating local progress:', e);
             }
 
-            // 2. Also sync with API
+            // 2. Also sync with API (using discord_id if available)
             try {
+                // Try to get discord_id from user data
+                const users = BookClub.getAllUsers ? BookClub.getAllUsers() : {};
+                const userData = users[effectiveUserId];
+                const discordId = userData?.discord_id || effectiveUserId;
+                
                 const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
