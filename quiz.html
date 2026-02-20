@@ -134,6 +134,58 @@
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
     <script>
+        // Session persistence constants
+        const SESSION_DURATION_DAYS = 7;
+        const SESSION_KEY = 'bookclub_session';
+        
+        function getStoredSession() {
+            try {
+                const session = localStorage.getItem(SESSION_KEY);
+                if (!session) return null;
+                
+                const data = JSON.parse(session);
+                const now = Date.now();
+                const sessionAge = now - data.timestamp;
+                const maxAge = SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000;
+                
+                if (sessionAge > maxAge) {
+                    localStorage.removeItem(SESSION_KEY);
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+        
+        function syncSessionWithBookClub() {
+            const session = getStoredSession();
+            if (session) {
+                // Sync session with BookClub's current user
+                const expectedUserId = session.userId;
+                const currentBookClubUser = BookClub.getCurrentUser();
+                if (!currentBookClubUser || currentBookClubUser.id !== expectedUserId) {
+                    BookClub.setCurrentUser(expectedUserId);
+                }
+            } else {
+                // Check for legacy format
+                const legacyUser = localStorage.getItem('bookclub_whoami');
+                if (legacyUser) {
+                    const userId = legacyUser === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+                    // Migrate to new session format
+                    const newSession = {
+                        userName: legacyUser,
+                        userId: userId,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
+                    BookClub.setCurrentUser(userId);
+                }
+            }
+        }
+        
+        // Sync session on load
+        syncSessionWithBookClub();
         // Mobile Navigation Toggle
         document.getElementById('navToggle')?.addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
