@@ -885,7 +885,7 @@
                 };
             }
             
-            // 2. Fall back to localStorage
+            // 2. Fall back to localStorage (new format: bookclub_quiz_results)
             if (localQuizData[normalizedUserId] && localQuizData[normalizedUserId][chapterId]) {
                 return {
                     ...localQuizData[normalizedUserId][chapterId],
@@ -893,8 +893,47 @@
                 };
             }
             
-            // 3. Fall back to getQuizResult from utils.js
-            return getQuizResult(chapterId, normalizedUserId);
+            // 3. Fall back to getQuizResult from utils.js (checks multiple formats)
+            const utilsResult = getQuizResult(chapterId, normalizedUserId);
+            if (utilsResult) {
+                return utilsResult;
+            }
+            
+            // 4. Final fallback: check bookclub_user_data directly (legacy format used by quiz.html)
+            try {
+                const userData = JSON.parse(localStorage.getItem('bookclub_user_data') || '{}');
+                const userKey = normalizedUserId === 'acro16hunna' ? 'alex' : 'dhianna';
+                const user = userData[userKey];
+                
+                if (user && user.quiz_results && user.quiz_results[chapterId]) {
+                    const qr = user.quiz_results[chapterId];
+                    return {
+                        completed: true,
+                        score: qr.score || 0,
+                        total: qr.total || qr.answers?.length || 10,
+                        percentage: qr.percentage || Math.round((qr.score / (qr.total || 10)) * 100),
+                        completedAt: qr.completed_at || qr.timestamp,
+                        source: 'legacy'
+                    };
+                }
+                
+                // Also check progress object
+                if (user && user.progress && user.progress[chapterId]) {
+                    const prog = user.progress[chapterId];
+                    return {
+                        completed: prog.completed,
+                        score: prog.quiz_score || prog.score || 0,
+                        total: prog.quiz_total || prog.total || 10,
+                        percentage: prog.quiz_percentage || prog.percentage || 0,
+                        completedAt: prog.completed_at || prog.completedAt,
+                        source: 'legacy-progress'
+                    };
+                }
+            } catch (e) {
+                console.error('Error checking legacy user data:', e);
+            }
+            
+            return null;
         }
 
         /**
