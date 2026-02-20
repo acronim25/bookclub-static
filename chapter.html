@@ -129,51 +129,10 @@
             color: #8b9bb4;
         }
 
-        /* Mark Buttons */
-        .mark-section {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        .mark-buttons {
-            display: flex;
-            gap: 8px;
-        }
-        .mark-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .mark-btn.alex {
-            background: rgba(0, 212, 170, 0.2);
-            color: #00d4aa;
-        }
-        .mark-btn.alex:hover:not(:disabled) {
-            background: #00d4aa;
-            color: white;
-        }
-        .mark-btn.dhianna {
-            background: rgba(255, 107, 107, 0.2);
-            color: #ff6b6b;
-        }
-        .mark-btn.dhianna:hover:not(:disabled) {
-            background: #ff6b6b;
-            color: white;
-        }
-        .mark-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        .mark-btn.completed {
-            background: var(--accent-success) !important;
-            color: white !important;
-            opacity: 1;
-        }
+        /* Mark Buttons - Removed - now auto-marked via quiz */
+        .mark-section { display: none; }
+        .mark-buttons { display: none; }
+        .mark-btn { display: none; }
 
         /* Loading State */
         .loading-state {
@@ -431,22 +390,6 @@
                                     ${dhiannaCompleted ? '✓ Completed' : '○ Not yet'}
                                 </span>
                             </div>
-
-                            <div class="mark-section">
-                                <div class="status-card-title">✏️ Mark as Complete</div>
-                                <div class="mark-buttons">
-                                    <button class="mark-btn alex ${alexCompleted ? 'completed' : ''}" 
-                                            onclick="markChapter(${chapter.id}, 'Alex')" 
-                                            ${!currentUser || alexCompleted ? 'disabled' : ''}>
-                                        ${alexCompleted ? '✓ Alex Done' : 'I am Alex'}
-                                    </button>
-                                    <button class="mark-btn dhianna ${dhiannaCompleted ? 'completed' : ''}" 
-                                            onclick="markChapter(${chapter.id}, 'Dhianna')" 
-                                            ${!currentUser || dhiannaCompleted ? 'disabled' : ''}>
-                                        ${dhiannaCompleted ? '✓ Dhianna Done' : 'I am Dhianna'}
-                                    </button>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Quiz Card -->
@@ -480,34 +423,6 @@
             const user = usersData[discordId];
             if (!user || !user.progress) return false;
             return user.progress[chapterId] && user.progress[chapterId].completed;
-        }
-
-        async function markChapter(chapterId, who) {
-            const discordId = who === 'Alex' ? 'acro16hunna' : 'Dhianna369';
-            
-            try {
-                const response = await fetch(`${API_URL}/user/${discordId}/progress`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: who,
-                        chapter_id: chapterId,
-                        completed: true,
-                        notes: ''
-                    })
-                });
-                
-                if (response.ok) {
-                    document.getElementById('sync-text').textContent = `✓ Marked for ${who}`;
-                    await loadData();
-                    setTimeout(() => {
-                        document.getElementById('sync-text').textContent = 'Cloud sync active';
-                    }, 2000);
-                }
-            } catch (e) {
-                console.error('Error marking chapter:', e);
-                alert('Error saving progress. Please try again.');
-            }
         }
 
         // Mobile Navigation
