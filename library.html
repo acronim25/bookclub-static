@@ -435,25 +435,140 @@
     <script src="js/data.js"></script>
     <script>
         const API_URL = 'https://5-189-142-233.nip.io/api';
-        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        let currentUser = null;
+        let currentUserId = null;
         let usersData = {};
         let booksData = [];
         let chaptersData = [];
+        
+        // Session persistence constants
+        const SESSION_DURATION_DAYS = 7;
+        const SESSION_KEY = 'bookclub_session';
+        
+        function getStoredSession() {
+            try {
+                const session = localStorage.getItem(SESSION_KEY);
+                if (!session) return null;
+                
+                const data = JSON.parse(session);
+                const now = Date.now();
+                const sessionAge = now - data.timestamp;
+                const maxAge = SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000;
+                
+                if (sessionAge > maxAge) {
+                    localStorage.removeItem(SESSION_KEY);
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+        
+        function saveSession(userName, userId) {
+            const session = {
+                userName: userName,
+                userId: userId,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+            localStorage.setItem('bookclub_whoami', userName);
+        }
+        
+        function clearSession() {
+            localStorage.removeItem(SESSION_KEY);
+            localStorage.removeItem('bookclub_whoami');
+        }
 
         function setWhoAmI(name) {
             currentUser = name;
-            localStorage.setItem('bookclub_whoami', name);
-            updateWhoAmIUI();
+            currentUserId = name === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+            saveSession(name, currentUserId);
+            showLoggedInBar();
             renderBooks();
+        }
+
+        function clearWhoAmI() {
+            currentUser = null;
+            currentUserId = null;
+            clearSession();
+            showSelectionUI();
+            renderBooks();
+        }
+        
+        function switchUser() {
+            clearWhoAmI();
         }
 
         function updateWhoAmIUI() {
             document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
             if (currentUser === 'Alex') {
-                document.getElementById('btn-alex').classList.add('active');
+                document.getElementById('btn-alex')?.classList.add('active');
             } else if (currentUser === 'Dhianna') {
-                document.getElementById('btn-dhianna').classList.add('active');
+                document.getElementById('btn-dhianna')?.classList.add('active');
             }
+        }
+        
+        function showLoggedInBar() {
+            const container = document.querySelector('.whoami-bar');
+            const userColor = currentUser === 'Alex' ? '#00d4aa' : '#ff6b6b';
+            const isLegacy = !getStoredSession() && localStorage.getItem('bookclub_whoami');
+            
+            container.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                    <div style="font-size: 24px;">${currentUser === 'Alex' ? '👨' : '👩'}</div>
+                    <div>
+                        <div style="font-weight: 600; color: ${userColor};">
+                            Logged in as ${currentUser} ✓
+                        </div>
+                        <div style="font-size: 12px; color: #6b7a94;">
+                            ${isLegacy ? 'Session restored from legacy data' : 'Session active'}
+                        </div>
+                    </div>
+                </div>
+                <button class="whoami-btn clear" onclick="switchUser()" style="padding: 10px 20px; font-size: 13px; background: rgba(139, 155, 180, 0.2); color: #8b9bb4; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    🔄 Switch User
+                </button>
+            `;
+        }
+        
+        function showSelectionUI() {
+            const container = document.querySelector('.whoami-bar');
+            container.innerHTML = `
+                <div>
+                    <div class="whoami-title">Who are you?</div>
+                    <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to view your progress</div>
+                </div>
+                <div class="whoami-buttons">
+                    <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                    <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+                </div>
+            `;
+        }
+        
+        function initSession() {
+            // Check for new session format first
+            const session = getStoredSession();
+            if (session) {
+                currentUser = session.userName;
+                currentUserId = session.userId;
+                showLoggedInBar();
+                return;
+            }
+            
+            // Legacy fallback
+            const legacyUser = localStorage.getItem('bookclub_whoami');
+            if (legacyUser) {
+                currentUser = legacyUser;
+                currentUserId = legacyUser === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+                // Migrate to new format
+                saveSession(currentUser, currentUserId);
+                showLoggedInBar();
+                return;
+            }
+            
+            // No session - show selection UI (default state)
+            showSelectionUI();
         }
 
         async function loadData() {
@@ -702,7 +817,7 @@
         });
 
         // Init
-        updateWhoAmIUI();
+        initSession();
         loadData();
         
         // Auto-refresh every 30 seconds
