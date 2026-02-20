@@ -55,6 +55,13 @@
             box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
             transform: translateY(-2px);
         }
+        .whoami-btn.clear {
+            background: rgba(139, 155, 180, 0.2);
+            color: #8b9bb4;
+        }
+        .whoami-btn.clear:hover {
+            background: rgba(139, 155, 180, 0.3);
+        }
 
         /* Sync Bar */
         .sync-bar {
@@ -76,6 +83,309 @@
             color: #00d4aa;
             font-size: 14px;
         }
+
+        /* Notes Styles */
+        .notes-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .add-note-card {
+            background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .add-note-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .note-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .note-textarea {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .note-textarea:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.5);
+        }
+
+        .note-textarea::placeholder {
+            color: #6b7a94;
+        }
+
+        .note-select {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .note-select:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.5);
+        }
+
+        .note-select option {
+            background: #1a1f2e;
+            color: white;
+        }
+
+        .add-note-btn {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-note-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 170, 0.4);
+        }
+
+        .add-note-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .note-card {
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s;
+        }
+
+        .note-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .note-card.alex {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(0, 168, 132, 0.05) 100%);
+            border-left: 4px solid #00d4aa;
+        }
+
+        .note-card.dhianna {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(238, 90, 90, 0.05) 100%);
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .note-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .note-author-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .note-card.alex .note-author-avatar {
+            background: rgba(0, 212, 170, 0.2);
+        }
+
+        .note-card.dhianna .note-author-avatar {
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .note-author-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .note-card.alex .note-author-name {
+            color: #00d4aa;
+        }
+
+        .note-card.dhianna .note-author-name {
+            color: #ff6b6b;
+        }
+
+        .note-meta {
+            font-size: 12px;
+            color: #6b7a94;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .note-delete-btn {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .note-delete-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .note-delete-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .note-content {
+            color: #e0e6f0;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .note-chapter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 155, 180, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #8b9bb4;
+            margin-bottom: 12px;
+        }
+
+        .empty-notes {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7a94;
+        }
+
+        .empty-notes-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .login-prompt {
+            background: rgba(139, 155, 180, 0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            text-align: center;
+            color: #8b9bb4;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .notes-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(139, 155, 180, 0.15);
+            border: 1px solid rgba(139, 155, 180, 0.2);
+            color: #8b9bb4;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(139, 155, 180, 0.25);
+            color: white;
+        }
+
+        .filter-btn.alex.active {
+            background: rgba(0, 212, 170, 0.2);
+            border-color: rgba(0, 212, 170, 0.4);
+            color: #00d4aa;
+        }
+
+        .filter-btn.dhianna.active {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
+            color: #ff6b6b;
+        }
+
+        .notes-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: rgba(26, 31, 46, 0.8);
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .stat-value.alex { color: #00d4aa; }
+        .stat-value.dhianna { color: #ff6b6b; }
+        .stat-value.total { color: #8b9bb4; }
     </style>
 </head>
 <body>
@@ -116,10 +426,10 @@
 
     <main class="main-content">
         <!-- Who Am I Bar -->
-        <div class="whoami-bar">
+        <div class="whoami-bar" id="whoami-bar">
             <div>
                 <div class="whoami-title">Who are you?</div>
-                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to mark chapters as completed</div>
+                <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to add notes</div>
             </div>
             <div class="whoami-buttons">
                 <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
@@ -128,20 +438,56 @@
         </div>
 
         <header class="page-header">
-            <h1>📝 Notes</h1>
-            <p class="subtitle">Shared insights from your reading journey</p>
+            <h1>📝 Shared Notes</h1>
+            <p class="subtitle">Insights and takeaways from both readers</p>
         </header>
 
-        <div class="card">
-            <div class="card-header">
-                <h2>💬 Shared Notes</h2>
+        <!-- Stats -->
+        <div class="notes-stats" id="notes-stats">
+            <div class="stat-item">
+                <span>📝</span>
+                <span>Total: <span class="stat-value total" id="stat-total">0</span></span>
             </div>
-            <div class="card-body">
-                <p class="empty-state" style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                    📝 <br><br>
-                    Notes feature coming soon with cloud sync!<br><br>
-                    <span style="font-size: 14px;">This will allow Alex and Dhianna to share insights on chapters.</span>
-                </p>
+            <div class="stat-item">
+                <span>👨</span>
+                <span>Alex: <span class="stat-value alex" id="stat-alex">0</span></span>
+            </div>
+            <div class="stat-item">
+                <span>👩</span>
+                <span>Dhianna: <span class="stat-value dhianna" id="stat-dhianna">0</span></span>
+            </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="notes-filter">
+            <button class="filter-btn active" onclick="filterNotes('all')" id="filter-all">All Notes</button>
+            <button class="filter-btn alex" onclick="filterNotes('alex')" id="filter-alex">👨 Alex Only</button>
+            <button class="filter-btn dhianna" onclick="filterNotes('dhianna')" id="filter-dhianna">👩 Dhianna Only</button>
+        </div>
+
+        <!-- Add Note Section -->
+        <div class="add-note-card" id="add-note-section">
+            <div class="add-note-title">✨ Add New Note</div>
+            <div class="login-prompt" id="login-prompt" style="display: none;">
+                👆 Please select "I am Alex" or "I am Dhianna" above to add notes
+            </div>
+            <div class="note-input-group" id="note-form" style="display: none;">
+                <select class="note-select" id="chapter-select">
+                    <option value="">📚 Select a chapter...</option>
+                </select>
+                <textarea class="note-textarea" id="note-text" placeholder="💭 Share your insights, key takeaways, or questions about this chapter..."></textarea>
+                <button class="add-note-btn" onclick="addNote()">
+                    <span>💾</span>
+                    <span>Save Note</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Notes List -->
+        <div class="notes-list" id="notes-list">
+            <div class="empty-notes">
+                <div class="empty-notes-icon">📝</div>
+                <p>Loading notes...</p>
             </div>
         </div>
 
@@ -149,9 +495,11 @@
         <div class="sync-bar">
             <div class="sync-status">
                 <span>☁️</span>
-                <span>Cloud sync active</span>
+                <span id="sync-text">Cloud sync active</span>
             </div>
-            <span style="font-size: 12px; color: #8b9bb4;">Auto-refreshes every 30s</span>
+            <button class="whoami-btn clear" onclick="loadNotes()" style="padding: 8px 16px; font-size: 13px;">
+                🔄 Refresh
+            </button>
         </div>
     </main>
 
@@ -160,20 +508,362 @@
     </footer>
 
     <script>
-        let currentUser = localStorage.getItem('bookclub_whoami') || null;
+        const API_URL = 'https://5-189-142-233.nip.io/api';
+        let currentUser = null;
+        let currentUserId = null;
+        let allNotes = [];
+        let currentFilter = 'all';
+        let booksData = [];
+        
+        // Session persistence constants
+        const SESSION_DURATION_DAYS = 7;
+        const SESSION_KEY = 'bookclub_session';
+        
+        function getStoredSession() {
+            try {
+                const session = localStorage.getItem(SESSION_KEY);
+                if (!session) return null;
+                
+                const data = JSON.parse(session);
+                const now = Date.now();
+                const sessionAge = now - data.timestamp;
+                const maxAge = SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000;
+                
+                if (sessionAge > maxAge) {
+                    localStorage.removeItem(SESSION_KEY);
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+        
+        function saveSession(userName, userId) {
+            const session = {
+                userName: userName,
+                userId: userId,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+            localStorage.setItem('bookclub_whoami', userName);
+        }
+        
+        function clearSession() {
+            localStorage.removeItem(SESSION_KEY);
+            localStorage.removeItem('bookclub_whoami');
+        }
 
         function setWhoAmI(name) {
             currentUser = name;
-            localStorage.setItem('bookclub_whoami', name);
-            updateWhoAmIUI();
+            currentUserId = name === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+            saveSession(name, currentUserId);
+            updateUI();
+        }
+
+        function clearWhoAmI() {
+            currentUser = null;
+            currentUserId = null;
+            clearSession();
+            updateUI();
+        }
+        
+        function switchUser() {
+            clearWhoAmI();
+            document.querySelector('.whoami-buttons').style.display = 'flex';
+            document.getElementById('whoami-bar').innerHTML = `
+                <div>
+                    <div class="whoami-title">Who are you?</div>
+                    <div style="font-size: 12px; color: #8b9bb4; margin-top: 5px;">Select to add notes</div>
+                </div>
+                <div class="whoami-buttons">
+                    <button class="whoami-btn alex" id="btn-alex" onclick="setWhoAmI('Alex')">👤 I am Alex</button>
+                    <button class="whoami-btn dhianna" id="btn-dhianna" onclick="setWhoAmI('Dhianna')">👤 I am Dhianna</button>
+                </div>
+            `;
         }
 
         function updateWhoAmIUI() {
             document.querySelectorAll('.whoami-btn').forEach(btn => btn.classList.remove('active'));
+            
             if (currentUser === 'Alex') {
-                document.getElementById('btn-alex').classList.add('active');
+                document.getElementById('btn-alex')?.classList.add('active');
             } else if (currentUser === 'Dhianna') {
-                document.getElementById('btn-dhianna').classList.add('active');
+                document.getElementById('btn-dhianna')?.classList.add('active');
+            }
+        }
+        
+        function showLoggedInBar() {
+            const container = document.getElementById('whoami-bar');
+            const userColor = currentUser === 'Alex' ? '#00d4aa' : '#ff6b6b';
+            
+            container.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                    <div style="font-size: 24px;">${currentUser === 'Alex' ? '👨' : '👩'}</div>
+                    <div>
+                        <div style="font-weight: 600; color: ${userColor};">
+                            Logged in as ${currentUser} ✓
+                        </div>
+                        <div style="font-size: 12px; color: #6b7a94;">
+                            You can add and delete your own notes
+                        </div>
+                    </div>
+                </div>
+                <button class="whoami-btn clear" onclick="switchUser()" style="padding: 10px 20px; font-size: 13px;">
+                    🔄 Switch User
+                </button>
+            `;
+        }
+
+        function updateUI() {
+            // Update Who Am I section
+            if (currentUser) {
+                showLoggedInBar();
+                document.getElementById('login-prompt').style.display = 'none';
+                document.getElementById('note-form').style.display = 'flex';
+            } else {
+                document.getElementById('login-prompt').style.display = 'block';
+                document.getElementById('note-form').style.display = 'none';
+            }
+        }
+        
+        function initSession() {
+            const session = getStoredSession();
+            if (session) {
+                currentUser = session.userName;
+                currentUserId = session.userId;
+            } else {
+                const legacyUser = localStorage.getItem('bookclub_whoami');
+                if (legacyUser) {
+                    currentUser = legacyUser;
+                    currentUserId = legacyUser === 'Alex' ? 'acro16hunna' : 'Dhianna369';
+                    saveSession(currentUser, currentUserId);
+                }
+            }
+            updateUI();
+        }
+
+        async function loadBooks() {
+            try {
+                const res = await fetch(`${API_URL}/books`);
+                booksData = await res.json();
+                
+                const select = document.getElementById('chapter-select');
+                select.innerHTML = '<option value="">📚 Select a chapter...</option>';
+                
+                booksData.forEach(book => {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `📖 ${book.title}`;
+                    
+                    book.chapters.forEach(ch => {
+                        const option = document.createElement('option');
+                        option.value = ch.id;
+                        option.textContent = `Ch ${ch.number}: ${ch.title}`;
+                        optgroup.appendChild(option);
+                    });
+                    
+                    select.appendChild(optgroup);
+                });
+            } catch (e) {
+                console.error('Error loading books:', e);
+            }
+        }
+
+        async function loadNotes() {
+            try {
+                document.getElementById('sync-text').textContent = 'Loading notes...';
+                
+                const res = await fetch(`${API_URL}/notes`);
+                allNotes = await res.json();
+                
+                updateStats();
+                renderNotes();
+                
+                document.getElementById('sync-text').textContent = 'Cloud sync active - ' + new Date().toLocaleTimeString();
+            } catch (e) {
+                console.error('Error loading notes:', e);
+                document.getElementById('sync-text').textContent = 'Error loading notes';
+                document.getElementById('notes-list').innerHTML = `
+                    <div class="empty-notes">
+                        <div class="empty-notes-icon">⚠️</div>
+                        <p>Error loading notes. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const total = allNotes.length;
+            const alexCount = allNotes.filter(n => n.discord_id === 'acro16hunna').length;
+            const dhiannaCount = allNotes.filter(n => n.discord_id === 'Dhianna369').length;
+            
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-alex').textContent = alexCount;
+            document.getElementById('stat-dhianna').textContent = dhiannaCount;
+        }
+
+        function filterNotes(filter) {
+            currentFilter = filter;
+            
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`filter-${filter}`).classList.add('active');
+            
+            renderNotes();
+        }
+
+        function renderNotes() {
+            const container = document.getElementById('notes-list');
+            
+            let filteredNotes = allNotes;
+            if (currentFilter === 'alex') {
+                filteredNotes = allNotes.filter(n => n.discord_id === 'acro16hunna');
+            } else if (currentFilter === 'dhianna') {
+                filteredNotes = allNotes.filter(n => n.discord_id === 'Dhianna369');
+            }
+            
+            if (filteredNotes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-notes">
+                        <div class="empty-notes-icon">📝</div>
+                        <p>No notes yet${currentFilter !== 'all' ? ' from this user' : ''}.</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Be the first to add one!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredNotes.map(note => {
+                const isAlex = note.discord_id === 'acro16hunna';
+                const authorName = isAlex ? 'Alex' : 'Dhianna';
+                const isOwnNote = currentUserId === note.discord_id;
+                const date = new Date(note.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                return `
+                    <div class="note-card ${isAlex ? 'alex' : 'dhianna'}" data-note-id="${note.id}">
+                        <div class="note-header">
+                            <div class="note-author">
+                                <div class="note-author-avatar">${isAlex ? '👨' : '👩'}</div>
+                                <div>
+                                    <div class="note-author-name">${authorName} ${isOwnNote ? '(You)' : ''}</div>
+                                    <div class="note-meta">${date}</div>
+                                </div>
+                            </div>
+                            <div class="note-actions">
+                                ${isOwnNote ? `
+                                    <button class="note-delete-btn" onclick="deleteNote(${note.id})">
+                                        🗑️ Delete
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <div class="note-chapter-tag">
+                            <span>📖</span>
+                            <span>${note.book_title || 'Unknown Book'} - Ch ${note.chapter_number || '?'}: ${note.chapter_title || 'Unknown'}</span>
+                        </div>
+                        <div class="note-content">${escapeHtml(note.note)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function addNote() {
+            const chapterId = document.getElementById('chapter-select').value;
+            const noteText = document.getElementById('note-text').value.trim();
+            
+            if (!chapterId) {
+                alert('Please select a chapter');
+                return;
+            }
+            if (!noteText) {
+                alert('Please write something in your note');
+                return;
+            }
+            if (!currentUserId) {
+                alert('Please select who you are first');
+                return;
+            }
+            
+            const btn = document.querySelector('.add-note-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span><span>Saving...</span>';
+            
+            try {
+                const res = await fetch(`${API_URL}/notes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        discord_id: currentUserId,
+                        name: currentUser,
+                        chapter_id: parseInt(chapterId),
+                        note: noteText
+                    })
+                });
+                
+                if (!res.ok) {
+                    throw new Error('Failed to save note');
+                }
+                
+                // Clear form
+                document.getElementById('chapter-select').value = '';
+                document.getElementById('note-text').value = '';
+                
+                // Reload notes
+                await loadNotes();
+                document.getElementById('sync-text').textContent = '✓ Note saved!';
+                
+            } catch (e) {
+                console.error('Error saving note:', e);
+                alert('Error saving note. Please try again.');
+                document.getElementById('sync-text').textContent = 'Error saving note';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>💾</span><span>Save Note</span>';
+            }
+        }
+
+        async function deleteNote(noteId) {
+            if (!confirm('Are you sure you want to delete this note?')) {
+                return;
+            }
+            
+            if (!currentUserId) {
+                alert('Please select who you are first');
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/notes/${noteId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        discord_id: currentUserId
+                    })
+                });
+                
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.error || 'Failed to delete');
+                }
+                
+                await loadNotes();
+                document.getElementById('sync-text').textContent = '✓ Note deleted';
+                
+            } catch (e) {
+                console.error('Error deleting note:', e);
+                alert('Error deleting note: ' + e.message);
             }
         }
 
@@ -189,7 +879,12 @@
         });
 
         // Init
-        updateWhoAmIUI();
+        initSession();
+        loadBooks();
+        loadNotes();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadNotes, 30000);
     </script>
 </body>
 </html>
